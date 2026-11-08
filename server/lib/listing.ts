@@ -79,3 +79,44 @@ export const MIN_LISTINGS_FOR_INDEX = 3;
 export function shouldIndexLocation(activeCount: number): boolean {
   return activeCount >= MIN_LISTINGS_FOR_INDEX;
 }
+
+/**
+ * Türkçe adı URL slug'ına çevirir (src/data/locations.ts slug'larıyla aynı kural):
+ * "İstanbul" → "istanbul", "Kadıköy" → "kadikoy", "Beşiktaş" → "besiktas".
+ */
+export function trSlug(name: string): string {
+  const map: Record<string, string> = { ç: 'c', ğ: 'g', ı: 'i', ö: 'o', ş: 's', ü: 'u', â: 'a', î: 'i', û: 'u' };
+  return name
+    .normalize('NFC')
+    .toLocaleLowerCase('tr-TR')
+    .replace(/[çğıöşüâîû]/g, (c) => map[c] ?? c)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/** Arama motoru indekslemesi yalnız SEO_INDEXING=true iken (hukuki onay sonrası) açılır. */
+export function seoIndexingEnabled(): boolean {
+  return process.env.SEO_INDEXING === 'true';
+}
+
+const xmlEscape = (s: string) =>
+  s.replace(/[<>&'"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c]!);
+
+/** Konum site haritası: yalnız indekslenebilir (≥MIN_LISTINGS_FOR_INDEX) şehir/ilçe sayfaları. */
+export function buildLocationSitemap(
+  baseUrl: string,
+  rows: { city: string; district: string | null; count: number }[],
+): string {
+  const base = baseUrl.replace(/\/+$/, '');
+  const urls = new Set<string>();
+  const cityTotals = new Map<string, number>();
+  for (const r of rows) {
+    cityTotals.set(r.city, (cityTotals.get(r.city) ?? 0) + r.count);
+    if (r.district && shouldIndexLocation(r.count)) urls.add(`${base}/konum/${trSlug(r.city)}/${trSlug(r.district)}`);
+  }
+  for (const [city, total] of cityTotals) if (shouldIndexLocation(total)) urls.add(`${base}/konum/${trSlug(city)}`);
+  const body = [...urls].sort().map((u) => `  <url><loc>${xmlEscape(u)}</loc><changefreq>daily</changefreq></url>`).join('\n');
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}${body ? '\n' : ''}</urlset>\n`;
+}

@@ -48,6 +48,7 @@ const Home = lazy(() => import("@/pages/Home"));
 const Catalog = lazy(() => import("@/pages/Catalog"));
 const EscortList = lazy(() => import("@/pages/EscortList"));
 const EscortProfile = lazy(() => import("@/pages/EscortProfile"));
+const LocationListings = lazy(() => import("@/pages/LocationListings"));
 
 // Auth
 const CustomerLogin = lazy(() => import("@/pages/auth/CustomerLogin"));
@@ -171,6 +172,7 @@ function AppRouter() {
           <Route path="/escorts" component={EscortList} />
           <Route path={ROUTES.ESCORT_PROFILE} component={EscortProfile} />
           <Route path="/escort/:id" component={EscortProfile} />
+          <Route path="/konum/:city/:district?" component={LocationListings} />
 
           {/* ── Auth ── */}
           <Route path={ROUTES.LOGIN} component={CustomerLogin} />

@@ -28,6 +28,8 @@ import {
 } from './lib/session';
 import { normalizeEmail, isDisposableEmail } from './lib/email';
 import { checkLoginRate, checkRegisterRate, TOO_MANY_ATTEMPTS } from './lib/authRateLimit';
+import { buildLocationSitemap, seoIndexingEnabled } from './lib/listing';
+import { sql as dsql, and as dand } from 'drizzle-orm';
 
 validateEnvOnStartup();
 initServerMonitoring();
@@ -369,6 +371,26 @@ app.use(
     createContext,
   })
 );
+
+// Konum site haritası — yalnız SEO_INDEXING=true ve yeterli canlı ilanı olan sayfalar.
+// Hukuki onaydan önce boş urlset döner (index.html zaten noindex).
+app.get('/sitemap-locations.xml', async (_req: Request, res: Response) => {
+  try {
+    let rows: { city: string; district: string | null; count: number }[] = [];
+    if (seoIndexingEnabled()) {
+      const p = schema.escortProfiles;
+      rows = await db
+        .select({ city: p.city, district: p.district, count: dsql<number>`count(*)::int` })
+        .from(p)
+        .where(dand(eq(p.visibilityStatus, 'public')))
+        .groupBy(p.city, p.district);
+    }
+    res.type('application/xml').set('Cache-Control', 'public, max-age=3600').send(buildLocationSitemap(env.appUrl, rows));
+  } catch (error) {
+    captureServerError(error, { scope: 'sitemap' });
+    res.status(503).type('text/plain').send('sitemap unavailable');
+  }
+});
 
 app.get('/health', async (_req: Request, res: Response) => {
   try {

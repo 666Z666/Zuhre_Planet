@@ -5,6 +5,8 @@ import {
   rankKey,
   shouldIndexLocation,
   MIN_AGE,
+  trSlug,
+  buildLocationSitemap,
 } from '../lib/listing';
 
 describe('updateProfileInputSchema — yaş sınırı', () => {
@@ -71,5 +73,28 @@ describe('shouldIndexLocation', () => {
     expect(shouldIndexLocation(0)).toBe(false);
     expect(shouldIndexLocation(2)).toBe(false);
     expect(shouldIndexLocation(3)).toBe(true);
+  });
+});
+
+
+describe('trSlug / buildLocationSitemap', () => {
+  it('Türkçe slug', () => {
+    expect(trSlug('İstanbul')).toBe('istanbul');
+    expect(trSlug('Şişli')).toBe('sisli');
+    expect(trSlug('Çankaya')).toBe('cankaya');
+  });
+  it('yalnız yeterli ilanı olan ilçe ve şehirleri listeler', () => {
+    const xml = buildLocationSitemap('https://ornek.test/', [
+      { city: 'İstanbul', district: 'Kadıköy', count: 5 },
+      { city: 'İstanbul', district: 'Şişli', count: 1 },
+      { city: 'Ankara', district: 'Çankaya', count: 1 },
+    ]);
+    expect(xml).toContain('<loc>https://ornek.test/konum/istanbul/kadikoy</loc>');
+    expect(xml).toContain('<loc>https://ornek.test/konum/istanbul</loc>');
+    expect(xml).not.toContain('sisli');
+    expect(xml).not.toContain('ankara');
+  });
+  it('boş veride geçerli boş urlset döner', () => {
+    expect(buildLocationSitemap('https://x.test', [])).toMatch(/<urlset[^>]*>\n<\/urlset>/);
   });
 });
