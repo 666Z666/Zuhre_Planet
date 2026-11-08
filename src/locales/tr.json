@@ -20,5 +20,57 @@
     "nebulaRank": "NEBULA RÜTBESİ",
     "npBalance": "MEVCUT BAKİYE",
     "vault": "ÖZEL ARŞİV"
+  },
+  "activity": {
+    "online": "Çevrimiçi",
+    "today": "Bugün aktif",
+    "week": "Bu hafta aktif",
+    "month": "Bu ay aktif",
+    "inactive": "Uzun süredir pasif",
+    "label": "Son aktiflik"
+  },
+  "rates": {
+    "title": "Fiyat Tablosu",
+    "duration": "Süre",
+    "own_place": "Kendi yerinde",
+    "visit": "Ziyaret",
+    "minutes": "{n} dk",
+    "hours": "{n} saat",
+    "hoursMinutes": "{h} sa {m} dk",
+    "day": "1 gün",
+    "hourly": "Saatlik Ücret"
+  },
+  "filters": {
+    "title": "Filtre",
+    "reset": "Sıfırla",
+    "location": "Konum",
+    "city": "Şehir Seçin",
+    "district": "İlçe Seçin",
+    "any": "Fark etmez",
+    "activeWithin": "Son Aktiflik",
+    "online": "Şu an çevrimiçi",
+    "day": "Son 24 saat",
+    "week": "Son 7 gün",
+    "verified": "Yalnız Doğrulanmış",
+    "verifiedHint": "Kimliği ve fotoğrafı doğrulanmış profiller",
+    "age": "Yaş Aralığı",
+    "price": "Saatlik Ücret",
+    "min": "En az",
+    "max": "En çok"
+  },
+  "location": {
+    "home": "Ana sayfa",
+    "listings": "{place} ilanları",
+    "active": "{count} aktif ilan",
+    "verified": "{count} doğrulanmış",
+    "empty": "{place} bölgesinde şu an aktif ilan yok.",
+    "browseAll": "Tüm ilanlara göz at",
+    "otherDistricts": "{city} — ilanı olan diğer ilçeler",
+    "unknown": "Bu konum tanınmadı; yazımı kontrol edin."
+  },
+  "profile": {
+    "noReviews": "Bu profil için henüz yayımlanmış yorum yok.",
+    "verifiedMember": "Doğrulanmış üye",
+    "contactUnavailable": "Bu ilan için bu iletişim kanalı açık değil."
   }
 }

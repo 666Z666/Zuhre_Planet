@@ -2,12 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Ruler, Weight, User, Scissors, Eye, Zap, MapPin, BadgeCheck, Wallet } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useT } from '@/contexts/LanguageContext';
 import { TURKEY_LOCATIONS, getDistrictsByCity } from '@/data/locations';
 import { LipsIcon, MaskIcon, CorsetIcon, SilkBowIcon } from './ui/SensualIcons';
 
 interface FilterOption {
   id: string;
   label: string;
+  labelKey?: string;
   value: string;
   icon?: React.ElementType;
 }
@@ -15,6 +17,8 @@ interface FilterOption {
 interface FilterSection {
   id: string;
   title: string;
+  /** Çeviri anahtarı (varsa title yerine kullanılır) */
+  titleKey?: string;
   icon: React.ElementType;
   type: 'checkbox' | 'range' | 'minmax' | 'select' | 'grid' | 'toggle';
   /** minmax: URL anahtarları (ör. minAge / maxAge) */
@@ -36,6 +40,7 @@ const filterSections: FilterSection[] = [
   {
     id: 'location',
     title: 'Konum',
+    titleKey: 'filters.location',
     icon: MapPin,
     type: 'select',
     options: TURKEY_LOCATIONS.map(c => ({ id: c.slug, label: c.name, value: c.slug }))
@@ -43,23 +48,26 @@ const filterSections: FilterSection[] = [
   {
     id: 'activeWithin',
     title: 'Son Aktiflik',
+    titleKey: 'filters.activeWithin',
     icon: Zap,
     type: 'select',
     options: [
-      { id: 'online', label: 'Şu an çevrimiçi', value: 'online' },
-      { id: 'day', label: 'Son 24 saat', value: 'day' },
-      { id: 'week', label: 'Son 7 gün', value: 'week' },
+      { id: 'online', label: 'Şu an çevrimiçi', labelKey: 'filters.online', value: 'online' },
+      { id: 'day', label: 'Son 24 saat', labelKey: 'filters.day', value: 'day' },
+      { id: 'week', label: 'Son 7 gün', labelKey: 'filters.week', value: 'week' },
     ],
   },
   {
     id: 'verified',
     title: 'Yalnız Doğrulanmış',
+    titleKey: 'filters.verified',
     icon: BadgeCheck,
     type: 'toggle',
   },
   {
     id: 'age',
     title: 'Yaş Aralığı',
+    titleKey: 'filters.age',
     icon: User,
     type: 'minmax',
     keys: ['minAge', 'maxAge'],
@@ -71,6 +79,7 @@ const filterSections: FilterSection[] = [
   {
     id: 'price',
     title: 'Saatlik Ücret',
+    titleKey: 'filters.price',
     icon: Wallet,
     type: 'minmax',
     keys: ['minPrice', 'maxPrice'],
@@ -146,6 +155,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
   const [expandedSections, setExpandedSections] = useState<string[]>(['location', 'verified', 'age', 'price']);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const t = useT();
 
   const toggleSection = (id: string) => {
     setExpandedSections(prev =>
@@ -192,7 +202,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
           onClick={handleReset}
           className="text-[10px] font-black uppercase tracking-widest text-primary/60 hover:text-primary transition-colors"
         >
-          SIFIRLA
+          {t('filters.reset')}
         </button>
       </div>
 
@@ -206,7 +216,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
               <div className="flex items-center gap-4">
                 <section.icon className={`w-5 h-5 ${expandedSections.includes(section.id) ? 'text-primary' : 'text-white/20'}`} />
                 <span className={`text-[11px] font-black uppercase tracking-widest ${expandedSections.includes(section.id) ? 'text-white' : 'text-white/40'}`}>
-                  {section.title}
+                  {section.titleKey ? t(section.titleKey) : section.title}
                 </span>
               </div>
               <ChevronDown
@@ -230,9 +240,9 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                       >
-                        <option value="">{section.id === 'location' ? 'Şehir Seçin' : 'Fark etmez'}</option>
+                        <option value="">{section.id === 'location' ? t('filters.city') : t('filters.any')}</option>
                         {section.options?.map(opt => (
-                          <option key={opt.id} value={opt.value} className="bg-slate-900">{opt.label}</option>
+                          <option key={opt.id} value={opt.value} className="bg-slate-900">{opt.labelKey ? t(opt.labelKey) : opt.label}</option>
                         ))}
                       </select>
 
@@ -243,7 +253,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                           className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                         >
-                          <option value="">İlçe Seçin</option>
+                          <option value="">{t('filters.district')}</option>
                           {selectedCityDistricts.map(dist => (
                             <option key={dist.slug} value={dist.slug} className="bg-slate-900">{dist.name}</option>
                           ))}
@@ -255,14 +265,14 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                   {section.type === 'toggle' && (
                     <label className="flex items-center justify-between gap-4 pt-2 cursor-pointer">
                       <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
-                        Kimliği ve fotoğrafı doğrulanmış profiller
+                        {t('filters.verifiedHint')}
                       </span>
                       <input
                         type="checkbox"
                         checked={activeFilters[section.id] === true}
                         onChange={(e) => handleValueChange(section.id, e.target.checked ? true : undefined)}
                         className="h-5 w-5 accent-primary"
-                        aria-label={section.title}
+                        aria-label={section.titleKey ? t(section.titleKey) : section.title}
                       />
                     </label>
                   )}
@@ -272,7 +282,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                       {section.keys.map((key, i) => (
                         <label key={key} className="space-y-2">
                           <span className="block text-[9px] font-black uppercase tracking-widest text-white/40">
-                            {i === 0 ? 'En az' : 'En çok'} ({section.unit})
+                            {i === 0 ? t('filters.min') : t('filters.max')} ({section.unit})
                           </span>
                           <input
                             type="number"

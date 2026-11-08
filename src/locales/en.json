@@ -20,5 +20,57 @@
     "nebulaRank": "NEBULA RANK",
     "npBalance": "CURRENT BALANCE",
     "vault": "THE VAULT"
+  },
+  "activity": {
+    "online": "Online",
+    "today": "Active today",
+    "week": "Active this week",
+    "month": "Active this month",
+    "inactive": "Inactive for a while",
+    "label": "Last active"
+  },
+  "rates": {
+    "title": "Rates",
+    "duration": "Duration",
+    "own_place": "At own place",
+    "visit": "Visit",
+    "minutes": "{n} min",
+    "hours": "{n} h",
+    "hoursMinutes": "{h} h {m} min",
+    "day": "1 day",
+    "hourly": "Hourly rate"
+  },
+  "filters": {
+    "title": "Filters",
+    "reset": "Reset",
+    "location": "Location",
+    "city": "Select city",
+    "district": "Select district",
+    "any": "Any",
+    "activeWithin": "Last active",
+    "online": "Online now",
+    "day": "Last 24 hours",
+    "week": "Last 7 days",
+    "verified": "Verified only",
+    "verifiedHint": "Profiles with verified ID and photos",
+    "age": "Age range",
+    "price": "Hourly rate",
+    "min": "Min",
+    "max": "Max"
+  },
+  "location": {
+    "home": "Home",
+    "listings": "Listings in {place}",
+    "active": "{count} active listings",
+    "verified": "{count} verified",
+    "empty": "There are no active listings in {place} right now.",
+    "browseAll": "Browse all listings",
+    "otherDistricts": "{city} — other districts with listings",
+    "unknown": "Location not recognised; please check the spelling."
+  },
+  "profile": {
+    "noReviews": "No published reviews for this profile yet.",
+    "verifiedMember": "Verified member",
+    "contactUnavailable": "This contact channel is not available for this listing."
   }
 }

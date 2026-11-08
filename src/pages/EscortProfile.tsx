@@ -40,6 +40,7 @@ import {
 import { ReviewCard } from '@/components/ui/ReviewCard';
 import { ActivityBadge } from '@/components/ui/ActivityBadge';
 import { RateTable } from '@/components/rates/RateTable';
+import { useT } from '@/contexts/LanguageContext';
 import { ListingProfile } from '@/types/domain';
 import { listingService } from '@/services/listingService';
 import { Button } from '@/components/ui/button';
@@ -63,6 +64,7 @@ export default function EscortProfile() {
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const t = useT();
 
   // 3D Tilt Logic for Hero Photo
   const x = useMotionValue(0);
@@ -445,7 +447,7 @@ export default function EscortProfile() {
                             escortId: String(profile.id),
                             customerId: '',
                             // Yorum yapanın kimliği public uçta paylaşılmaz
-                            customerName: 'Doğrulanmış üye',
+                            customerName: t('profile.verifiedMember'),
                             rating: rv.rating,
                             comment: rv.comment,
                             isVerified: true,
@@ -456,7 +458,7 @@ export default function EscortProfile() {
                     </div>
                   ) : (
                     <p className="text-sm font-bold uppercase tracking-widest text-white/50">
-                      Bu profil için henüz yayımlanmış yorum yok.
+                      {t('profile.noReviews')}
                     </p>
                   )}
                 </div>
@@ -475,7 +477,7 @@ export default function EscortProfile() {
 
                 <div className="space-y-8 mb-10">
                   <div className="flex justify-between items-end border-b border-white/10 pb-6">
-                    <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? 'text-white/80' : 'text-orange-950/80'}`}>Saatlik Ücret</span>
+                    <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? 'text-white/80' : 'text-orange-950/80'}`}>{t('rates.hourly')}</span>
                     <span className={`text-5xl font-black italic text-glow text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>
                       {profile.rates?.hourly ? `₺${profile.rates.hourly.toLocaleString('tr-TR')}` : '—'}
                     </span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, Check, ChevronDown } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguage, type Language } from '@/contexts/LanguageContext';
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
@@ -11,6 +11,7 @@ export function LanguageSwitcher() {
     { code: 'tr', label: 'TÜRKÇE', flag: '🇹🇷' },
     { code: 'en', label: 'ENGLISH', flag: '🇺🇸' },
     { code: 'ar', label: 'العربية', flag: '🇦🇪' },
+    { code: 'ru', label: 'РУССКИЙ', flag: '🇷🇺' },
   ];
 
   const currentLang = languages.find(l => l.code === language);
@@ -41,7 +42,7 @@ export function LanguageSwitcher() {
                 <button
                   key={lang.code}
                   onClick={() => {
-                    setLanguage(lang.code as any);
+                    setLanguage(lang.code as Language);
                     setIsOpen(false);
                   }}
                   className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all group ${language === lang.code ? 'bg-primary/20 text-white' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`}

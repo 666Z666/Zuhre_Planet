@@ -17,6 +17,7 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { listingService } from '@/services/listingService';
 import { resolveCityName, resolveDistrictName, getDistrictsByCity, sameLocation } from '@/data/locations';
 import type { ListingProfile } from '@/types/domain';
+import { useT } from '@/contexts/LanguageContext';
 
 export const MIN_LISTINGS_FOR_INDEX = 3;
 
@@ -40,6 +41,7 @@ const isVerified = (l: ListingProfile) => Boolean(l.hasVerifiedBadge || l.verifi
 
 export default function LocationListings() {
   const params = useParams<{ city: string; district?: string }>();
+  const t = useT();
   const cityName = resolveCityName(params.city) ?? params.city;
   const districtName = params.district ? resolveDistrictName(params.city, params.district) : undefined;
 
@@ -96,14 +98,14 @@ export default function LocationListings() {
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Ana sayfa', item: `${origin}/` },
+          { '@type': 'ListItem', position: 1, name: t('location.home'), item: `${origin}/` },
           { '@type': 'ListItem', position: 2, name: cityName, item: `${origin}/konum/${citySlug}` },
           ...(districtName ? [{ '@type': 'ListItem', position: 3, name: districtName, item: `${origin}${path}` }] : []),
         ],
       },
       {
         '@type': 'ItemList',
-        name: `${placeLabel} ilanları`,
+        name: t('location.listings', { place: placeLabel }),
         numberOfItems: count,
         itemListElement: sorted.slice(0, 20).map((l, i) => ({
           '@type': 'ListItem',
@@ -118,11 +120,11 @@ export default function LocationListings() {
   return (
     <div className="min-h-screen bg-transparent pb-40">
       <SEOManager
-        title={`${placeLabel} ilanları`}
+        title={t('location.listings', { place: placeLabel })}
         description={
           count > 0
-            ? `${placeLabel} bölgesinde ${count} aktif ilan${verifiedCount ? `, ${verifiedCount} doğrulanmış profil` : ''}.`
-            : `${placeLabel} bölgesinde şu an aktif ilan yok.`
+            ? `${t('location.listings', { place: placeLabel })}: ${t('location.active', { count })}${verifiedCount ? `, ${t('location.verified', { count: verifiedCount })}` : ''}.`
+            : t('location.empty', { place: placeLabel })
         }
         canonical={`${origin}${path}`}
         noindex={!indexable}
@@ -135,8 +137,8 @@ export default function LocationListings() {
 
       <div className="max-w-7xl mx-auto px-4 pt-28 space-y-10">
         {/* Breadcrumb */}
-        <nav aria-label="Konum yolu" className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/50">
-          <Link href="/" className="hover:text-primary">Ana sayfa</Link>
+        <nav aria-label={t('filters.location')} className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/50">
+          <Link href="/" className="hover:text-primary">{t('location.home')}</Link>
           <ChevronRight className="w-3 h-3" />
           <Link href={`/konum/${citySlug}`} className="hover:text-primary">{cityName}</Link>
           {districtName && (<><ChevronRight className="w-3 h-3" /><span className="text-white/80">{districtName}</span></>)}
@@ -148,16 +150,16 @@ export default function LocationListings() {
           </h1>
           {!isLoading && (
             <p className="text-sm font-bold text-white/70 flex flex-wrap items-center gap-4">
-              <span>{count} aktif ilan</span>
+              <span>{t('location.active', { count })}</span>
               {verifiedCount > 0 && (
                 <span className="inline-flex items-center gap-1 text-emerald-400">
-                  <BadgeCheck className="w-4 h-4" /> {verifiedCount} doğrulanmış
+                  <BadgeCheck className="w-4 h-4" /> {t('location.verified', { count: verifiedCount })}
                 </span>
               )}
             </p>
           )}
           {!knownCity && !isLoading && (
-            <p className="text-xs text-amber-300">Bu konum tanınmadı; yazımı kontrol edin.</p>
+            <p className="text-xs text-amber-300">{t('location.unknown')}</p>
           )}
         </header>
 
@@ -169,9 +171,9 @@ export default function LocationListings() {
           </div>
         ) : (
           <div className="py-20 text-center space-y-4">
-            <p className="text-white/70 font-bold">{placeLabel} bölgesinde şu an aktif ilan yok.</p>
+            <p className="text-white/70 font-bold">{t('location.empty', { place: placeLabel })}</p>
             <Link href="/catalog" className="inline-block text-primary font-black uppercase tracking-widest text-xs hover:underline">
-              Tüm ilanlara göz at
+              {t('location.browseAll')}
             </Link>
           </div>
         )}
@@ -179,7 +181,7 @@ export default function LocationListings() {
         {siblingDistricts.length > 0 && (
           <section className="space-y-4">
             <h2 className="text-sm font-black uppercase tracking-widest text-white/60">
-              {cityName} — ilanı olan diğer ilçeler
+              {t('location.otherDistricts', { city: cityName })}
             </h2>
             <ul className="flex flex-wrap gap-2">
               {siblingDistricts.map(([d, n]) => (
