@@ -98,7 +98,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
               className="text-[8vw] md:text-[10vw] font-black italic uppercase tracking-[-0.08em] leading-[0.8] text-white drop-shadow-[0_0_60px_rgba(var(--primary-rgb),0.6)] font-orbitron"
             >
               {title.split(' ')[0]} <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-slow drop-shadow-none">
+              <span className="inline-block pr-[0.18em] -mr-[0.18em] text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-slow drop-shadow-none">
                  {title.split(' ')[1] || 'PLANET'}
               </span>
             </motion.h1>
@@ -115,7 +115,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, delay: 1 }}
-            className="text-lg md:text-3xl font-black uppercase tracking-[0.6em] text-white/40 italic max-w-6xl mx-auto leading-relaxed"
+            className="text-base md:text-3xl font-black uppercase tracking-[0.15em] md:tracking-[0.6em] text-white/40 italic max-w-6xl mx-auto leading-relaxed"
           >
              {subtitle}
           </motion.p>

@@ -29,11 +29,11 @@ export function Logo({ size = 44, showWordmark = true, showTagline = false, clas
       />
       {showWordmark && (
         <span className="flex flex-col leading-none">
-          <span className="font-brand text-[1.45rem] md:text-[1.6rem] font-semibold tracking-wide text-brand-wordmark">
+          <span className="font-brand whitespace-nowrap text-[1.45rem] md:text-[1.6rem] font-semibold tracking-wide text-brand-wordmark">
             Zühre <span className="text-brand-gold">Planet</span>
           </span>
           {showTagline && (
-            <span className="mt-1 text-[0.6rem] font-semibold uppercase tracking-[0.35em] text-muted-foreground">
+            <span className="mt-1 text-[0.6rem] font-semibold uppercase tracking-[0.35em] text-muted-foreground max-sm:hidden">
               {BRAND.tagline}
             </span>
           )}

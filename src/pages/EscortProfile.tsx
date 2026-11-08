@@ -50,7 +50,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { LockedContentCard } from '@/components/ui/LockedContentCard';
 import { AchievementBadge } from '@/components/ui/AchievementBadge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { SEO } from '@/pages/SEO';
@@ -187,14 +186,14 @@ export default function EscortProfile() {
         schemaData={profileSchema}
       />
       {/* --- HERO SECTION --- */}
-      <div className="relative h-[60vh] md:h-[75vh] w-full overflow-hidden content-layer">
+      <div className="relative min-h-[60vh] md:h-[75vh] w-full overflow-hidden content-layer">
         <div className="absolute inset-0 z-0">
           <div className={`absolute inset-0 transition-colors duration-1000 ${isDark ? 'bg-gradient-to-b from-transparent via-slate-950/40 to-slate-950' : 'bg-gradient-to-b from-transparent via-white/40 to-white'}`} />
         </div>
 
-        <div className="container mx-auto px-6 h-full relative z-10 flex flex-col justify-end pb-16">
+        <div className="container mx-auto px-6 h-full relative z-10 flex flex-col justify-end pt-28 md:pt-0 pb-16">
           <Link href="/escorts">
-            <motion.button whileHover={{ x: -10 }} className={`absolute top-28 left-6 flex items-center gap-3 transition-all uppercase text-[11px] font-black tracking-[0.5em] italic border-b-2 py-2 text-shadow-premium ${isDark ? 'text-white border-primary/30 hover:border-primary' : 'text-orange-950 border-orange-500/30 hover:border-orange-500'}`}>
+            <motion.button whileHover={{ x: -10 }} className={`relative mb-8 md:mb-0 md:absolute md:top-28 md:left-6 self-start flex items-center gap-3 transition-all uppercase text-[11px] font-black tracking-[0.5em] italic border-b-2 py-2 text-shadow-premium ${isDark ? 'text-white border-primary/30 hover:border-primary' : 'text-orange-950 border-orange-500/30 hover:border-orange-500'}`}>
               <ArrowLeft className="w-4 h-4" /> KATALOĞA DÖN
             </motion.button>
           </Link>
@@ -313,39 +312,8 @@ export default function EscortProfile() {
               </div>
             </section>
 
-            {/* THE VAULT - LOCKED CONTENT */}
-            <section className="glass-panel border-none rounded-[3rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
-               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-3xl rounded-full -mr-32 -mt-32" />
-               
-               <div className="flex items-center justify-between mb-10 relative z-10">
-                  <h2 className="text-2xl font-black flex items-center gap-4 uppercase tracking-tighter italic text-white text-shadow-premium">
-                    <Lock className="w-7 h-7 text-primary" /> THE VAULT <span className="text-primary italic">ÖZEL ARŞİV</span>
-                  </h2>
-                  <div className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-2xl">
-                     <Zap className="w-4 h-4 text-amber-400" />
-                     <span className="text-[10px] font-black text-white px-2 py-0.5 rounded bg-amber-500/20 uppercase tracking-widest text-shadow-premium">NEBULA PUANI GEREKLİ</span>
-                  </div>
-               </div>
-
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 relative z-10">
-                  <LockedContentCard 
-                    id="v1" 
-                    previewUrl="/brand/placeholders/portrait-4.svg" 
-                    price={1200} 
-                    type="image" 
-                  />
-                  <LockedContentCard 
-                    id="v2" 
-                    previewUrl="/brand/placeholders/portrait-4.svg" 
-                    price={2500} 
-                    type="video" 
-                  />
-               </div>
-
-               <div className="mt-8 p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
-                  <p className="text-[10px] text-gray-200 font-black uppercase tracking-[0.3em] text-shadow-premium italic">Özel içerikler, yıldız partnerimiz tarafından limitli süreyle ve Nebula rütbesine özel olarak yayınlanmıştır.</p>
-               </div>
-            </section>
+            {/* "Özel Arşiv" bölümü kaldırıldı: her profilde aynı sahte iki kilitli içerik vardı ve
+                "kilidi aç" puan düşmeden 2 sn sonra yer tutucuyu açıyordu. Gerçek ücretli içerik altyapısı gelince eklenebilir. */}
 
             {/* Details Tabs */}
             <Tabs defaultValue="about" className="w-full">

@@ -155,7 +155,7 @@ export function Footer() {
         {/* Bottom Section: Legal & Credits */}
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 px-10">
            <div className="flex items-center gap-10">
-              <span className="text-[9px] font-black italic uppercase tracking-[0.4em] text-white/20">© 2024 ZÜHRE PLANET — GALAXY EDITION V3.1</span>
+              <span className="text-[9px] font-black italic uppercase tracking-[0.4em] text-white/20">© {new Date().getFullYear()} ZÜHRE PLANET</span>
               <div className="hidden lg:flex items-center gap-2">
                  <ThemeIcon type="star" size={12} className="text-primary/40" />
                  <span className="text-[9px] font-black italic uppercase tracking-[0.4em] text-white/10">CRAFTED FOR THE ELITE</span>
@@ -163,7 +163,6 @@ export function Footer() {
            </div>
            
            <div className="flex items-center gap-8">
-              <img src="/stripe-badge.png" className="h-6 opacity-30 grayscale hover:grayscale-0 transition-all cursor-pointer" alt="Stripe" />
               <div className="flex items-center gap-3 px-6 py-2 rounded-full bg-white/5 border border-white/10">
                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                  <span className="text-[9px] font-black text-white/50 italic uppercase tracking-widest leading-none">SYSTEM STATUS: OPTIMAL</span>
