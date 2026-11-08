@@ -1,0 +1,24 @@
+{
+  "common": {
+    "login": "GİRİŞ YAP",
+    "register": "ÜYE OL",
+    "logout": "ÇIKIŞ YAP",
+    "search": "DİJİTAL GALAKSİDE ARA...",
+    "explore": "KEŞFET",
+    "profile": "PROFİL",
+    "dashboard": "KOMUTA MERKEZİ",
+    "messages": "MESAJLAR"
+  },
+  "home": {
+    "heroTitle": "ARZU <span class='text-primary'>GALAKSİSİNE</span> HOŞ GELDİNİZ",
+    "heroSubtitle": "Elite Shadow-X deneyimi ile en gizemli ve şehvetli yıldızları keşfedin.",
+    "ctaExplore": "YILDIZLARI KEŞFET",
+    "ctaVip": "VIP ELITE ÜYELİK"
+  },
+  "dashboard": {
+    "welcome": "KOMUTA MERKEZİ",
+    "nebulaRank": "NEBULA RÜTBESİ",
+    "npBalance": "MEVCUT BAKİYE",
+    "vault": "ÖZEL ARŞİV"
+  }
+}

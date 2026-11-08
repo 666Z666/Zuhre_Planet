@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zühre Noir — Moodboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,900;1,900&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #050005;
+  color: #f0e6f0;
+  font-family: 'Inter', sans-serif;
+  padding: 40px;
+}
+h1, h2, h3 { font-family: 'Playfair Display', serif; font-style: italic; }
+.container { max-width: 1200px; margin: 0 auto; }
+.hero {
+  text-align: center;
+  padding: 80px 0 60px;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+  margin-bottom: 60px;
+}
+.hero h1 {
+  font-size: 64px;
+  font-weight: 900;
+  color: #d4af37;
+  letter-spacing: -1px;
+  text-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+  margin-bottom: 12px;
+}
+.hero h1 span { color: #a3001e; }
+.hero p {
+  font-size: 14px;
+  color: rgba(240, 230, 240, 0.4);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.palette {
+  margin-bottom: 60px;
+}
+.palette h2 {
+  font-size: 20px;
+  color: #d4af37;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.swatch {
+  aspect-ratio: 3/2;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-end;
+  padding: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.layout-preview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 60px;
+}
+.layout-col h3 {
+  font-size: 13px;
+  color: #d4af37;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.mockup {
+  background: rgba(10, 0, 5, 0.8);
+  border: 1px solid rgba(163, 0, 30, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.mockup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(163,0,30,0.15);
+}
+.mockup-logo {
+  color: #a3001e;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 900;
+}
+.mockup-nav span {
+  font-size: 10px;
+  color: rgba(240,230,240,0.3);
+  letter-spacing: 2px;
+  margin-left: 16px;
+  text-transform: uppercase;
+}
+.mockup-hero {
+  padding: 60px 20px;
+  text-align: center;
+  position: relative;
+}
+.mockup-hero h2 {
+  font-size: 32px;
+  color: #f0e6f0;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.mockup-hero .accent {
+  color: #a3001e;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+.cta-btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 14px 40px;
+  border: 1px solid #a3001e;
+  color: #a3001e;
+  border-radius: 100px;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.mockup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+.mockup-card {
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  border: 1px solid rgba(163,0,30,0.1);
+  background: linear-gradient(180deg, rgba(163,0,30,0.05), rgba(5,0,5,0.8));
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.mockup-card .line {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(240,230,240,0.1);
+  margin-bottom: 4px;
+}
+.mockup-card .line.short { width: 40%; }
+.mockup-card .line.medium { width: 65%; }
+.mockup-card .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #a3001e;
+  margin-bottom: 8px;
+  box-shadow: 0 0 10px #a3001e;
+}
+.efect-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.efect-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(163,0,30,0.03);
+  border-radius: 8px;
+  border-left: 2px solid #a3001e;
+  font-size: 13px;
+  color: rgba(240,230,240,0.7);
+}
+.efect-list li strong {
+  color: #d4af37;
+  font-weight: 600;
+}
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.tag-red { background: rgba(163,0,30,0.15); color: #a3001e; border: 1px solid rgba(163,0,30,0.2); }
+.tag-gold { background: rgba(212,175,55,0.1); color: #d4af37; border: 1px solid rgba(212,175,55,0.15); }
+.tag-muted { background: rgba(240,230,240,0.03); color: rgba(240,230,240,0.3); border: 1px solid rgba(240,230,240,0.05); }
+.section-title {
+  font-size: 13px;
+  color: #a3001e;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(163,0,30,0.1);
+}
+.vibe-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0 40px;
+}
+.vibe-card {
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: rgba(163,0,30,0.02);
+  text-align: center;
+}
+.vibe-card .icon { font-size: 32px; margin-bottom: 8px; }
+.vibe-card .label { font-size: 12px; color: #d4af37; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+.vibe-card .desc { font-size: 11px; color: rgba(240,230,240,0.4); margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="container">
+  
+  <div class="hero">
+    <h1>ZÜHRE <span>NOIR</span></h1>
+    <p>Seksi &bull; Erotik &bull; Libido &bull; 3D Deneyim</p>
+  </div>
+
+  <div class="palette">
+    <h2>✦ Renk Paleti</h2>
+    <div class="swatches">
+      <div class="swatch" style="background:#050005; color:#f0e6f0;">#050005<br>Gece</div>
+      <div class="swatch" style="background:#0a000a; color:#f0e6f0;">#0a000a<br>Rahim</div>
+      <div class="swatch" style="background:#a3001e; color:#f0e6f0;">#a3001e<br>Kan</div>
+      <div class="swatch" style="background:#2d0a1e; color:#f0e6f0;">#2d0a1e<br>Morarma</div>
+      <div class="swatch" style="background:#d4af37; color:#050005;">#d4af37<br>Altın</div>
+    </div>
+  </div>
+
+  <div class="vibe-row">
+    <div class="vibe-card">
+      <div class="icon">🩸</div>
+      <div class="label">Kan Ter</div>
+      <div class="desc">Nabız hızında titreşen kırmızı ışıklar, sıcaklık hissi</div>
+    </div>
+    <div class="vibe-card">
+      <div class="icon">🌸</div>
+      <div class="label">İpek Ten</div>
+      <div class="desc">MeshTransmissionMaterial ile kaygan/ıslak parlaklık</div>
+    </div>
+    <div class="vibe-card">
+      <div class="icon">🌫️</div>
+      <div class="label">Sıcak Buhar</div>
+      <div class="desc">Partikül sis, heat haze, buğulu kamera</div>
+    </div>
+  </div>
+
+  <div class="layout-preview">
+    <div class="layout-col">
+      <h3>✦ Sayfa Yapısı</h3>
+      <div class="mockup">
+        <div class="mockup-header">
+          <div class="mockup-logo">Z.</div>
+          <div class="mockup-nav">
+            <span>keşfet</span>
+            <span>vip</span>
+            <span>iletişim</span>
+          </div>
+        </div>
+        <div class="mockup-hero">
+          <div class="accent">Gecenin Sırrı</div>
+          <h2>Karanlıkta<br>Parlayan<br><span style="color:#a3001e;">Arzular</span></h2>
+          <div class="cta-btn">Giriş</div>
+        </div>
+        <div style="padding: 12px 0;">
+          <div style="display:flex; gap:8px; justify-content:center;">
+            <span class="tag tag-red">escort</span>
+            <span class="tag tag-gold">vip</span>
+            <span class="tag tag-muted">gizlilik</span>
+          </div>
+        </div>
+        <div class="mockup-grid">
+          <div class="mockup-card"><div class="dot"></div><div class="line medium"></div><div class="line short"></div></div>
+          <div class="mockup-card"><div class="dot"></div><div class="line medium"></div><div class="line short"></div></div>
+          <div class="mockup-card"><div class="dot"></div><div class="line medium"></div><div class="line short"></div></div>
+          <div class="mockup-card"><div class="dot"></div><div class="line medium"></div><div class="line short"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout-col">
+      <h3>✦ 3D Efektler</h3>
+      <ul class="efect-list">
+        <li><strong>Nabız</strong> — Bloom yoğunluğu 70BPM'de atsın (kalp ritmi)</li>
+        <li><strong>Islaklık</strong> — MeshTransmissionMaterial + su dalgası distort</li>
+        <li><strong>Sıcaklık</strong> — Heat haze distortion, buğulu kenarlar</li>
+        <li><strong>Nefes</strong> — Kamera + partiküller yavaşça inip kalksın</li>
+        <li><strong>Kan</strong> — Kırmızı ışık pulsasyonu, kenarlarda kararma</li>
+        <li><strong>İpek</strong> — Kaygan yansımalar, altın ışıltılar</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align:center; padding: 40px 0; border-top: 1px solid rgba(163,0,30,0.1);">
+    <p style="font-size:11px; color:rgba(240,230,240,0.2); letter-spacing:2px; text-transform:uppercase; margin-bottom:20px;">Onay ver, kodlamaya başlayalım.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <span class="tag tag-red">BEĞENDİM — BAŞLA</span>
+      <span class="tag tag-gold">RENKLERİ DEĞİŞTİR</span>
+      <span class="tag tag-muted">BAŞKA TEMA İSTERİM</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

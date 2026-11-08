@@ -1,0 +1,99 @@
+{
+  "name": "Zühre Planet",
+  "short_name": "Zühre",
+  "description": "Zühre Planet — doğrulanmış profiller, gizlilik odaklı ve güvenli iletişim.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#04140f",
+  "theme_color": "#127a59",
+  "lang": "tr",
+  "dir": "ltr",
+  "categories": [
+    "lifestyle",
+    "social",
+    "dating"
+  ],
+  "icons": [
+    {
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Profilleri Görüntüle",
+      "short_name": "Profiller",
+      "description": "Tüm escort profillerini görüntüleyin",
+      "url": "/escorts"
+    },
+    {
+      "name": "Harita Görünümü",
+      "short_name": "Harita",
+      "description": "Escort konumlarını haritada görüntüleyin",
+      "url": "/map"
+    },
+    {
+      "name": "Mesajlar",
+      "short_name": "Mesajlar",
+      "description": "Mesajlarınızı görüntüleyin",
+      "url": "/messages"
+    },
+    {
+      "name": "Favoriler",
+      "short_name": "Favoriler",
+      "description": "Favori profillerinizi görüntüleyin",
+      "url": "/favorites"
+    }
+  ],
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/"
+  },
+  "offline_enabled": true
+}

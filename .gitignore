@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.session
+*.session-journal
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/*
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local analysis artifacts
+tsc_*.txt
+lint_*.txt
+final_lint*.txt
+suspected_errors.json
+vite_output.log
+docker-compose.log
+.artifacts/
+
+# Test artifacts
+playwright-report/
+test-results/
+coverage/
+
+# Python / AI tooling
+__pycache__/
+venv/
+.venv/
+sdxl-models/
+sdxl-outputs/
+
+# Temporary files
+*.tmp
+.cache/

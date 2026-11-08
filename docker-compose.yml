@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: zuhre_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-zuhre_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-your_strong_db_password}
+      POSTGRES_DB: ${DB_NAME:-zuhre_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - zuhre_postgres_data:/var/lib/postgresql/data
+    networks:
+      - zuhre_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: zuhre_api
+    restart: always
+    command: npm run dev:server
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgres://${DB_USER:-zuhre_user}:${DB_PASSWORD:-your_strong_db_password}@db:5432/${DB_NAME:-zuhre_db}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    networks:
+      - zuhre_network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: zuhre_frontend
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    networks:
+      - zuhre_network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: zuhre_nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - api
+    networks:
+      - zuhre_network
+
+volumes:
+  zuhre_postgres_data:
+
+networks:
+  zuhre_network:
+    driver: bridge

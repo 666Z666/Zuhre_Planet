@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Sadece package.json kopyala (Hız için)
+COPY package*.json ./
+
+# Bağımlılıkları kur
+RUN npm install
+
+# Geri kalan her şeyi kopyala
+COPY . .
+
+EXPOSE 5173
+EXPOSE 3000
+
+# Geliştirme sunucusunu başlat
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

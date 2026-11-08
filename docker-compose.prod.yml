@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: zuhre_api_prod
+    restart: always
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    networks:
+      - zuhre_prod_network
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: zuhre_nginx_prod
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./dist:/usr/share/nginx/html:ro
+    depends_on:
+      - api
+    networks:
+      - zuhre_prod_network
+
+networks:
+  zuhre_prod_network:
+    driver: bridge

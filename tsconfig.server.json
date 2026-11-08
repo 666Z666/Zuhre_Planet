@@ -1,0 +1,36 @@
+{
+
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+
+    "module": "ESNext",
+
+    "moduleResolution": "bundler",
+
+    "allowImportingTsExtensions": false,
+
+    "outDir": "dist/server",
+
+    "noEmit": false,
+
+    "baseUrl": ".",
+
+    "paths": {
+
+      "@/*": ["./src/*"]
+
+    }
+
+  },
+
+  "include": [
+    "server/**/*.ts",
+    "src/drizzle/**/*.ts",
+    "src/lib/chatFilter.ts",
+    "src/lib/logger.ts"
+  ],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+
+}
+

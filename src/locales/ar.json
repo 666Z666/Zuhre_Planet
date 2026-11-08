@@ -1,0 +1,24 @@
+{
+  "common": {
+    "login": "تسجيل الدخول",
+    "register": "سجل الآن",
+    "logout": "تسجيل الخروج",
+    "search": "ابحث في المجرة الرقمية...",
+    "explore": "اكتشف",
+    "profile": "الملف الشخصي",
+    "dashboard": "مركز القيادة",
+    "messages": "الرسائل"
+  },
+  "home": {
+    "heroTitle": "مرحباً بكم في <span class='text-primary'>مجرة الرغبة</span>",
+    "heroSubtitle": "اكتشف النجوم الأكثر غموضاً وإثارة مع تجربة Elite Shadow-X.",
+    "ctaExplore": "اكتشف النجوم",
+    "ctaVip": "عضوية VIP نخبوية"
+  },
+  "dashboard": {
+    "welcome": "مركز القيادة",
+    "nebulaRank": "رتبة السديم",
+    "npBalance": "الرصيد الحالي",
+    "vault": "القبو الخاص"
+  }
+}

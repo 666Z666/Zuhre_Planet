@@ -1,0 +1,24 @@
+{
+  "common": {
+    "login": "LOGIN",
+    "register": "SIGN UP",
+    "logout": "LOGOUT",
+    "search": "SEARCH DIGITAL GALAXY...",
+    "explore": "EXPLORE",
+    "profile": "PROFILE",
+    "dashboard": "COMMAND CENTER",
+    "messages": "MESSAGES"
+  },
+  "home": {
+    "heroTitle": "WELCOME TO THE <span class='text-primary'>DESIRE GALAXY</span>",
+    "heroSubtitle": "Explore the most mysterious and sensual stars with Elite Shadow-X experience.",
+    "ctaExplore": "EXPLORE STARS",
+    "ctaVip": "VIP ELITE MEMBERSHIP"
+  },
+  "dashboard": {
+    "welcome": "COMMAND CENTER",
+    "nebulaRank": "NEBULA RANK",
+    "npBalance": "CURRENT BALANCE",
+    "vault": "THE VAULT"
+  }
+}
