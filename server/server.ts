@@ -29,6 +29,7 @@ import {
 import { normalizeEmail, isDisposableEmail } from './lib/email';
 import { checkLoginRate, checkRegisterRate, TOO_MANY_ATTEMPTS } from './lib/authRateLimit';
 import { buildLocationSitemap, seoIndexingEnabled } from './lib/listing';
+import { blindIndex } from './lib/contactCrypto';
 import { sql as dsql, and as dand } from 'drizzle-orm';
 
 validateEnvOnStartup();
@@ -227,6 +228,7 @@ app.post('/api/auth/register', async (req: Request, res: Response) => {
       role: normalizedRole,
       phoneNumber: phone ? String(phone) : null,
       provider: 'email',
+      signupIpHash: blindIndex('ip', clientIp(req)),
       hasAcceptedTerms: true,
       termsAcceptedAt: new Date(),
       isProfileComplete: true,

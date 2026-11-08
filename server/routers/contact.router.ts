@@ -3,11 +3,11 @@ import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
 import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
-import { and, eq, gte, sql } from 'drizzle-orm';
+import { and, eq, gte, sql, or, inArray } from 'drizzle-orm';
 import { createRateLimiter } from '@/lib/security/rateLimit';
 import { clientIp } from '../lib/session';
 import {
-  encryptContact, decryptContact, normalizeTrPhone, maskPhone, contactLink,
+  encryptContact, decryptContact, normalizeTrPhone, maskPhone, contactLink, blindIndex,
 } from '../lib/contactCrypto';
 
 /**
@@ -20,6 +20,10 @@ const revealIpLimiter = createRateLimiter({ windowMs: 10 * 60 * 1000, maxRequest
 const revealProfileLimiter = createRateLimiter({ windowMs: 10 * 60 * 1000, maxRequests: 5 });
 
 const channelSchema = z.enum(['phone', 'whatsapp']);
+const CLEAR_PENDING = {
+  pendingPhoneEnc: null, pendingWhatsappEnc: null, pendingPhoneHash: null, pendingWhatsappHash: null,
+  hasPendingChange: false,
+} as const;
 const phoneInput = z.string().trim().max(32);
 
 const safeDecrypt = (enc: string | null | undefined) => {
@@ -60,6 +64,8 @@ export const contactRouter = router({
       const values = {
         pendingPhoneEnc: phone ? encryptContact(phone) : null,
         pendingWhatsappEnc: whatsapp ? encryptContact(whatsapp) : null,
+        pendingPhoneHash: phone ? blindIndex('phone', phone) : null,
+        pendingWhatsappHash: whatsapp ? blindIndex('phone', whatsapp) : null,
         hasPendingChange: true,
         updatedAt: new Date(),
       };
@@ -133,7 +139,23 @@ export const contactRouter = router({
       with: { escortProfile: { columns: { id: true, stageName: true, city: true } } },
       limit: 100,
     });
+    // Aynı numara başka profillerde de kayıtlı mı (onaylı veya bekleyen)
+    const hashes = [...new Set(rows.flatMap((r) => [r.pendingPhoneHash, r.pendingWhatsappHash]).filter((h): h is string => !!h))];
+    const all = hashes.length
+      ? await db.query.escortContacts.findMany({
+          columns: { escortProfileId: true, phoneHash: true, whatsappHash: true, pendingPhoneHash: true, pendingWhatsappHash: true },
+          where: or(
+            inArray(schema.escortContacts.phoneHash, hashes),
+            inArray(schema.escortContacts.whatsappHash, hashes),
+            inArray(schema.escortContacts.pendingPhoneHash, hashes),
+            inArray(schema.escortContacts.pendingWhatsappHash, hashes),
+          ),
+        })
+      : [];
+    const usersOf = (h: string | null, self: number) =>
+      h ? all.filter((o) => o.escortProfileId !== self && [o.phoneHash, o.whatsappHash, o.pendingPhoneHash, o.pendingWhatsappHash].includes(h)).map((o) => o.escortProfileId) : [];
     return rows.map((r) => ({
+      sharedWithProfiles: [...new Set([...usersOf(r.pendingPhoneHash, r.escortProfileId), ...usersOf(r.pendingWhatsappHash, r.escortProfileId)])],
       profileId: r.escortProfileId,
       stageName: r.escortProfile?.stageName ?? '',
       city: r.escortProfile?.city ?? '',
@@ -154,9 +176,12 @@ export const contactRouter = router({
         ? {
             phoneEnc: c.pendingPhoneEnc ?? c.phoneEnc,
             whatsappEnc: c.pendingWhatsappEnc ?? c.whatsappEnc,
-            pendingPhoneEnc: null, pendingWhatsappEnc: null, hasPendingChange: false, updatedAt: new Date(),
+            phoneHash: c.pendingPhoneHash ?? c.phoneHash,
+            whatsappHash: c.pendingWhatsappHash ?? c.whatsappHash,
+            ...CLEAR_PENDING,
+            updatedAt: new Date(),
           }
-        : { pendingPhoneEnc: null, pendingWhatsappEnc: null, hasPendingChange: false, updatedAt: new Date() };
+        : { ...CLEAR_PENDING, updatedAt: new Date() };
       await db.update(schema.escortContacts).set(set).where(eq(schema.escortContacts.id, c.id));
       await db.insert(schema.auditLogs).values({
         adminId: ctx.user.id,

@@ -1,4 +1,4 @@
-import { createCipheriv, createDecipheriv, randomBytes, createHash } from 'node:crypto';
+import { createCipheriv, createDecipheriv, randomBytes, createHash, createHmac } from 'node:crypto';
 
 /**
  * İletişim numaraları için AES-256-GCM. Anahtar: CONTACT_ENC_KEY (64 hex = 32 bayt).
@@ -54,4 +54,14 @@ export function maskPhone(e164: string): string {
 /** Tıklamada dönen bağlantı. */
 export function contactLink(channel: 'phone' | 'whatsapp', e164: string): string {
   return channel === 'phone' ? `tel:${e164}` : `https://wa.me/${e164.replace(/^\+/, '')}`;
+}
+
+/**
+ * Kör indeks: aynı değer → aynı özet, ama özetten değer geri çıkarılamaz.
+ * Şifreleme anahtarından ayrı bir alt anahtar kullanılır. `scope` farklı türleri ayırır
+ * (ör. "phone" ve "ip" özetleri birbirine eşlenemez).
+ */
+export function blindIndex(scope: 'phone' | 'ip', value: string): string {
+  const sub = createHash('sha256').update(Buffer.concat([Buffer.from('bidx:'), getKey()])).digest();
+  return createHmac('sha256', sub).update(`${scope}:${value}`).digest('base64url');
 }

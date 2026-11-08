@@ -9,6 +9,7 @@ import { env } from "@/config/env";
 import { isDisposableEmail } from "../lib/email";
 import { issueSession, clientIp } from "../lib/session";
 import { checkLoginRate, checkRegisterRate, TOO_MANY_ATTEMPTS } from "../lib/authRateLimit";
+import { blindIndex } from "../lib/contactCrypto";
 const DUMMY_HASH = bcrypt.hashSync("timing-equalizer-not-a-real-password", 12);
 function assertUserNotBanned(
   user: Pick<schema.User, "isBanned" | "banExpiresAt">,
@@ -159,6 +160,7 @@ export const authRouter = router({
           phoneNumber,
           role: role as "customer" | "escort",
           provider: "email",
+          signupIpHash: blindIndex("ip", clientIp(ctx.req)),
           hasAcceptedTerms,
           termsAcceptedAt: new Date(),
           isProfileComplete: true,

@@ -58,6 +58,8 @@ export const users = pgTable('users', {
   banExpiresAt: timestamp('ban_expires_at'), // Ceza bitiş tarihi
   isShadowBanned: boolean('is_shadow_banned').default(false), // Gizli ban
   isApprovedCustomer: boolean('is_approved_customer').default(false), // Onaylı müşteri rozeti
+  /** Kayıt IP'sinin HMAC özeti (ham IP saklanmaz) — toplu hesap açma tespiti */
+  signupIpHash: text('signup_ip_hash'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -114,6 +116,8 @@ export const media = pgTable('media', {
   blurredUrl: text('blurred_url'), // Bulanıklaştırılmış URL
   isApproved: boolean('is_approved').default(false),
   privacyLevel: photoPrivacyLevelEnum('privacy_level').default('public'),
+  /** Dosya içeriğinin SHA-256 özeti — aynı fotoğrafın farklı profillerde kullanımını yakalar */
+  contentHash: text('content_hash'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -215,6 +219,11 @@ export const escortContacts = pgTable('escort_contacts', {
   whatsappEnc: text('whatsapp_enc'),
   pendingPhoneEnc: text('pending_phone_enc'),
   pendingWhatsappEnc: text('pending_whatsapp_enc'),
+  /** Kör indeks (HMAC): şifreli numarayı çözmeden "aynı numara" karşılaştırması */
+  phoneHash: text('phone_hash'),
+  whatsappHash: text('whatsapp_hash'),
+  pendingPhoneHash: text('pending_phone_hash'),
+  pendingWhatsappHash: text('pending_whatsapp_hash'),
   hasPendingChange: boolean('has_pending_change').default(false),
   updatedAt: timestamp('updated_at').defaultNow(),
 }, (t) => ({

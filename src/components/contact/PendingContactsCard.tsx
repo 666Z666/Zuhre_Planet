@@ -31,6 +31,11 @@ export function PendingContactsCard() {
               </div>
               <div>Telefon: {r.currentPhone ?? '—'} → <b>{r.pendingPhone ?? '(değişmiyor)'}</b></div>
               <div>WhatsApp: {r.currentWhatsapp ?? '—'} → <b>{r.pendingWhatsapp ?? '(değişmiyor)'}</b></div>
+              {r.sharedWithProfiles.length > 0 && (
+                <div className="mt-1 text-xs font-bold text-red-400">
+                  Uyarı: bu numara şu profillerde de kayıtlı: {r.sharedWithProfiles.map((id) => `#${id}`).join(', ')}
+                </div>
+              )}
             </div>
             <div className="flex gap-2">
               <Button size="sm" disabled={review.isPending} onClick={() => review.mutate({ profileId: r.profileId, approve: true })}>
