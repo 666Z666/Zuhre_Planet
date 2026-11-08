@@ -10,6 +10,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { ContactSettingsCard } from '@/components/contact/ContactSettingsCard';
 import { motion } from 'framer-motion';
 import { 
   User, 
@@ -188,6 +189,8 @@ export default function ProfileEditor() {
             <div className="text-green-400 font-bold">Değişiklikler başarıyla onaya gönderildi!</div>
           </div>
         )}
+
+        <ContactSettingsCard />
 
         {/* --- KİMLİK DOĞRULAMA BANNER --- */}
         {!isVerified && (

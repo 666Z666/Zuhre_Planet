@@ -88,21 +88,19 @@ export default function EscortProfile() {
     y.set(0);
   };
 
-  const handleCall = () => {
-    if (profile?.phoneNumber) {
-      window.location.href = `tel:${profile.phoneNumber}`;
-    } else {
-      alert("Bu profil için telefon numarası henüz tanımlanmamış.");
+  // Numara sayfada tutulmaz; tıklamada sunucudan alınır ve tıklama sayılır.
+  const openContact = async (channel: 'phone' | 'whatsapp') => {
+    if (!profile) return;
+    const res = await listingService.revealContact(profile.id, channel);
+    if ('error' in res) {
+      alert(res.error);
+      return;
     }
+    if (channel === 'phone') window.location.href = res.url;
+    else window.open(res.url, '_blank', 'noopener,noreferrer');
   };
-
-  const handleWhatsApp = () => {
-    if (profile?.whatsappNumber) {
-      window.open(`https://wa.me/${profile.whatsappNumber.replace(/\+/g, '')}`, '_blank');
-    } else {
-      alert("Bu profil için WhatsApp numarası henüz tanımlanmamış.");
-    }
-  };
+  const handleCall = () => { void openContact('phone'); };
+  const handleWhatsApp = () => { void openContact('whatsapp'); };
 
   useEffect(() => {
     const fetchProfile = async () => {

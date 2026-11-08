@@ -63,6 +63,7 @@ const envSchema = z
     VITE_API_URL: optionalUrl,
     SENTRY_DSN: optionalUrl,
     GOOGLE_CLIENT_ID: optionalString,
+    CONTACT_ENC_KEY: z.preprocess(emptyToUndefined, z.string().regex(/^[0-9a-fA-F]{64}$/, 'CONTACT_ENC_KEY 64 hex karakter olmalı').optional()),
     ALLOW_INSECURE_SOCIAL_AUTH: z.preprocess(
       emptyToUndefined,
       z
@@ -81,6 +82,7 @@ const envSchema = z
       'IYZICO_SECRET_KEY',
       'EMAIL_USER',
       'EMAIL_PASSWORD',
+      'CONTACT_ENC_KEY',
     ];
 
     for (const key of productionRequired) {

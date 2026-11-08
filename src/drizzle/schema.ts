@@ -8,6 +8,7 @@ import {
   timestamp,
   pgEnum,
   uniqueIndex,
+  index,
   decimal
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
@@ -200,8 +201,43 @@ export const reports = pgTable('reports', {
 });
 
 // ============================================
+// İLETİŞİM MASKELEME (rakip analizi, Kasım 2026)
+// Numara sayfada/HTML'de asla düz yer almaz; AES-256-GCM ile şifreli saklanır,
+// yalnız tıklamada, hız sınırlı bir uçtan açılır. Değişiklik admin onaylıdır.
+// ============================================
+
+export const contactChannelEnum = pgEnum('contact_channel', ['phone', 'whatsapp']);
+
+export const escortContacts = pgTable('escort_contacts', {
+  id: serial('id').primaryKey(),
+  escortProfileId: integer('escort_profile_id').notNull().references(() => escortProfiles.id, { onDelete: 'cascade' }),
+  phoneEnc: text('phone_enc'),
+  whatsappEnc: text('whatsapp_enc'),
+  pendingPhoneEnc: text('pending_phone_enc'),
+  pendingWhatsappEnc: text('pending_whatsapp_enc'),
+  hasPendingChange: boolean('has_pending_change').default(false),
+  updatedAt: timestamp('updated_at').defaultNow(),
+}, (t) => ({
+  profileUnique: uniqueIndex('escort_contacts_profile_unique').on(t.escortProfileId),
+}));
+
+/** Tıklama sayacı — kişisel veri tutmaz (IP/kullanıcı yok), yalnız kanal + zaman. */
+export const contactClicks = pgTable('contact_clicks', {
+  id: serial('id').primaryKey(),
+  escortProfileId: integer('escort_profile_id').notNull().references(() => escortProfiles.id, { onDelete: 'cascade' }),
+  channel: contactChannelEnum('channel').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (t) => ({
+  profileCreatedIdx: index('contact_clicks_profile_created_idx').on(t.escortProfileId, t.createdAt),
+}));
+
+// ============================================
 // RELATIONS
 // ============================================
+
+export const escortContactsRelations = relations(escortContacts, ({ one }) => ({
+  escortProfile: one(escortProfiles, { fields: [escortContacts.escortProfileId], references: [escortProfiles.id] }),
+}));
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   escortProfile: one(escortProfiles, { fields: [users.id], references: [escortProfiles.userId] }),

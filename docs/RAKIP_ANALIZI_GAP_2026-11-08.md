@@ -21,7 +21,8 @@ Yaş kapısı (`AgeGateOverlay`), şikâyet diyaloğu (`ReportEscortDialog`) + a
 
 ## Kalan önemli boşluklar (öncelik sırasıyla)
 1. ~~Katalog mock~~ → **2. tur:** `ApiListingService` (`VITE_LISTING_SOURCE=api`), `escort.getById`, Katalog URL filtrelerini sunucuya iletiyor, istemci sıralaması da doğrulanmış > boost > tier. Kalan: EscortProfile'ın galeri/yorum alanlarını API şekline uyarlamak, filtre paneline ilçe/fiyat/yaş/doğrulanmış kontrolleri.
-2. **Telefon maskeleme + WhatsApp yönlendirme** (E.1 "Türkiye'de hiç yok") — şemada telefon alanı yok. Öneri: `escort_contacts` tablosu (şifreli), `/go/:slug/whatsapp` yönlendirmesi + tıklama sayacı (sağlayıcı istatistiği de buradan beslenir).
+2. ~~Telefon maskeleme + WhatsApp~~ → **4. tur:** `escort_contacts` (AES-256-GCM, `CONTACT_ENC_KEY`) + `contact_clicks` (IP/kişi verisi yok), migration `0001_contact_masking`. `contact.setMine` (numara → admin onayına), `contact.getMine` (maskeli + 30 gün tıklama), `contact.reveal` (tıklamada bağlantı, IP başına 30/10 dk ve profil başına 5/10 dk sınır), `contact.listPending/review` (denetim kaydı). UI: profil düzenleyicide numara kartı, admin onay kuyruğunda numara onayları, profil sayfası düğmeleri sunucudan açıyor.
+   - Not: `0000` migration mevcut şemanın gerisinde (önceden kalma sapma); temiz DB kurulumundan önce `drizzle-kit generate` ile yeniden üretilmeli.
 3. **"Şu an müsait" rozeti** — `available_until timestamp` kolonu + migration; filtre ve sıralamaya ek.
 4. **İlçe sayfaları** — `/:city/:district` rotası, `locationStats.indexable=false` ise `noindex`; `ItemList` JSON-LD, sitemap'e yalnız indekslenebilir sayfalar.
 5. **Ajans paneli** — çoklu profil yönetimi (`agencies` tablosu, `escort_profiles.agency_id`). Raporlara göre arzın büyük kısmı ajanslarda.

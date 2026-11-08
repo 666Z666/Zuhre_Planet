@@ -16,6 +16,8 @@ export interface IListingService {
   getListingBySlug(slug: string): Promise<ListingProfile | null>;
   getListingById(id: number | string): Promise<ListingProfile | null>;
   getFeaturedListings(): Promise<ListingProfile[]>;
+  /** İletişim bağlantısını tıklamada açar (tel: / wa.me). Numara sayfada tutulmaz. */
+  revealContact(id: number | string, channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }>;
 }
 
 // --- MOCK DATA ---
@@ -223,6 +225,13 @@ export class MockListingService implements IListingService {
 
   async getFeaturedListings(): Promise<ListingProfile[]> {
     return MOCK_LISTINGS.filter(l => l.isBoosted);
+  }
+
+  async revealContact(id: number | string, channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }> {
+    const l = MOCK_LISTINGS.find(x => String(x.id) === String(id));
+    const n = channel === 'phone' ? l?.phoneNumber : l?.whatsappNumber;
+    if (!n) return { error: 'Bu ilan için bu iletişim kanalı açık değil.' };
+    return { url: channel === 'phone' ? `tel:${n}` : `https://wa.me/${n.replace(/^\+/, '')}` };
   }
 }
 

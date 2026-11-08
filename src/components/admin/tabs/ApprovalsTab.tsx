@@ -21,6 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { trpc } from '@/lib/trpc';
+import { PendingContactsCard } from '@/components/contact/PendingContactsCard';
 import { usePendingPhotos, useApprovePhoto, useRejectPhoto } from '@/hooks/useAdminData';
 
 export const ApprovalsTab = () => {
@@ -82,6 +83,7 @@ export const ApprovalsTab = () => {
 
   return (
     <div className="space-y-8 pb-20">
+      <PendingContactsCard />
       
       {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">

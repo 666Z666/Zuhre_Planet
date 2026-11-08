@@ -146,6 +146,16 @@ export class ApiListingService implements IListingService {
     return (res.profiles as ApiProfileRow[]).map((p) => mapApiProfile(p));
   }
 
+  async revealContact(id: number | string, channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }> {
+    const n = Number(id);
+    if (!Number.isInteger(n) || n <= 0) return { error: 'Geçersiz ilan.' };
+    try {
+      return await client.contact.reveal.mutate({ profileId: n, channel });
+    } catch (e) {
+      return { error: e instanceof Error ? e.message : 'İletişim bilgisi alınamadı.' };
+    }
+  }
+
   /** Şehir/ilçe canlı ilan sayıları (filtre paneli + ilçe SEO sayfaları). */
   async getLocationStats(city?: string) {
     return client.escort.locationStats.query(city ? { city } : undefined);
