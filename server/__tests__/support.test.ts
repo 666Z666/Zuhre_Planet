@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { contactFormSchema } from '../routers/support.router';
+import { contactFormSchema } from '../lib/contactForm';
 
 const ok = { name: 'Ada', email: 'ada@ornek.test', subject: 'Soru', message: 'Merhaba, bir sorum var.' };
 
