@@ -102,9 +102,6 @@ const HowItWorks = lazy(() => import("@/pages/general/HowItWorks"));
 const Settings = lazy(() => import("@/pages/Settings"));
 
 // Elite Ecosystem Pages
-const Tours = lazy(() => import("@/pages/general/Tours"));
-const Agencies = lazy(() => import("@/pages/general/Agencies"));
-const Nightlife = lazy(() => import("@/pages/general/Nightlife"));
 
 // Forum
 const ForumHome = lazy(() => import("@/pages/forum/ForumHome"));
@@ -220,9 +217,10 @@ function AppRouter() {
           <Route path={ROUTES.RED_ROOM} component={RedRoom} />
 
           {/* ── Elite Ecosystem ── */}
-          <Route path={ROUTES.TOURS} component={Tours} />
-          <Route path={ROUTES.AGENCIES} component={Agencies} />
-          <Route path={ROUTES.NIGHTLIFE} component={Nightlife} />
+          {/* Turneler / Ajanslar / Gece Hayatı kaldırıldı (TCK m.227 "aracılık / yer temini" riski) */}
+          <Route path="/tours"><Redirect to={ROUTES.CATALOG} /></Route>
+          <Route path="/agencies"><Redirect to={ROUTES.CATALOG} /></Route>
+          <Route path="/nightlife"><Redirect to={ROUTES.CATALOG} /></Route>
 
           {/* ── Forum ── */}
           <Route path={ROUTES.FORUM} component={ForumHome} />

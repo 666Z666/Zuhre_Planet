@@ -48,7 +48,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { BookingForm } from '@/components/BookingForm';
 import { LockedContentCard } from '@/components/ui/LockedContentCard';
 import { AchievementBadge } from '@/components/ui/AchievementBadge';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -60,7 +59,6 @@ export default function EscortProfile() {
   const [profile, setProfile] = useState<ListingProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
@@ -485,25 +483,6 @@ export default function EscortProfile() {
                   <RateTable rates={profile.rateTable} />
 
                   <div className="space-y-3 sm:space-y-4">
-                    <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>
-                      <DialogTrigger asChild>
-                        <Button className="w-full h-14 md:h-16 bg-gradient-to-t from-pink-600 to-rose-500 text-white rounded-2xl sm:rounded-[2rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] italic shadow-[0_8px_20px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_30px_rgba(244,63,94,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group">
-                          <Calendar className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-12 transition-transform" /> HEMEN RANDEVU AL
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-2xl border-white/10 p-0 rounded-3xl">
-                        <div className="p-6 lg:p-10 pt-16">
-                          <BookingForm
-                            escortId={profile.id.toString()}
-                            escortName={profile.displayName}
-                            escortAvatar={profile.coverImage || ''}
-                            hourlyRate={profile.rates?.hourly || 0}
-                            location={`${profile.city} ${profile.district}`}
-                            onSubmit={(data) => console.warn('Randevu Talebi:', data)}
-                          />
-                        </div>
-                      </DialogContent>
-                    </Dialog>
 
                     <Button 
                       onClick={handleCall}

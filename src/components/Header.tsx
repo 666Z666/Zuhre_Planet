@@ -48,9 +48,6 @@ export function Header() {
             {[
               { name: 'Keşfet', path: ROUTES.CATALOG, icon: 'star' as const },
               { name: 'VIP', path: ROUTES.VIP, icon: 'zap' as const, special: true },
-              { name: 'Turneler', path: ROUTES.TOURS, icon: 'map' as const },
-              { name: 'Ajanslar', path: ROUTES.AGENCIES, icon: 'users' as const },
-              { name: 'Gece Hayatı', path: ROUTES.NIGHTLIFE, icon: 'moon' as const },
             ].map((item: any) => (
                <Link key={item.name} href={item.path}>
                 <motion.div
@@ -136,9 +133,6 @@ export function Header() {
                 {[
                   { name: 'Keşfet', path: ROUTES.CATALOG, icon: 'star' as const },
                   { name: 'VIP Elite', path: ROUTES.VIP, color: 'text-secondary', icon: 'zap' as const },
-                  { name: 'Turneler', path: ROUTES.TOURS, icon: 'map' as const },
-                  { name: 'Ajanslar', path: ROUTES.AGENCIES, icon: 'users' as const },
-                  { name: 'Gece Hayatı', path: ROUTES.NIGHTLIFE, icon: 'moon' as const },
                 ].map((item) => (
                   <Link key={item.name} href={item.path}>
                     <span 

@@ -39,9 +39,6 @@ export const ROUTES = {
   ANALYTICS: '/analytics',
   MARKET: '/market',
   VIP: '/vip',
-  TOURS: '/tours',
-  AGENCIES: '/agencies',
-  NIGHTLIFE: '/nightlife',
   RED_ROOM: '/red-room',
   
   // Legal & Info Routes
