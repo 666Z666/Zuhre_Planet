@@ -3,7 +3,8 @@ import { router, publicProcedure, protectedProcedure } from '../router.core';
 import { z } from 'zod';
 import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
-import { eq, and, or, sql, desc, asc, ilike } from 'drizzle-orm';
+import { eq, and, or, sql, desc, asc, ilike, gte, lte, type SQL } from 'drizzle-orm';
+import { listInputSchema, updateProfileInputSchema, shouldIndexLocation } from '../lib/listing';
 import { TRPCError } from '@trpc/server';
 import logger from '@/lib/logger';
 import { RANK_CONFIG } from './loyalty.router';
@@ -79,28 +80,27 @@ export const escortRouter = router({
    * List Escort Profiles with filtering and pagination
    */
   list: publicProcedure
-    .input(
-      z.object({
-        page: z.number().min(1).default(1),
-        limit: z.number().min(1).max(100).default(20),
-        city: z.string().optional(),
-        tier: z.enum(schema.subscriptionTierEnum.enumValues).optional(),
-        isBoosted: z.boolean().optional(),
-        search: z.string().optional(),
-        sortBy: z.enum(['rating', 'createdAt', 'hourlyRate']).default('rating'),
-        sortOrder: z.enum(['asc', 'desc']).default('desc'),
-      })
-    )
+    .input(listInputSchema)
     .query(async ({ input }) => {
-      const { page, limit, city, tier, isBoosted, search, sortBy, sortOrder } = input;
+      const {
+        page, limit, city, district, tier, isBoosted, verifiedOnly,
+        minPrice, maxPrice, minAge, maxAge, search, sortBy, sortOrder,
+      } = input;
+      const p = schema.escortProfiles;
       // CRITICAL: Always filter to only publicly visible profiles
-      const whereConditions = [
-        eq(schema.escortProfiles.visibilityStatus, 'public'),
+      const whereConditions: SQL[] = [
+        eq(p.visibilityStatus, 'public'),
       ];
 
-      if (city) whereConditions.push(eq(schema.escortProfiles.city, city));
-      if (tier) whereConditions.push(eq(schema.escortProfiles.tier, tier));
-      if (isBoosted !== undefined) whereConditions.push(eq(schema.escortProfiles.isBoosted, isBoosted));
+      if (city) whereConditions.push(eq(p.city, city));
+      if (district) whereConditions.push(eq(p.district, district));
+      if (tier) whereConditions.push(eq(p.tier, tier));
+      if (isBoosted !== undefined) whereConditions.push(eq(p.isBoosted, isBoosted));
+      if (verifiedOnly) whereConditions.push(or(eq(p.hasVerifiedBadge, true), eq(p.isVerifiedByAdmin, true))!);
+      if (minPrice !== undefined) whereConditions.push(gte(p.hourlyRate, minPrice));
+      if (maxPrice !== undefined) whereConditions.push(lte(p.hourlyRate, maxPrice));
+      if (minAge !== undefined) whereConditions.push(gte(p.age, minAge));
+      if (maxAge !== undefined) whereConditions.push(lte(p.age, maxAge));
 
       if (search) {
         const term = `%${escapeLike(search)}%`;
@@ -130,7 +130,12 @@ export const escortRouter = router({
           where: filterCondition,
           limit: limit,
           offset: (page - 1) * limit,
-          orderBy: [desc(schema.escortProfiles.isBoosted), orderBy],
+          // Doğrulama satın alınamaz: önce doğrulanmış, sonra boost (bkz. rankKey)
+          orderBy: [
+            desc(sql`(coalesce(${p.hasVerifiedBadge}, false) or coalesce(${p.isVerifiedByAdmin}, false))`),
+            desc(p.isBoosted),
+            orderBy,
+          ],
         }),
         db.select({ count: sql<number>`count(*)::int` }).from(schema.escortProfiles).where(filterCondition),
       ]);
@@ -144,6 +149,30 @@ export const escortRouter = router({
           totalPages: Math.ceil(total[0].count / limit),
         },
       };
+    }),
+
+  /**
+   * Şehir/ilçe bazında canlı ilan sayıları — ilçe SEO sayfaları ve filtre paneli için.
+   * `indexable`: boş/az ilanlı sayfalar noindex kalmalı (doorway page riski).
+   */
+  locationStats: publicProcedure
+    .input(z.object({ city: z.string().trim().max(80).optional() }).optional())
+    .query(async ({ input }) => {
+      const p = schema.escortProfiles;
+      const conds: SQL[] = [eq(p.visibilityStatus, 'public')];
+      if (input?.city) conds.push(eq(p.city, input.city));
+      const rows = await db
+        .select({
+          city: p.city,
+          district: p.district,
+          count: sql<number>`count(*)::int`,
+          verifiedCount: sql<number>`count(*) filter (where coalesce(${p.hasVerifiedBadge}, false) or coalesce(${p.isVerifiedByAdmin}, false))::int`,
+        })
+        .from(p)
+        .where(and(...conds))
+        .groupBy(p.city, p.district)
+        .orderBy(desc(sql`count(*)`));
+      return rows.map((r) => ({ ...r, indexable: shouldIndexLocation(r.count) }));
     }),
 
   /**
@@ -251,17 +280,7 @@ export const escortRouter = router({
     }),
 
   updateProfile: protectedProcedure
-    .input(
-      z.object({
-        displayName: z.string().optional(),
-        bio: z.string().optional(),
-        biography: z.string().optional(),
-        slogan: z.string().optional(),
-        city: z.string().optional(),
-        district: z.string().optional(),
-        age: z.number().optional(),
-      })
-    )
+    .input(updateProfileInputSchema)
     .mutation(async ({ ctx, input }) => {
       if (ctx.user.role !== 'escort') {
         throw new TRPCError({ code: 'FORBIDDEN', message: 'Sadece escortlar profillerini güncelleyebilir.' });

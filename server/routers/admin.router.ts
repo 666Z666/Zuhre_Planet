@@ -4,6 +4,7 @@ import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
 import { eq, sql, and, or, ilike, desc, type SQL } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
+import { updateProfileInputSchema } from '../lib/listing';
 
 type AdminAuditAction =
   | 'ADJUST_LOYALTY' | 'APPROVE_LISTING' | 'APPROVE_PHOTO' | 'APPROVE_PROFILE_UPDATE'
@@ -630,10 +631,13 @@ export const adminRouter = router({
     .mutation(async ({ ctx, input }) => {
       const [profile] = await db.select().from(schema.escortProfiles).where(eq(schema.escortProfiles.id, input.profileId));
       if (!profile || !profile.pendingData) throw new TRPCError({ code: 'BAD_REQUEST' });
-      const pendingChanges = JSON.parse(profile.pendingData);
-      const allowedFields = ['displayName', 'bio', 'biography', 'slogan', 'city', 'district', 'age'];
-      const safeChanges: any = {};
-      allowedFields.forEach(f => { if (pendingChanges[f] !== undefined) safeChanges[f] = pendingChanges[f]; });
+      // Onay anında yeniden doğrula (eski kayıtlarda 18 yaş altı vb. kalmış olabilir)
+      const parsed = updateProfileInputSchema.safeParse(JSON.parse(profile.pendingData));
+      if (!parsed.success) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: `Bekleyen güncelleme geçersiz: ${parsed.error.issues[0]?.message ?? 'doğrulama hatası'}` });
+      }
+      // Şema yalnız izinli alanları taşır (zod bilinmeyen anahtarları atar)
+      const safeChanges = Object.fromEntries(Object.entries(parsed.data).filter(([, v]) => v !== undefined));
       await db.update(schema.escortProfiles).set({ ...safeChanges, pendingData: null, hasPendingUpdate: false }).where(eq(schema.escortProfiles.id, input.profileId));
       await logAdminAction(ctx, { action: 'APPROVE_PROFILE_UPDATE', targetType: 'ESCORT_PROFILE', targetId: input.profileId, newData: safeChanges });
       return { success: true };
