@@ -195,6 +195,9 @@ const MOCK_LISTINGS: ListingProfile[] = [
   }
 ];
 
+// Demo verisinde aktiflik: isOnline → online, aksi halde "bu hafta"
+for (const l of MOCK_LISTINGS) l.activity ??= l.isOnline ? 'online' : 'week';
+
 // --- IMPLEMENTATION ---
 
 export class MockListingService implements IListingService {
@@ -207,6 +210,10 @@ export class MockListingService implements IListingService {
       if (filters.city && tr(l.city) !== tr(filters.city)) return false;
       if (filters.district && tr(l.district) !== tr(filters.district)) return false;
       if (filters.isVerified && !(l.hasVerifiedBadge || l.verificationStatus === 'verified')) return false;
+      if (filters.activeWithin) {
+        const ok = { online: ['online'], day: ['online', 'today'], week: ['online', 'today', 'week'] }[filters.activeWithin];
+        if (!ok.includes(l.activity ?? 'inactive')) return false;
+      }
       if (filters.minAge !== undefined && l.age < filters.minAge) return false;
       if (filters.maxAge !== undefined && l.age > filters.maxAge) return false;
       if (filters.minPrice !== undefined && (price === undefined || price < filters.minPrice)) return false;

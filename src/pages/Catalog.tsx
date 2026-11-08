@@ -54,6 +54,7 @@ export default function Catalog() {
           city: resolveCityName(searchParams.get('location')),
           district: resolveDistrictName(searchParams.get('location'), searchParams.get('district')),
           isVerified: searchParams.get('verified') === 'true' || undefined,
+          activeWithin: (['online', 'day', 'week'] as const).find((v) => v === searchParams.get('activeWithin')),
           minPrice: num('minPrice'),
           maxPrice: num('maxPrice'),
           minAge: num('minAge'),

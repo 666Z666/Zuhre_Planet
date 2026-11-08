@@ -4,6 +4,7 @@ import * as schema from "@/drizzle/schema";
 import { db } from "@/drizzle/db";
 import { eq } from "drizzle-orm";
 import { verifyAccessToken, AUTH_COOKIE } from "./lib/session";
+import { shouldTouch } from "./lib/activity";
 
 // 1. tRPC Initialization - CORE
 const t = initTRPC.context<Context>().create();
@@ -67,6 +68,15 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
         code: "FORBIDDEN",
         message: "Hesabınız askıya alındı. Destek ile iletişime geçin.",
       });
+    }
+
+    // Son aktiflik: ilan sahibi giriş yapmış her istekte (5 dk'da bir) güncellenir
+    if (userProfile.role === 'escort' && shouldTouch(userProfile.id)) {
+      db.update(schema.escortProfiles)
+        .set({ lastActive: now })
+        .where(eq(schema.escortProfiles.userId, userProfile.id))
+        .execute()
+        .catch(() => { /* aktiflik güncellemesi isteği bozmamalı */ });
     }
 
     return next({

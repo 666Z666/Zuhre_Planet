@@ -6,6 +6,9 @@
 
 export type UserRole = 'customer' | 'escort' | 'admin' | 'moderator';
 
+/** Son aktiflik dilimi (backend: server/lib/activity.ts) */
+export type ActivityBucket = 'online' | 'today' | 'week' | 'month' | 'inactive';
+
 export type MembershipTier = 'free' | 'standard' | 'gold' | 'platinum' | 'vip' | 'diamond' | 'elite';
 
 /** Escort profile status */
@@ -92,6 +95,8 @@ export interface ListingProfile {
   reviewCount?: number;
   viewCount?: number;
   isOnline: boolean;
+  /** Son aktiflik (tam zaman yerine kaba dilim) */
+  activity?: ActivityBucket;
   isLive?: boolean;
   biography?: string;
   services: string[];
@@ -139,8 +144,10 @@ export interface FilterOptions {
   tier?: MembershipTier;
   isOnline?: boolean;
   isVerified?: boolean;
+  /** Son aktiflik filtresi */
+  activeWithin?: 'online' | 'day' | 'week';
   services?: string[];
-  sortBy?: 'rating' | 'price_asc' | 'price_desc' | 'newest' | 'popular';
+  sortBy?: 'rating' | 'price_asc' | 'price_desc' | 'newest' | 'popular' | 'recent';
   page?: number;
   limit?: number;
 }

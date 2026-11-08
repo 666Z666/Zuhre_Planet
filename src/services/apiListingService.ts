@@ -6,7 +6,7 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../../server';
 import { SERVER_BASE_URL, secureFetch } from '@/lib/apiSecurity';
-import type { ListingProfile, FilterOptions, MembershipTier } from '@/types/domain';
+import type { ListingProfile, FilterOptions, MembershipTier, ActivityBucket } from '@/types/domain';
 import type { IListingService } from './listingService';
 
 const client = createTRPCProxyClient<AppRouter>({
@@ -19,7 +19,6 @@ const client = createTRPCProxyClient<AppRouter>({
 });
 
 const PLACEHOLDER = '/brand/placeholders/portrait-3.svg';
-const ONLINE_WINDOW_MS = 15 * 60 * 1000;
 
 /** Backend satırı (PUBLIC_PROFILE_COLUMNS) — yalnız kullandığımız alanlar. */
 export interface ApiProfileRow {
@@ -40,7 +39,8 @@ export interface ApiProfileRow {
   viewCount?: number | null;
   hasVerifiedBadge?: boolean | null;
   isVerifiedByAdmin?: boolean | null;
-  lastActive?: string | Date | null;
+  /** Backend tam zaman damgası yerine dilim döner */
+  activity?: ActivityBucket;
   hourlyRate?: number | null;
   rating?: number | null;
   averageRating?: string | number | null;
@@ -49,9 +49,8 @@ export interface ApiProfileRow {
   reviews?: { id: number; rating: number; comment?: string | null; createdAt?: string | Date | null }[];
 }
 
-export function mapApiProfile(r: ApiProfileRow, now = Date.now()): ListingProfile {
+export function mapApiProfile(r: ApiProfileRow): ListingProfile {
   const verified = Boolean(r.hasVerifiedBadge || r.isVerifiedByAdmin);
-  const last = r.lastActive ? new Date(r.lastActive) : undefined;
   const avg = r.averageRating != null ? Number(r.averageRating) : NaN;
   return {
     id: r.id,
@@ -72,9 +71,9 @@ export function mapApiProfile(r: ApiProfileRow, now = Date.now()): ListingProfil
     rating: Number.isFinite(avg) && avg > 0 ? avg : r.rating ?? 0,
     reviewCount: r.reviewCount ?? 0,
     viewCount: r.viewCount ?? 0,
-    isOnline: last ? now - last.getTime() < ONLINE_WINDOW_MS : false,
+    isOnline: r.activity === 'online',
+    activity: r.activity ?? 'inactive',
     isBoosted: Boolean(r.isBoosted),
-    lastActiveAt: last,
     biography: r.biography || r.bio || undefined,
     slogan: r.slogan ?? undefined,
     price: r.hourlyRate ?? undefined,
@@ -98,6 +97,7 @@ export function toListInput(f: FilterOptions = {}) {
     f.sortBy === 'price_asc' ? { sortBy: 'hourlyRate' as const, sortOrder: 'asc' as const }
     : f.sortBy === 'price_desc' ? { sortBy: 'hourlyRate' as const, sortOrder: 'desc' as const }
     : f.sortBy === 'newest' ? { sortBy: 'createdAt' as const, sortOrder: 'desc' as const }
+    : f.sortBy === 'recent' ? { sortBy: 'lastActive' as const, sortOrder: 'desc' as const }
     : { sortBy: 'rating' as const, sortOrder: 'desc' as const };
   const tier = BACKEND_TIERS.includes(f.tier as BackendTier) ? (f.tier as BackendTier) : undefined;
   const clampAge = (a?: number) => (a === undefined ? undefined : Math.max(18, Math.min(99, Math.round(a))));
@@ -109,6 +109,7 @@ export function toListInput(f: FilterOptions = {}) {
     search: f.search?.trim() || undefined,
     tier,
     verifiedOnly: f.isVerified || undefined,
+    activeWithin: f.activeWithin,
     minPrice: f.minPrice,
     maxPrice: f.maxPrice,
     minAge: clampAge(f.minAge),

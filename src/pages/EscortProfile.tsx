@@ -38,6 +38,7 @@ import {
 } from '@/components/ui/SensualIcons';
 
 import { ReviewCard } from '@/components/ui/ReviewCard';
+import { ActivityBadge } from '@/components/ui/ActivityBadge';
 import { ListingProfile } from '@/types/domain';
 import { listingService } from '@/services/listingService';
 import { Button } from '@/components/ui/button';
@@ -246,6 +247,7 @@ export default function EscortProfile() {
                   <MapPin className="w-4 h-4 text-primary" />
                   <span className="text-shadow-premium">{profile.city} • {profile.district}</span>
                 </div>
+                <ActivityBadge activity={profile.activity} />
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                   <span className="text-shadow-premium font-orbitron">{profile.rating}</span>

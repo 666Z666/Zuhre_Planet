@@ -28,7 +28,9 @@ export const listInputSchema = z
     minAge: z.number().int().min(MIN_AGE).max(MAX_AGE).optional(),
     maxAge: z.number().int().min(MIN_AGE).max(MAX_AGE).optional(),
     search: text(100).optional(),
-    sortBy: z.enum(['rating', 'createdAt', 'hourlyRate']).default('rating'),
+    /** Son aktiflik filtresi: online (<15 dk), day (24 sa), week (7 gün) */
+    activeWithin: z.enum(['online', 'day', 'week']).optional(),
+    sortBy: z.enum(['rating', 'createdAt', 'hourlyRate', 'lastActive']).default('rating'),
     sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
   .refine((v) => v.minPrice === undefined || v.maxPrice === undefined || v.minPrice <= v.maxPrice, {

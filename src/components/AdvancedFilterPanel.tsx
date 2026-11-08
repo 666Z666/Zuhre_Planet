@@ -41,6 +41,17 @@ const filterSections: FilterSection[] = [
     options: TURKEY_LOCATIONS.map(c => ({ id: c.slug, label: c.name, value: c.slug }))
   },
   {
+    id: 'activeWithin',
+    title: 'Son Aktiflik',
+    icon: Zap,
+    type: 'select',
+    options: [
+      { id: 'online', label: 'Şu an çevrimiçi', value: 'online' },
+      { id: 'day', label: 'Son 24 saat', value: 'day' },
+      { id: 'week', label: 'Son 7 gün', value: 'week' },
+    ],
+  },
+  {
     id: 'verified',
     title: 'Yalnız Doğrulanmış',
     icon: BadgeCheck,
@@ -219,7 +230,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                       >
-                        <option value="">Şehir Seçin</option>
+                        <option value="">{section.id === 'location' ? 'Şehir Seçin' : 'Fark etmez'}</option>
                         {section.options?.map(opt => (
                           <option key={opt.id} value={opt.value} className="bg-slate-900">{opt.label}</option>
                         ))}

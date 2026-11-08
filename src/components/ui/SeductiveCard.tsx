@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { ActivityBadge } from './ActivityBadge';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Star, MapPin, ShieldCheck } from 'lucide-react';
 import { LipsIcon, SilkBowIcon } from './SensualIcons';
@@ -155,6 +156,7 @@ const SeductiveCardComponent = ({ profile, onQuickView, size = 'sm' }: Seductive
                  icon={tier === 'diamond' ? <SilkBowIcon size={12} /> : <LipsIcon size={12} />} 
                />
              )}
+             <ActivityBadge activity={profile.activity} />
              {profile.isLive && (
                <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-2xl px-3 py-1.5 rounded-[1.2rem] border border-primary/40">
                  <div className="w-2 h-2 bg-primary rounded-full animate-ping absolute inset-0" />

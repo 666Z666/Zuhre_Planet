@@ -5,6 +5,7 @@ import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
 import { eq, and, or, sql, desc, asc, ilike, gte, lte, type SQL } from 'drizzle-orm';
 import { listInputSchema, updateProfileInputSchema, shouldIndexLocation } from '../lib/listing';
+import { withActivity, activeSince } from '../lib/activity';
 import { TRPCError } from '@trpc/server';
 import logger from '@/lib/logger';
 import { RANK_CONFIG } from './loyalty.router';
@@ -110,7 +111,7 @@ async function getPublicProfile(match: SQL) {
         .execute()
         .catch(err => logger.error(`View count update failed for profile ${profile.id}: ${err}`));
 
-      return profile;
+      return withActivity(profile);
 }
 
 export const escortRouter = router({
@@ -122,7 +123,7 @@ export const escortRouter = router({
     .query(async ({ input }) => {
       const {
         page, limit, city, district, tier, isBoosted, verifiedOnly,
-        minPrice, maxPrice, minAge, maxAge, search, sortBy, sortOrder,
+        minPrice, maxPrice, minAge, maxAge, search, activeWithin, sortBy, sortOrder,
       } = input;
       const p = schema.escortProfiles;
       // CRITICAL: Always filter to only publicly visible profiles
@@ -139,6 +140,7 @@ export const escortRouter = router({
       if (maxPrice !== undefined) whereConditions.push(lte(p.hourlyRate, maxPrice));
       if (minAge !== undefined) whereConditions.push(gte(p.age, minAge));
       if (maxAge !== undefined) whereConditions.push(lte(p.age, maxAge));
+      if (activeWithin) whereConditions.push(gte(p.lastActive, activeSince(activeWithin)));
 
       if (search) {
         const term = `%${escapeLike(search)}%`;
@@ -155,6 +157,7 @@ export const escortRouter = router({
         rating: schema.escortProfiles.rating,
         hourlyRate: schema.escortProfiles.hourlyRate,
         createdAt: schema.escortProfiles.lastActive,
+        lastActive: schema.escortProfiles.lastActive,
       } as const;
       const sortColumn = sortColumnMap[sortBy];
       const orderBy = sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn);
@@ -178,8 +181,10 @@ export const escortRouter = router({
         db.select({ count: sql<number>`count(*)::int` }).from(schema.escortProfiles).where(filterCondition),
       ]);
 
+      const now = Date.now();
       return {
-        profiles,
+        // Tam zaman damgası yerine kaba aktiflik dilimi (gizlilik)
+        profiles: profiles.map((row) => withActivity(row, now)),
         pagination: {
           page,
           limit,
