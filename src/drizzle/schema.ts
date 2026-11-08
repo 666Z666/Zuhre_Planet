@@ -241,6 +241,27 @@ export const contactClicks = pgTable('contact_clicks', {
 }));
 
 // ============================================
+// FİYAT TABLOSU (rakip analizi: süre × görüşme yeri)
+// ============================================
+
+export const rateLocationEnum = pgEnum('rate_location', ['own_place', 'visit']);
+
+export const escortRates = pgTable('escort_rates', {
+  id: serial('id').primaryKey(),
+  escortProfileId: integer('escort_profile_id').notNull().references(() => escortProfiles.id, { onDelete: 'cascade' }),
+  durationMinutes: integer('duration_minutes').notNull(),
+  location: rateLocationEnum('location').notNull(),
+  price: integer('price').notNull(), // TRY, tam sayı
+  updatedAt: timestamp('updated_at').defaultNow(),
+}, (t) => ({
+  uniqueRow: uniqueIndex('escort_rates_profile_duration_location_unique').on(t.escortProfileId, t.durationMinutes, t.location),
+}));
+
+export const escortRatesRelations = relations(escortRates, ({ one }) => ({
+  escortProfile: one(escortProfiles, { fields: [escortRates.escortProfileId], references: [escortProfiles.id] }),
+}));
+
+// ============================================
 // RELATIONS
 // ============================================
 
@@ -268,6 +289,7 @@ export const escortProfilesRelations = relations(escortProfiles, ({ one, many })
   reviews: many(reviews, { relationName: 'reviewsReceived' }),
   photos: many(escortPhotos),
   appointments: many(appointments, { relationName: 'escortAppointments' }),
+  rates: many(escortRates),
 }));
 
 export const appointmentsRelations = relations(appointments, ({ one, many }) => ({

@@ -6,6 +6,7 @@ import * as schema from '@/drizzle/schema';
 import { eq, and, or, sql, desc, asc, ilike, gte, lte, type SQL } from 'drizzle-orm';
 import { listInputSchema, updateProfileInputSchema, shouldIndexLocation } from '../lib/listing';
 import { withActivity, activeSince } from '../lib/activity';
+import { setRatesInputSchema, deriveHourlyRate, sortRates } from '../lib/rates';
 import { TRPCError } from '@trpc/server';
 import logger from '@/lib/logger';
 import { RANK_CONFIG } from './loyalty.router';
@@ -96,7 +97,10 @@ async function getPublicProfile(match: SQL) {
             where: (rv, { eq: eqFn }) => eqFn(rv.visibility, 'public'),
             limit: 10,
             orderBy: [desc(schema.reviews.createdAt)],
-          }
+          },
+          rates: {
+            columns: { durationMinutes: true, location: true, price: true },
+          },
         },
       });
 
@@ -111,7 +115,7 @@ async function getPublicProfile(match: SQL) {
         .execute()
         .catch(err => logger.error(`View count update failed for profile ${profile.id}: ${err}`));
 
-      return withActivity(profile);
+      return withActivity({ ...profile, rates: sortRates(profile.rates) });
 }
 
 export const escortRouter = router({
@@ -289,6 +293,43 @@ export const escortRouter = router({
         .where(eq(schema.escortProfiles.userId, ctx.user.id));
 
       return { success: true, message: 'Profiliniz 24 saat boyunca öne çıkarıldı.' };
+    }),
+
+  /** İlan sahibinin fiyat tablosu (kendi görünümü). */
+  getMyRates: protectedProcedure.query(async ({ ctx }) => {
+    if (ctx.user.role !== 'escort') throw new TRPCError({ code: 'FORBIDDEN' });
+    const profile = await db.query.escortProfiles.findFirst({
+      where: eq(schema.escortProfiles.userId, ctx.user.id),
+      columns: { id: true },
+      with: { rates: { columns: { durationMinutes: true, location: true, price: true } } },
+    });
+    if (!profile) throw new TRPCError({ code: 'NOT_FOUND' });
+    return sortRates(profile.rates);
+  }),
+
+  /**
+   * Fiyat tablosunu tümüyle değiştirir. Fiyat bilgisi metin içermediği için
+   * admin onayı beklemez; filtre için hourly_rate tablodan türetilir.
+   */
+  setMyRates: protectedProcedure
+    .input(setRatesInputSchema)
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.role !== 'escort') throw new TRPCError({ code: 'FORBIDDEN' });
+      const profile = await db.query.escortProfiles.findFirst({
+        where: eq(schema.escortProfiles.userId, ctx.user.id),
+        columns: { id: true },
+      });
+      if (!profile) throw new TRPCError({ code: 'NOT_FOUND' });
+      await db.transaction(async (tx) => {
+        await tx.delete(schema.escortRates).where(eq(schema.escortRates.escortProfileId, profile.id));
+        if (input.rates.length) {
+          await tx.insert(schema.escortRates).values(input.rates.map((r) => ({ ...r, escortProfileId: profile.id })));
+        }
+        await tx.update(schema.escortProfiles)
+          .set({ hourlyRate: deriveHourlyRate(input.rates) })
+          .where(eq(schema.escortProfiles.id, profile.id));
+      });
+      return { success: true, count: input.rates.length };
     }),
 
   updateProfile: protectedProcedure

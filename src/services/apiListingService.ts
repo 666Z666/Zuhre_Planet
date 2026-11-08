@@ -6,7 +6,7 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from '../../server';
 import { SERVER_BASE_URL, secureFetch } from '@/lib/apiSecurity';
-import type { ListingProfile, FilterOptions, MembershipTier, ActivityBucket } from '@/types/domain';
+import type { ListingProfile, FilterOptions, MembershipTier, ActivityBucket, RateEntry } from '@/types/domain';
 import type { IListingService } from './listingService';
 
 const client = createTRPCProxyClient<AppRouter>({
@@ -46,6 +46,7 @@ export interface ApiProfileRow {
   averageRating?: string | number | null;
   reviewCount?: number | null;
   media?: { url: string; watermarkedUrl?: string | null; id: number }[];
+  rates?: RateEntry[];
   reviews?: { id: number; rating: number; comment?: string | null; createdAt?: string | Date | null }[];
 }
 
@@ -79,6 +80,7 @@ export function mapApiProfile(r: ApiProfileRow): ListingProfile {
     price: r.hourlyRate ?? undefined,
     rates: r.hourlyRate != null ? { hourly: r.hourlyRate, currency: 'TRY' } : undefined,
     services: [],
+    rateTable: r.rates,
     publicReviews: r.reviews?.map((rv) => ({
       id: String(rv.id),
       rating: rv.rating,

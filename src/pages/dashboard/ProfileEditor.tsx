@@ -11,6 +11,7 @@
 
 import { useState, useEffect } from 'react';
 import { ContactSettingsCard } from '@/components/contact/ContactSettingsCard';
+import { RatesEditorCard } from '@/components/rates/RatesEditorCard';
 import { motion } from 'framer-motion';
 import { 
   User, 
@@ -191,6 +192,7 @@ export default function ProfileEditor() {
         )}
 
         <ContactSettingsCard />
+        <RatesEditorCard />
 
         {/* --- KİMLİK DOĞRULAMA BANNER --- */}
         {!isVerified && (

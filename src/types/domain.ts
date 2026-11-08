@@ -6,6 +6,13 @@
 
 export type UserRole = 'customer' | 'escort' | 'admin' | 'moderator';
 
+/** Fiyat tablosu satırı (backend escort_rates) */
+export interface RateEntry {
+  durationMinutes: number;
+  location: 'own_place' | 'visit';
+  price: number;
+}
+
 /** Son aktiflik dilimi (backend: server/lib/activity.ts) */
 export type ActivityBucket = 'online' | 'today' | 'week' | 'month' | 'inactive';
 
@@ -128,6 +135,8 @@ export interface ListingProfile {
   };
   pendingChanges?: Partial<ListingProfile>;
   /** Herkese açık, moderasyondan geçmiş yorumlar (backend getBySlug/getById) */
+  /** Süre × görüşme yeri fiyat tablosu */
+  rateTable?: RateEntry[];
   publicReviews?: { id: string; rating: number; comment: string; createdAt: string }[];
   unpublishRequested?: boolean;
 }

@@ -39,6 +39,7 @@ import {
 
 import { ReviewCard } from '@/components/ui/ReviewCard';
 import { ActivityBadge } from '@/components/ui/ActivityBadge';
+import { RateTable } from '@/components/rates/RateTable';
 import { ListingProfile } from '@/types/domain';
 import { listingService } from '@/services/listingService';
 import { Button } from '@/components/ui/button';
@@ -475,8 +476,11 @@ export default function EscortProfile() {
                 <div className="space-y-8 mb-10">
                   <div className="flex justify-between items-end border-b border-white/10 pb-6">
                     <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? 'text-white/80' : 'text-orange-950/80'}`}>Saatlik Ücret</span>
-                    <span className={`text-5xl font-black italic text-glow text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>₺{profile.rates?.hourly}</span>
+                    <span className={`text-5xl font-black italic text-glow text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>
+                      {profile.rates?.hourly ? `₺${profile.rates.hourly.toLocaleString('tr-TR')}` : '—'}
+                    </span>
                   </div>
+                  <RateTable rates={profile.rateTable} />
 
                   <div className="space-y-3 sm:space-y-4">
                     <Dialog open={isBookingOpen} onOpenChange={setIsBookingOpen}>

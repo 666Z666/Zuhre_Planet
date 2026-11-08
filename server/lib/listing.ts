@@ -57,7 +57,6 @@ export const updateProfileInputSchema = z.object({
     .min(MIN_AGE, { message: `Yaş en az ${MIN_AGE} olmalıdır.` })
     .max(MAX_AGE)
     .optional(),
-  hourlyRate: z.number().min(0).max(1_000_000).optional(),
 });
 
 /** Bir profilin "doğrulanmış" sayılması: rozet veya admin onayı. */
