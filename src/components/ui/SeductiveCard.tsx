@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { ActivityBadge } from './ActivityBadge';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Star, MapPin, ShieldCheck } from 'lucide-react';
 import { LipsIcon, SilkBowIcon } from './SensualIcons';
@@ -147,6 +148,8 @@ const SeductiveCardComponent = ({ profile, onQuickView, size = 'sm' }: Seductive
                 </div>
              </div>
           )}
+
+          <FavoriteButton profileId={profile.id} className="absolute top-4 right-4 z-30" />
 
           <div className="absolute bottom-4 left-4 flex flex-col gap-2 z-20 translate-z-10">
              {isVip && (

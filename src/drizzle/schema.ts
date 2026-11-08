@@ -241,6 +241,23 @@ export const contactClicks = pgTable('contact_clicks', {
 }));
 
 // ============================================
+// FAVORİLER (müşteri → ilan)
+// ============================================
+
+export const favorites = pgTable('favorites', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  escortProfileId: integer('escort_profile_id').notNull().references(() => escortProfiles.id, { onDelete: 'cascade' }),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (t) => ({
+  userProfileUnique: uniqueIndex('favorites_user_profile_unique').on(t.userId, t.escortProfileId),
+}));
+
+export const favoritesRelations = relations(favorites, ({ one }) => ({
+  escortProfile: one(escortProfiles, { fields: [favorites.escortProfileId], references: [escortProfiles.id] }),
+}));
+
+// ============================================
 // İLETİŞİM FORMU MESAJLARI (admin gelen kutusu)
 // ============================================
 

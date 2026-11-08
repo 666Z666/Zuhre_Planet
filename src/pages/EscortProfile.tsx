@@ -39,6 +39,7 @@ import {
 
 import { ReviewCard } from '@/components/ui/ReviewCard';
 import { ActivityBadge } from '@/components/ui/ActivityBadge';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { RateTable } from '@/components/rates/RateTable';
 import { useT } from '@/contexts/LanguageContext';
 import { ListingProfile } from '@/types/domain';
@@ -249,6 +250,7 @@ export default function EscortProfile() {
                   <span className="text-shadow-premium">{profile.city} • {profile.district}</span>
                 </div>
                 <ActivityBadge activity={profile.activity} />
+                <FavoriteButton profileId={profile.id} />
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
                   <span className="text-shadow-premium font-orbitron">{profile.rating}</span>

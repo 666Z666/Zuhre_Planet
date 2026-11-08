@@ -62,7 +62,6 @@ const EscortRegister = lazy(() => import("@/pages/EscortRegister"));
 // Customer Dashboard & Feature Pages
 const CustomerDashboard = lazy(() => import("@/pages/customer/CustomerDashboard"));
 const CustomerFavorites = lazy(() => import("@/pages/customer/CustomerFavorites"));
-const CustomerAppointments = lazy(() => import("@/pages/customer/CustomerAppointments"));
 const CustomerReviews = lazy(() => import("@/pages/customer/CustomerReviews"));
 const CustomerMessages = lazy(() => import('@/pages/customer/CustomerMessages'));
 const LoyaltyDashboard = lazy(() => import("@/pages/customer/LoyaltyDashboard"));
@@ -206,7 +205,8 @@ function AppRouter() {
           {/* ── Customer Features ── */}
           <Route path={ROUTES.MESSAGES} component={CustomerMessages} />
           <Route path={ROUTES.FAVORITES} component={CustomerFavorites} />
-          <Route path={ROUTES.APPOINTMENTS} component={CustomerAppointments} />
+          <Route path={ROUTES.APPOINTMENTS}><Redirect to={ROUTES.CUSTOMER_DASHBOARD} /></Route>
+          <Route path="/customer/appointments"><Redirect to={ROUTES.CUSTOMER_DASHBOARD} /></Route>
           <Route path={ROUTES.REVIEWS} component={CustomerReviews} />
           <Route path="/customer/loyalty" component={LoyaltyDashboard} />
           <Route path="/dashboard/wallet" component={Wallet} />

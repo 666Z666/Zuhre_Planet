@@ -23,7 +23,6 @@ export const CustomerDashboardLayout: React.FC<CustomerDashboardLayoutProps> = (
 
   const menuItems = [
     { icon: LayoutDashboard, label: 'Genel Bakış', href: '/dashboard' },
-    { icon: Calendar, label: 'Randevularım', href: '/appointments' },
     { icon: Heart, label: 'Favorilerim', href: '/favorites' },
     { icon: MessageCircle, label: 'Mesajlar', href: '/messages' },
     { icon: Star, label: 'Değerlendirmelerim', href: '/reviews' },

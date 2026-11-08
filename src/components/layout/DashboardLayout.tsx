@@ -42,7 +42,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     customer: [
       { icon: LayoutDashboard, label: 'Genel Bakış', href: '/customer/dashboard' },
       { icon: User, label: 'Hesabım', href: '/customer/profile' },
-      { icon: Calendar, label: 'Randevularım', href: '/customer/appointments' },
       { icon: Trophy, label: 'Z-Puan & Sadakat', href: '/customer/loyalty' },
       { icon: Bell, label: 'Bildirimler', href: '/customer/notifications' },
       { icon: Settings, label: 'Ayarlar', href: '/customer/settings' },

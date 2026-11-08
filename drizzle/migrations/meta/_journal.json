@@ -43,6 +43,13 @@
       "when": 1794160955157,
       "tag": "0005_contact_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794161327005,
+      "tag": "0006_favorites",
+      "breakpoints": true
     }
   ]
 }
