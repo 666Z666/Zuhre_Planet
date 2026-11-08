@@ -20,7 +20,7 @@ Doğrulama: `typecheck` 0 hata · `vitest` 38/38 · `build:server` ✅.
 Yaş kapısı (`AgeGateOverlay`), şikâyet diyaloğu (`ReportEscortDialog`) + admin raporlar sekmesi, medya onay kuyruğu, harita görünümü (`MapListing`), iletişim kilidi (`ContactLock`), TR/EN/AR dil dosyaları (`src/locales`, henüz bağlı değil), ajans sayfası (statik), tier/boost/sadakat çarpanı.
 
 ## Kalan önemli boşluklar (öncelik sırasıyla)
-1. **Katalog hâlâ mock** — `listingService` → `trpc.escort.list` + yeni filtreler + `locationStats` (TODO §7). En büyük etki burada.
+1. ~~Katalog mock~~ → **2. tur:** `ApiListingService` (`VITE_LISTING_SOURCE=api`), `escort.getById`, Katalog URL filtrelerini sunucuya iletiyor, istemci sıralaması da doğrulanmış > boost > tier. Kalan: EscortProfile'ın galeri/yorum alanlarını API şekline uyarlamak, filtre paneline ilçe/fiyat/yaş/doğrulanmış kontrolleri.
 2. **Telefon maskeleme + WhatsApp yönlendirme** (E.1 "Türkiye'de hiç yok") — şemada telefon alanı yok. Öneri: `escort_contacts` tablosu (şifreli), `/go/:slug/whatsapp` yönlendirmesi + tıklama sayacı (sağlayıcı istatistiği de buradan beslenir).
 3. **"Şu an müsait" rozeti** — `available_until timestamp` kolonu + migration; filtre ve sıralamaya ek.
 4. **İlçe sayfaları** — `/:city/:district` rotası, `locationStats.indexable=false` ise `noindex`; `ItemList` JSON-LD, sitemap'e yalnız indekslenebilir sayfalar.
@@ -32,3 +32,12 @@ Yaş kapısı (`AgeGateOverlay`), şikâyet diyaloğu (`ReportEscortDialog`) + a
 
 ## Not
 Raporlardaki hukuki değerlendirmeler (TCK m.227, 6493) avukat görüşü değildir; yayın öncesi Türk ceza/vergi hukukçusuyla teyit edilmeli. `robots: noindex` bu yüzden açık kalıyor.
+
+## Hukuki/operasyonel araştırma (2. tur, 8 Kasım 2026)
+- **Erişim engeli riski (5651 m.8):** fuhuşla bağlantılı içerikte karar kural olarak sulh ceza hâkimliğinden çıkar; gecikmede sakınca varsa savcı. Kaynaklar, yalnız yetişkin içeriğin yetmediğini, fuhşa teşvik/aracılıkla somut bağın gerektiğini belirtiyor. Kararlar itiraz edilebilir. → Ürün dili, kategori ve moderasyon bu bağı kurmayacak şekilde tasarlanmalı; içerik kaldırma bildirimine hızlı yanıt süreci (yer sağlayıcı yükümlülüğü, m.5) yazılı olmalı.
+- **Engelleme pratiği:** 2025–2026'da flört/sohbet ve LGBTİ+ uygulamalarına toplu erişim engelleri getirildi (ör. 20 Ağu 2025, 29 uygulama; 2 Tem 2026). Alan adı engeli gerçek bir operasyonel risk; yedek alan adı/ayna planı ve kullanıcıya bildirim kanalı düşünülmeli.
+- **KVKK:** cinsel hayata ilişkin veriler özel nitelikli. Yurt dışına aktarım 1 Eyl 2024'ten beri açık rızayla değil standart sözleşme + bildirimle yapılıyor; bildirim yapmamanın 2026 idari para cezası 90.308–1.806.377 TL. Yurt dışı hosting kararı (yürütme planı §1) bu yükümlülüğü doğurur. Kimlik/doğrulama fotoğrafları şifreli ve ayrı saklanmalı (zaten public uçlardan dönmüyor).
+- Kaynaklar: mihci.av.tr ve harbiyehukuk.com "Fuhuş Sitelerine Erişimin Engellenmesi", kadimhukuk.com.tr "Erişimin Engellenmesi ve İçerik Kaldırma", tamindir.com ve bianet.org erişim engeli haberleri, kvkk.gov.tr Standart Sözleşmeler, gun.av.tr KVKK 2026 notu. Hepsi avukatla teyit edilmeli.
+
+## Rakip sitelerin canlı taraması
+Yapılmadı: arama aracı belirli şehirlerdeki escort ilan sitelerini listelemeyi reddediyor; bu sınırı aşacak şekilde (tarayıcı vb.) tarama yapılmadı. Mevcut saha gözlemi kaynak raporların B.3 bölümündedir.

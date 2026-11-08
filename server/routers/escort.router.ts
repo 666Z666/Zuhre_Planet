@@ -75,6 +75,44 @@ function calcVisibilityScore(points: number, tier: string): number {
   return Math.round(points * rankMultiplier * tierMultiplier);
 }
 
+/** Herkese açık profil + onaylı medya + public yorumlar; gizli profil 404. */
+async function getPublicProfile(match: SQL) {
+      const profile = await db.query.escortProfiles.findFirst({
+        columns: PUBLIC_PROFILE_COLUMNS,
+        // Gizli / onay bekleyen profiller slug ile de erişilemez
+        where: and(
+          match,
+          eq(schema.escortProfiles.visibilityStatus, 'public'),
+        ),
+        with: {
+          // Yalnızca admin onaylı ve herkese açık medya
+          media: {
+            columns: { id: true, type: true, url: true, watermarkedUrl: true, blurredUrl: true, privacyLevel: true, createdAt: true },
+            where: (m, { and: andFn, eq: eqFn }) => andFn(eqFn(m.isApproved, true), eqFn(m.privacyLevel, 'public')),
+          },
+          reviews: {
+            columns: { id: true, rating: true, comment: true, createdAt: true },
+            where: (rv, { eq: eqFn }) => eqFn(rv.visibility, 'public'),
+            limit: 10,
+            orderBy: [desc(schema.reviews.createdAt)],
+          }
+        },
+      });
+
+      if (!profile) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Profil bulunamadı.' });
+      }
+
+      // Fire-and-forget view count increment
+      db.update(schema.escortProfiles)
+        .set({ viewCount: sql`${schema.escortProfiles.viewCount} + 1` })
+        .where(eq(schema.escortProfiles.id, profile.id))
+        .execute()
+        .catch(err => logger.error(`View count update failed for profile ${profile.id}: ${err}`));
+
+      return profile;
+}
+
 export const escortRouter = router({
   /**
    * List Escort Profiles with filtering and pagination
@@ -180,42 +218,11 @@ export const escortRouter = router({
    */
   getBySlug: publicProcedure
     .input(z.object({ slug: z.string().min(1).max(160) }))
-    .query(async ({ input }) => {
-      const profile = await db.query.escortProfiles.findFirst({
-        columns: PUBLIC_PROFILE_COLUMNS,
-        // Gizli / onay bekleyen profiller slug ile de erişilemez
-        where: and(
-          eq(schema.escortProfiles.slug, input.slug),
-          eq(schema.escortProfiles.visibilityStatus, 'public'),
-        ),
-        with: {
-          // Yalnızca admin onaylı ve herkese açık medya
-          media: {
-            columns: { id: true, type: true, url: true, watermarkedUrl: true, blurredUrl: true, privacyLevel: true, createdAt: true },
-            where: (m, { and: andFn, eq: eqFn }) => andFn(eqFn(m.isApproved, true), eqFn(m.privacyLevel, 'public')),
-          },
-          reviews: {
-            columns: { id: true, rating: true, comment: true, createdAt: true },
-            where: (rv, { eq: eqFn }) => eqFn(rv.visibility, 'public'),
-            limit: 10,
-            orderBy: [desc(schema.reviews.createdAt)],
-          }
-        },
-      });
+    .query(({ input }) => getPublicProfile(eq(schema.escortProfiles.slug, input.slug))),
 
-      if (!profile) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Profil bulunamadı.' });
-      }
-
-      // Fire-and-forget view count increment
-      db.update(schema.escortProfiles)
-        .set({ viewCount: sql`${schema.escortProfiles.viewCount} + 1` })
-        .where(eq(schema.escortProfiles.id, profile.id))
-        .execute()
-        .catch(err => logger.error(`View count update failed for slug ${input.slug}: ${err}`));
-
-      return profile;
-    }),
+  getById: publicProcedure
+    .input(z.object({ id: z.number().int().positive() }))
+    .query(({ input }) => getPublicProfile(eq(schema.escortProfiles.id, input.id))),
 
   /**
    * Update own escort profile (Queue for admin approval)

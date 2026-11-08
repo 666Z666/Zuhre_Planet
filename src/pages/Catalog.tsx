@@ -45,7 +45,19 @@ export default function Catalog() {
     const fetchListings = async () => {
       setIsLoading(true);
       try {
-        const data = await listingService.getListings();
+        const num = (k: string) => {
+          const v = searchParams.get(k);
+          return v !== null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : undefined;
+        };
+        const data = await listingService.getListings({
+          city: searchParams.get('location') || undefined,
+          district: searchParams.get('district') || undefined,
+          isVerified: searchParams.get('verified') === 'true' || undefined,
+          minPrice: num('minPrice'),
+          maxPrice: num('maxPrice'),
+          minAge: num('minAge'),
+          maxAge: num('maxAge'),
+        });
         setListings(data);
       } catch (error) {
         logger.error('Failed to fetch listings', error);
@@ -54,7 +66,7 @@ export default function Catalog() {
       }
     };
     fetchListings();
-  }, []);
+  }, [searchParams]);
 
   // Debounce Effect: Optimize Search
   useEffect(() => {
@@ -74,14 +86,13 @@ export default function Catalog() {
     });
   }, [listings, searchParams, debouncedQuery]);
 
-  // Sort: Diamond > Platinum > Gold > Elite > Standard
+  // Sıralama: doğrulanmış > öne çıkarılmış > üyelik seviyesi (doğrulama satın alınamaz)
   const sortedEscorts = useMemo(() => {
-    const tierOrder: Record<string, number> = { 'diamond': 0, 'platinum': 1, 'gold': 2, 'elite': 3, 'vip': 4, 'standard': 5 };
-    return [...filteredEscorts].sort((a, b) => {
-      const tierA = tierOrder[a.membershipTier] ?? 99;
-      const tierB = tierOrder[b.membershipTier] ?? 99;
-      return tierA - tierB;
-    });
+    const tierOrder: Record<string, number> = { 'diamond': 0, 'vip': 1, 'platinum': 2, 'gold': 3, 'elite': 4, 'standard': 5, 'free': 6 };
+    const rank = (e: ListingProfile) =>
+      (e.hasVerifiedBadge || e.verificationStatus === 'verified' ? 2 : 0) + (e.isBoosted ? 1 : 0);
+    return [...filteredEscorts].sort((a, b) =>
+      rank(b) - rank(a) || (tierOrder[a.membershipTier] ?? 99) - (tierOrder[b.membershipTier] ?? 99));
   }, [filteredEscorts]);
 
   const handleFilterChange = (newFilters: Record<string, any>) => {

@@ -7,6 +7,7 @@
  */
 
 import { ListingProfile, FilterOptions } from '@/types/domain';
+import { ApiListingService } from './apiListingService';
 
 // --- INTERFACE ---
 
@@ -213,5 +214,10 @@ export class MockListingService implements IListingService {
   }
 }
 
-// Singleton Instance
-export const listingService = new MockListingService();
+// Singleton Instance — kaynak: VITE_LISTING_SOURCE=api → gerçek backend, aksi halde mock.
+// Mock yalnız geliştirme/demo içindir; yayında mutlaka "api" olmalı.
+export const LISTING_SOURCE: 'api' | 'mock' =
+  import.meta.env.VITE_LISTING_SOURCE === 'api' ? 'api' : 'mock';
+
+export const listingService: IListingService =
+  LISTING_SOURCE === 'api' ? new ApiListingService() : new MockListingService();
