@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from "react";
+import { toast } from 'sonner';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -123,11 +124,11 @@ export function ReviewForm({
         );
 
         if (!isValidType) {
-          alert(`Geçersiz dosya formatı: ${file.type}`);
+          toast.error(`Geçersiz dosya formatı: ${file.type}`);
           return false;
         }
         if (file.size > REVIEW_VALIDATION.photos.maxSize) {
-          alert(
+          toast.error(
             `Dosya çok büyük (max ${REVIEW_VALIDATION.photos.maxSize / 1024 / 1024}MB)`,
           );
           return false;
@@ -139,7 +140,7 @@ export function ReviewForm({
         validFiles.length + photos.length >
         REVIEW_VALIDATION.photos.maxCount
       ) {
-        alert(
+        toast.error(
           `En fazla ${REVIEW_VALIDATION.photos.maxCount} fotoğraf yükleyebilirsiniz`,
         );
         return;

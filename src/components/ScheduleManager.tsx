@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { 
   Calendar, 
   Clock, 
@@ -66,10 +67,10 @@ export function ScheduleManager({
       if (onSave) {
         await onSave(slots);
       }
-      alert('Takvim başarıyla güncellendi.');
+      toast.success('Takvim başarıyla güncellendi.');
     } catch (error) {
       console.error('Takvim kaydetme hatası:', error);
-      alert('Takvim güncellenirken bir hata oluştu.');
+      toast.error('Takvim güncellenirken bir hata oluştu.');
     } finally {
       setIsSaving(false);
     }

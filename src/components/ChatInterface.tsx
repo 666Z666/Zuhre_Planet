@@ -37,6 +37,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -211,11 +212,11 @@ export function ChatInterface({
         },
         (error) => {
           console.error('Konum alınamadı:', error);
-          alert('Konum alınamadı. Lütfen konum izinlerini kontrol edin.');
+          toast.error('Konum alınamadı. Lütfen konum izinlerini kontrol edin.');
         }
       );
     } else {
-      alert('Tarayıcınız konum özelliğini desteklemiyor.');
+      toast.error('Tarayıcınız konum özelliğini desteklemiyor.');
     }
   };
 

@@ -37,6 +37,7 @@
  */
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -168,7 +169,7 @@ export function CustomerRatingForm({
 
   const handleSubmit = () => {
     if (overallRating < 1) {
-      alert('Lütfen en az bir kriteri değerlendirin.');
+      toast.error('Lütfen en az bir kriteri değerlendirin.');
       return;
     }
 

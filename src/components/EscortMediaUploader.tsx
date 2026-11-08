@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef } from 'react';
+import { toast } from 'sonner';
 import {
   Upload,
   Play,
@@ -94,25 +95,25 @@ export function EscortMediaUploader({
       const isVideo = file.type.startsWith('video/');
 
       if (!isPhoto && !isVideo) {
-        alert('Sadece fotoğraf ve video dosyaları yükleyebilirsiniz');
+        toast.error('Sadece fotoğraf ve video dosyaları yükleyebilirsiniz');
         return;
       }
 
       // Sınır kontrolü
       if (isPhoto && !canAddPhotos) {
-        alert(`Maksimum ${limits.photos} fotoğraf yükleyebilirsiniz`);
+        toast.error(`Maksimum ${limits.photos} fotoğraf yükleyebilirsiniz`);
         return;
       }
 
       if (isVideo && !canAddVideos) {
-        alert(`Maksimum ${limits.videos} video yükleyebilirsiniz`);
+        toast.error(`Maksimum ${limits.videos} video yükleyebilirsiniz`);
         return;
       }
 
       // Dosya boyutu kontrolü
       const maxSize = isPhoto ? limits.maxPhotoSize : limits.maxVideoSize;
       if (file.size > maxSize * 1024 * 1024) {
-        alert(`Maksimum dosya boyutu: ${maxSize} MB`);
+        toast.error(`Maksimum dosya boyutu: ${maxSize} MB`);
         return;
       }
 
@@ -169,7 +170,7 @@ export function EscortMediaUploader({
 
   const handleUpload = async () => {
     if (uploadedMedia.length === 0) {
-      alert('Lütfen en az bir medya dosyası seçin');
+      toast.error('Lütfen en az bir medya dosyası seçin');
       return;
     }
 

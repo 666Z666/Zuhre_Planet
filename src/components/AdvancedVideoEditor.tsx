@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useRef, useEffect } from 'react';
+import { toast } from 'sonner';
 import {
   Play,
   Pause,
@@ -182,7 +183,7 @@ export function AdvancedVideoEditor({
 
   const handleSave = async () => {
     if (!coverImage) {
-      alert('Lütfen kapak fotoğrafı seçin');
+      toast.error('Lütfen kapak fotoğrafı seçin');
       return;
     }
 

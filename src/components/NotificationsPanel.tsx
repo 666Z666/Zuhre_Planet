@@ -36,6 +36,7 @@
  * ```
  */
 import { useState } from 'react';
+import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -245,7 +246,7 @@ export function NotificationsPanel({
                 className="w-full"
                 onClick={() => {
                   // Open email settings modal
-                  alert('E-posta bildirim ayarları açılacak...');
+                  toast.info('E-posta bildirim tercihleri Ayarlar sayfasındadır.');
                 }}
               >
                 <Mail className="w-4 h-4 mr-2" />

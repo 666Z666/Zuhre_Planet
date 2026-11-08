@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { toast } from 'sonner';
 import { MessageSquare, Phone, MessageCircle, Send, Check, X, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -95,7 +96,7 @@ export function ContactRequestManager({
 
   const handleSendRequest = async () => {
     if (!selectedMethod || !message.trim()) {
-      alert('Lütfen iletişim yöntemini seçin ve mesaj yazın');
+      toast.error('Lütfen iletişim yöntemini seçin ve mesaj yazın');
       return;
     }
 

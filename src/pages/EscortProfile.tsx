@@ -5,6 +5,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 import { useParams, Link } from 'wouter';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { 
@@ -96,7 +97,7 @@ export default function EscortProfile() {
     if (!profile) return;
     const res = await listingService.revealContact(profile.id, channel);
     if ('error' in res) {
-      alert(res.error);
+      toast.error(res.error);
       return;
     }
     if (channel === 'phone') window.location.href = res.url;

@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { toast } from 'sonner';
 import {
   Copy,
   Share2,
@@ -86,7 +87,7 @@ export function ReferralManagementPanel({
       });
     } else {
       navigator.clipboard.writeText(message);
-      alert('Mesaj kopyalandı!');
+      toast.success('Mesaj kopyalandı!');
     }
   };
 
