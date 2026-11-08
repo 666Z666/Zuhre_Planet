@@ -2,16 +2,17 @@ import React from 'react';
 import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { MessageSquare, TrendingUp, Users, PlusCircle } from 'lucide-react';
+import { QueryState } from '@/components/ui/QueryState';
 import { trpc } from '@/lib/trpc';
 import { ROUTES } from '@/constants/routes';
 
 export default function ForumHome() {
   const [, setLocation] = useLocation();
-  const { data: categories, isLoading } = trpc.forum.getCategories.useQuery();
+  const { data: categories, isLoading, error, refetch } = trpc.forum.getCategories.useQuery();
   const totalTopics = categories?.reduce((sum, category) => sum + (category.topicCount || 0), 0) || 0;
   const totalPosts = categories?.reduce((sum, category) => sum + (category.postCount || 0), 0) || 0;
 
-  if (isLoading) return <div className="p-10 text-white animate-pulse">Kategoriler yükleniyor...</div>;
+  if (isLoading || error) return <QueryState isLoading={isLoading} error={error} onRetry={() => void refetch()} loadingText="Kategoriler yükleniyor…" />;
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">

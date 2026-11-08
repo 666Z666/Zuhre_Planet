@@ -75,7 +75,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
 
       {/* Cinematic Vignette & Anamorphic Masking */}
       <div className="absolute inset-0 z-[1] shadow-[inset_0_0_20vw_rgba(0,0,0,1)] pointer-events-none" />
-      <div className="absolute inset-0 z-[1] opacity-[0.08] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay contrast-200" />
+      <div className="absolute inset-0 z-[1] opacity-[0.08] pointer-events-none bg-[url('/textures/noise.svg')] mix-blend-overlay contrast-200" />
 
       {/* CONTENT LAYER */}
       <div className="relative z-10 max-w-[1800px] mx-auto px-12 text-center space-y-16">

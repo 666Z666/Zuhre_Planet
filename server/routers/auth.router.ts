@@ -2,7 +2,7 @@ import { router, publicProcedure, protectedProcedure } from "../router.core";
 import { z } from "zod";
 import { db } from "@/drizzle/db";
 import * as schema from "@/drizzle/schema";
-import { eq } from "drizzle-orm";
+import { eq, and, gt, isNull } from "drizzle-orm";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { env } from "@/config/env";
@@ -10,6 +10,12 @@ import { isDisposableEmail } from "../lib/email";
 import { issueSession, clientIp } from "../lib/session";
 import { checkLoginRate, checkRegisterRate, TOO_MANY_ATTEMPTS } from "../lib/authRateLimit";
 import { blindIndex } from "../lib/contactCrypto";
+import {
+  createResetToken, hashResetToken, resetEmailLimiter, resetIpLimiter,
+  RESET_REQUEST_MESSAGE, RESET_TOKEN_TTL_MS, resetEmailHtml,
+} from "../lib/passwordReset";
+import { sendEmail } from "@/lib/email/client";
+import logger from "@/lib/logger";
 const DUMMY_HASH = bcrypt.hashSync("timing-equalizer-not-a-real-password", 12);
 function assertUserNotBanned(
   user: Pick<schema.User, "isBanned" | "banExpiresAt">,
@@ -369,6 +375,73 @@ export const authRouter = router({
       .where(eq(schema.users.id, ctx.user.id));
     return { success: true };
   }),
+  /**
+   * Şifre sıfırlama isteği. Hesap var/yok aynı yanıtı döner; e-posta ve IP hız sınırlı.
+   */
+  requestPasswordReset: publicProcedure
+    .input(z.object({ email: z.string().trim().email().max(254) }))
+    .mutation(async ({ input, ctx }) => {
+      const email = input.email.toLowerCase();
+      const ip = clientIp(ctx.req);
+      if (!resetIpLimiter.check(`ip:${ip}`).allowed || !resetEmailLimiter.check(`email:${email}`).allowed) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: TOO_MANY_ATTEMPTS });
+      }
+      const user = await db.query.users.findFirst({
+        where: eq(schema.users.email, email),
+        columns: { id: true, email: true, isBanned: true, provider: true },
+      });
+      if (user && !user.isBanned) {
+        const { token, tokenHash } = createResetToken();
+        await db.insert(schema.passwordResetTokens).values({
+          userId: user.id,
+          tokenHash,
+          expiresAt: new Date(Date.now() + RESET_TOKEN_TTL_MS),
+        });
+        const link = `${env.appUrl.replace(/\/+$/, "")}/reset-password?token=${encodeURIComponent(token)}`;
+        const sent = await sendEmail({
+          to: user.email,
+          subject: "Zühre Planet — şifre sıfırlama",
+          html: resetEmailHtml(link),
+          text: `Yeni şifre belirlemek için 30 dakika içinde bu bağlantıyı açın: ${link}`,
+        }).catch((e) => ({ success: false, error: String(e) }));
+        if (!sent.success) logger.error(`Şifre sıfırlama e-postası gönderilemedi (kullanıcı ${user.id})`);
+      }
+      return { message: RESET_REQUEST_MESSAGE };
+    }),
+
+  /**
+   * Token ile yeni şifre. Tek kullanımlık; kullanılınca kullanıcının diğer bekleyen token'ları da geçersiz olur.
+   */
+  resetPassword: publicProcedure
+    .input(z.object({
+      token: z.string().min(20).max(200),
+      password: z.string().min(8, "Şifre en az 8 karakter olmalıdır.").max(256),
+    }))
+    .mutation(async ({ input, ctx }) => {
+      if (!resetIpLimiter.check(`reset:${clientIp(ctx.req)}`).allowed) {
+        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: TOO_MANY_ATTEMPTS });
+      }
+      const now = new Date();
+      const row = await db.query.passwordResetTokens.findFirst({
+        where: and(
+          eq(schema.passwordResetTokens.tokenHash, hashResetToken(input.token)),
+          isNull(schema.passwordResetTokens.usedAt),
+          gt(schema.passwordResetTokens.expiresAt, now),
+        ),
+      });
+      if (!row) {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Bağlantı geçersiz veya süresi dolmuş. Yeni bir sıfırlama isteyin." });
+      }
+      const passwordHash = await bcrypt.hash(input.password, 12);
+      await db.transaction(async (tx) => {
+        await tx.update(schema.users).set({ passwordHash }).where(eq(schema.users.id, row.userId));
+        await tx.update(schema.passwordResetTokens)
+          .set({ usedAt: now })
+          .where(and(eq(schema.passwordResetTokens.userId, row.userId), isNull(schema.passwordResetTokens.usedAt)));
+      });
+      return { message: "Şifreniz güncellendi. Yeni şifrenizle giriş yapabilirsiniz." };
+    }),
+
   /**
    * Get current user session info
    */

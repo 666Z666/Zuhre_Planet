@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation, useRoute } from 'wouter';
 import { motion } from 'framer-motion';
 import { MessageCircle, User, Calendar, ArrowLeft } from 'lucide-react';
+import { QueryState } from '@/components/ui/QueryState';
 import { trpc } from '@/lib/trpc';
 import { ROUTES } from '@/constants/routes';
 
@@ -10,9 +11,9 @@ export default function ForumCategory() {
   const [, setLocation] = useLocation();
   const slug = (params as Record<string, string>)?.slug || "";
 
-  const { data, isLoading } = trpc.forum.getTopics.useQuery({ categorySlug: slug });
+  const { data, isLoading, error, refetch } = trpc.forum.getTopics.useQuery({ categorySlug: slug });
 
-  if (isLoading) return <div className="p-10 text-white animate-pulse">Konular yükleniyor...</div>;
+  if (isLoading || error) return <QueryState isLoading={isLoading} error={error} onRetry={() => void refetch()} loadingText="Konular yükleniyor…" />;
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">

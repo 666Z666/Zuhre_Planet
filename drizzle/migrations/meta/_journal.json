@@ -29,6 +29,13 @@
       "when": 1794154273600,
       "tag": "0003_escort_rates",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794155523047,
+      "tag": "0004_password_reset",
+      "breakpoints": true
     }
   ]
 }

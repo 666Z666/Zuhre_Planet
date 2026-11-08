@@ -28,7 +28,7 @@ export function Footer() {
         { name: 'Elite Katalog', path: ROUTES.CATALOG },
         { name: 'VIP Üyelik', path: ROUTES.VIP },
         { name: 'Galaxy Magazine', path: ROUTES.BLOG },
-        { name: 'Trendler', path: '/trends' },
+        { name: 'Trendler', path: ROUTES.CATALOG },
       ],
     },
     {
@@ -37,7 +37,7 @@ export function Footer() {
         { name: 'Hakkımızda', path: '/about' },
         { name: 'Nasıl Çalışır?', path: '/how-it-works' },
         { name: 'Üyelik Paketleri', path: ROUTES.PRICING },
-        { name: 'İş Ortaklığı', path: '/partners' },
+        { name: 'İş Ortaklığı', path: ROUTES.CONTACT },
       ],
     },
     {

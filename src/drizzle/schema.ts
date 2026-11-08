@@ -241,6 +241,21 @@ export const contactClicks = pgTable('contact_clicks', {
 }));
 
 // ============================================
+// ŞİFRE SIFIRLAMA — token'ın kendisi değil SHA-256 özeti saklanır, tek kullanımlık, 30 dk.
+// ============================================
+
+export const passwordResetTokens = pgTable('password_reset_tokens', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  tokenHash: text('token_hash').notNull(),
+  expiresAt: timestamp('expires_at').notNull(),
+  usedAt: timestamp('used_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (t) => ({
+  tokenHashUnique: uniqueIndex('password_reset_tokens_hash_unique').on(t.tokenHash),
+}));
+
+// ============================================
 // FİYAT TABLOSU (rakip analizi: süre × görüşme yeri)
 // ============================================
 

@@ -239,7 +239,8 @@ export const YonicBurningFeather = ({ size = 200, className = "" }: IconProps) =
             cx="100" cy="85" r="5" 
             fill="white" 
             className="shadow-[0_0_10px_white]"
-            animate={{ r: [4, 7, 4], opacity: [0.8, 1, 0.8] }}
+            style={{ transformBox: 'fill-box', transformOrigin: 'center' }}
+            animate={{ scale: [0.8, 1.4, 0.8], opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 0.8, repeat: Infinity }}
           />
 

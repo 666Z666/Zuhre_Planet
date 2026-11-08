@@ -35,7 +35,7 @@ import { BackgroundScene } from "@/components/3d/BackgroundScene";
 import CommandCenter from "@/components/scout/CommandCenter";
 
 // ─── Router ──────────────────────────────────────────────────────────────────
-import { Route, Switch } from "wouter";
+import { Route, Switch, Redirect } from "wouter";
 import NotFound from "@/pages/NotFound";
 import { ROUTES } from "@/constants/routes";
 
@@ -49,6 +49,8 @@ const Catalog = lazy(() => import("@/pages/Catalog"));
 const EscortList = lazy(() => import("@/pages/EscortList"));
 const EscortProfile = lazy(() => import("@/pages/EscortProfile"));
 const LocationListings = lazy(() => import("@/pages/LocationListings"));
+const ForgotPassword = lazy(() => import("@/pages/auth/ForgotPassword"));
+const ResetPassword = lazy(() => import("@/pages/auth/ResetPassword"));
 
 // Auth
 const CustomerLogin = lazy(() => import("@/pages/auth/CustomerLogin"));
@@ -170,13 +172,17 @@ function AppRouter() {
           <Route path={ROUTES.HOME} component={Home} />
           <Route path={ROUTES.CATALOG} component={Catalog} />
           <Route path="/escorts" component={EscortList} />
+          {/* /escort/:id'den ÖNCE: aksi halde /escort/login ve /escort/dashboard profil sanılıyordu */}
+          <Route path={ROUTES.ESCORT_LOGIN} component={EscortLogin} />
+          <Route path={ROUTES.ESCORT_DASHBOARD} component={EscortDashboard} />
+          <Route path="/escort/forgot-password"><Redirect to="/forgot-password" /></Route>
+          <Route path="/escort/settings"><Redirect to="/settings" /></Route>
           <Route path={ROUTES.ESCORT_PROFILE} component={EscortProfile} />
           <Route path="/escort/:id" component={EscortProfile} />
           <Route path="/konum/:city/:district?" component={LocationListings} />
 
           {/* ── Auth ── */}
           <Route path={ROUTES.LOGIN} component={CustomerLogin} />
-          <Route path={ROUTES.ESCORT_LOGIN} component={EscortLogin} />
           <Route path="/login-escort" component={EscortLogin} />
           <Route path={ROUTES.ADMIN_LOGIN} component={AdminLogin} />
           <Route path={ROUTES.REGISTER} component={ClientRegister} />
@@ -187,7 +193,6 @@ function AppRouter() {
           {/* ── Dashboards ── */}
           <Route path={ROUTES.CUSTOMER_DASHBOARD} component={CustomerDashboard} />
           <Route path="/dashboard" component={CustomerDashboard} />
-          <Route path={ROUTES.ESCORT_DASHBOARD} component={EscortDashboard} />
           <Route path="/escort/dashboard/private" component={EscortDashboard} />
           <Route path={ROUTES.ADMIN_DASHBOARD} component={AdminDashboard} />
 
@@ -244,6 +249,23 @@ function AppRouter() {
           <Route path={ROUTES.SETTINGS} component={Settings} />
 
           {/* ── 404 ── */}
+          {/* Şifre sıfırlama */}
+          <Route path={ROUTES.FORGOT_PASSWORD} component={ForgotPassword} />
+          <Route path={ROUTES.RESET_PASSWORD} component={ResetPassword} />
+
+          {/* Eski/kısa bağlantılar → doğru sayfalar (sitede bu adreslere bağlantılar var) */}
+          <Route path="/privacy"><Redirect to={ROUTES.PRIVACY} /></Route>
+          <Route path="/cookies"><Redirect to={ROUTES.COOKIE_POLICY} /></Route>
+          <Route path="/terms"><Redirect to={ROUTES.TERMS} /></Route>
+          <Route path={ROUTES.VIP}><Redirect to="/membership" /></Route>
+          <Route path={ROUTES.MARKET}><Redirect to="/dashboard/store" /></Route>
+          <Route path={ROUTES.ANALYTICS}><Redirect to={ROUTES.ESCORT_DASHBOARD} /></Route>
+          <Route path={ROUTES.REPORTS}><Redirect to={ROUTES.SUPPORT} /></Route>
+          <Route path="/customer/wallet"><Redirect to="/dashboard/wallet" /></Route>
+          <Route path="/customer/settings"><Redirect to={ROUTES.SETTINGS} /></Route>
+          <Route path="/customer/analytics"><Redirect to={ROUTES.CUSTOMER_DASHBOARD} /></Route>
+          <Route path={ROUTES.ADMIN_SETTINGS}><Redirect to={ROUTES.ADMIN_DASHBOARD} /></Route>
+
           <Route component={NotFound} />
         </Switch>
       </Suspense>

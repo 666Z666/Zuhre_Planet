@@ -22,7 +22,19 @@ function getBaseUrl() {
 }
 
 export function TRPCProvider({ children }: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(() => new QueryClient({
+    defaultOptions: {
+      // Sunucu yoksa sayfa uzun süre "yükleniyor"da kalmasın; 4xx hatalarını yeniden deneme
+      queries: {
+        retry: (count, err) => {
+          const code = (err as { data?: { httpStatus?: number } })?.data?.httpStatus;
+          if (code && code >= 400 && code < 500) return false;
+          return count < 1;
+        },
+        refetchOnWindowFocus: false,
+      },
+    },
+  }));
 
   const [trpcClient] = useState(() =>
     trpc.createClient({
