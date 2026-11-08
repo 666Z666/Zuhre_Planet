@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Ruler, Weight, User, Scissors, Eye, Zap, MapPin } from 'lucide-react';
+import { ChevronDown, Ruler, Weight, User, Scissors, Eye, Zap, MapPin, BadgeCheck, Wallet } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { TURKEY_LOCATIONS, getDistrictsByCity } from '@/data/locations';
 import { LipsIcon, MaskIcon, CorsetIcon, SilkBowIcon } from './ui/SensualIcons';
@@ -16,7 +16,9 @@ interface FilterSection {
   id: string;
   title: string;
   icon: React.ElementType;
-  type: 'checkbox' | 'range' | 'select' | 'grid';
+  type: 'checkbox' | 'range' | 'minmax' | 'select' | 'grid' | 'toggle';
+  /** minmax: URL anahtarları (ör. minAge / maxAge) */
+  keys?: [string, string];
   options?: FilterOption[];
   min?: number;
   max?: number;
@@ -39,14 +41,32 @@ const filterSections: FilterSection[] = [
     options: TURKEY_LOCATIONS.map(c => ({ id: c.slug, label: c.name, value: c.slug }))
   },
   {
+    id: 'verified',
+    title: 'Yalnız Doğrulanmış',
+    icon: BadgeCheck,
+    type: 'toggle',
+  },
+  {
     id: 'age',
     title: 'Yaş Aralığı',
     icon: User,
-    type: 'range',
+    type: 'minmax',
+    keys: ['minAge', 'maxAge'],
     min: 18,
-    max: 50,
+    max: 60,
     step: 1,
     unit: 'Yaş'
+  },
+  {
+    id: 'price',
+    title: 'Saatlik Ücret',
+    icon: Wallet,
+    type: 'minmax',
+    keys: ['minPrice', 'maxPrice'],
+    min: 0,
+    max: 20000,
+    step: 250,
+    unit: '₺'
   },
   {
     id: 'height',
@@ -112,7 +132,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
   className = ''
 }) => {
   const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
-  const [expandedSections, setExpandedSections] = useState<string[]>(['location', 'age']);
+  const [expandedSections, setExpandedSections] = useState<string[]>(['location', 'verified', 'age', 'price']);
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
@@ -124,6 +144,8 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
 
   const handleValueChange = (sectionId: string, value: any) => {
     const newFilters = { ...activeFilters, [sectionId]: value };
+    // Şehir değişince eski ilçe geçersiz olur
+    if (sectionId === 'location') delete newFilters.district;
     setActiveFilters(newFilters);
     onFilterChange?.(newFilters);
   };
@@ -216,6 +238,49 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                           ))}
                         </select>
                       )}
+                    </div>
+                  )}
+
+                  {section.type === 'toggle' && (
+                    <label className="flex items-center justify-between gap-4 pt-2 cursor-pointer">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
+                        Kimliği ve fotoğrafı doğrulanmış profiller
+                      </span>
+                      <input
+                        type="checkbox"
+                        checked={activeFilters[section.id] === true}
+                        onChange={(e) => handleValueChange(section.id, e.target.checked ? true : undefined)}
+                        className="h-5 w-5 accent-primary"
+                        aria-label={section.title}
+                      />
+                    </label>
+                  )}
+
+                  {section.type === 'minmax' && section.keys && (
+                    <div className="grid grid-cols-2 gap-3 pt-2">
+                      {section.keys.map((key, i) => (
+                        <label key={key} className="space-y-2">
+                          <span className="block text-[9px] font-black uppercase tracking-widest text-white/40">
+                            {i === 0 ? 'En az' : 'En çok'} ({section.unit})
+                          </span>
+                          <input
+                            type="number"
+                            inputMode="numeric"
+                            min={section.min}
+                            max={section.max}
+                            step={section.step}
+                            value={activeFilters[key] ?? ''}
+                            placeholder={String(i === 0 ? section.min : section.max)}
+                            onChange={(e) => {
+                              const raw = e.target.value;
+                              if (raw === '') return handleValueChange(key, undefined);
+                              const n = Math.min(section.max ?? Infinity, Math.max(section.min ?? 0, Number(raw)));
+                              handleValueChange(key, Number.isFinite(n) ? n : undefined);
+                            }}
+                            className="w-full bg-white/5 border border-white/10 rounded-2xl p-3 text-xs font-black text-white focus:outline-none focus:border-primary/50"
+                          />
+                        </label>
+                      ))}
                     </div>
                   )}
 

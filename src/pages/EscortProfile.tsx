@@ -434,28 +434,30 @@ export default function EscortProfile() {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <ReviewCard review={{
-                      id: '1',
-                      escortId: profile.id.toString(),
-                      customerId: 'c1',
-                      customerName: 'Yusuf K.',
-                      rating: 5,
-                      comment: "Harika bir deneyimdi, fotoğraflarından daha güzel ve çok nazik biri. Kesinlikle tavsiye ederim.",
-                      isVerified: true,
-                      createdAt: '2 gün önce'
-                    }} />
-                    <ReviewCard review={{
-                      id: '2',
-                      escortId: profile.id.toString(),
-                      customerId: 'c2',
-                      customerName: 'Ahmet T.',
-                      rating: 4,
-                      comment: "Çok profesyonel ve dakik. Galaxy'nin en iyilerinden biri.",
-                      isVerified: true,
-                      createdAt: '1 hafta önce'
-                    }} />
-                  </div>
+                  {profile.publicReviews && profile.publicReviews.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      {profile.publicReviews.map((rv) => (
+                        <ReviewCard
+                          key={rv.id}
+                          review={{
+                            id: rv.id,
+                            escortId: String(profile.id),
+                            customerId: '',
+                            // Yorum yapanın kimliği public uçta paylaşılmaz
+                            customerName: 'Doğrulanmış üye',
+                            rating: rv.rating,
+                            comment: rv.comment,
+                            isVerified: true,
+                            createdAt: rv.createdAt ? new Date(rv.createdAt).toLocaleDateString('tr-TR') : '',
+                          }}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm font-bold uppercase tracking-widest text-white/50">
+                      Bu profil için henüz yayımlanmış yorum yok.
+                    </p>
+                  )}
                 </div>
               </TabsContent>
             </Tabs>

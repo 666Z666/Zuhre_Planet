@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';
 import { SEOManager } from '@/components/SEOManager';
 import { listingService } from '@/services/listingService';
+import { resolveCityName, resolveDistrictName, sameLocation } from '@/data/locations';
 import { ListingProfile } from '@/types/domain';
 import { QuickViewModal } from '@/components/listings/QuickViewModal';
 import logger from '@/lib/browserLogger';
@@ -50,8 +51,8 @@ export default function Catalog() {
           return v !== null && v !== '' && Number.isFinite(Number(v)) ? Number(v) : undefined;
         };
         const data = await listingService.getListings({
-          city: searchParams.get('location') || undefined,
-          district: searchParams.get('district') || undefined,
+          city: resolveCityName(searchParams.get('location')),
+          district: resolveDistrictName(searchParams.get('location'), searchParams.get('district')),
           isVerified: searchParams.get('verified') === 'true' || undefined,
           minPrice: num('minPrice'),
           maxPrice: num('maxPrice'),
@@ -79,9 +80,9 @@ export default function Catalog() {
       const name = (escort.displayName || escort.stageName || '').toLowerCase();
       if (debouncedQuery && !name.includes(debouncedQuery.toLowerCase())) return false;
       const city = searchParams.get('location');
-      if (city && escort.city.toLowerCase() !== city.toLowerCase()) return false;
+      if (city && !sameLocation(escort.city, resolveCityName(city))) return false;
       const district = searchParams.get('district');
-      if (district && escort.district?.toLowerCase() !== district.toLowerCase()) return false;
+      if (district && !sameLocation(escort.district, resolveDistrictName(city, district))) return false;
       return true;
     });
   }, [listings, searchParams, debouncedQuery]);

@@ -197,8 +197,20 @@ const MOCK_LISTINGS: ListingProfile[] = [
 
 export class MockListingService implements IListingService {
   async getListings(filters?: FilterOptions): Promise<ListingProfile[]> {
-    // Filtreleme mantığı (Basitçe mock veriyi dönüyoruz şimdilik)
-    return MOCK_LISTINGS;
+    // Demo modunda da sunucuyla aynı filtre mantığı (bkz. server/lib/listing.ts)
+    if (!filters) return MOCK_LISTINGS;
+    const tr = (s?: string) => (s ?? '').toLocaleLowerCase('tr-TR');
+    return MOCK_LISTINGS.filter((l) => {
+      const price = l.rates?.hourly ?? l.price;
+      if (filters.city && tr(l.city) !== tr(filters.city)) return false;
+      if (filters.district && tr(l.district) !== tr(filters.district)) return false;
+      if (filters.isVerified && !(l.hasVerifiedBadge || l.verificationStatus === 'verified')) return false;
+      if (filters.minAge !== undefined && l.age < filters.minAge) return false;
+      if (filters.maxAge !== undefined && l.age > filters.maxAge) return false;
+      if (filters.minPrice !== undefined && (price === undefined || price < filters.minPrice)) return false;
+      if (filters.maxPrice !== undefined && (price === undefined || price > filters.maxPrice)) return false;
+      return true;
+    });
   }
 
   async getListingBySlug(slug: string): Promise<ListingProfile | null> {

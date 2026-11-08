@@ -46,6 +46,7 @@ export interface ApiProfileRow {
   averageRating?: string | number | null;
   reviewCount?: number | null;
   media?: { url: string; watermarkedUrl?: string | null; id: number }[];
+  reviews?: { id: number; rating: number; comment?: string | null; createdAt?: string | Date | null }[];
 }
 
 export function mapApiProfile(r: ApiProfileRow, now = Date.now()): ListingProfile {
@@ -79,6 +80,12 @@ export function mapApiProfile(r: ApiProfileRow, now = Date.now()): ListingProfil
     price: r.hourlyRate ?? undefined,
     rates: r.hourlyRate != null ? { hourly: r.hourlyRate, currency: 'TRY' } : undefined,
     services: [],
+    publicReviews: r.reviews?.map((rv) => ({
+      id: String(rv.id),
+      rating: rv.rating,
+      comment: rv.comment ?? '',
+      createdAt: rv.createdAt ? new Date(rv.createdAt).toISOString() : '',
+    })),
   };
 }
 

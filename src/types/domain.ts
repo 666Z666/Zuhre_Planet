@@ -122,6 +122,8 @@ export interface ListingProfile {
     lng: number;
   };
   pendingChanges?: Partial<ListingProfile>;
+  /** Herkese açık, moderasyondan geçmiş yorumlar (backend getBySlug/getById) */
+  publicReviews?: { id: string; rating: number; comment: string; createdAt: string }[];
   unpublishRequested?: boolean;
 }
 

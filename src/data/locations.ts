@@ -50,8 +50,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "01_i-mamoglu",
-        "name": "İmamoğlu",
-        "slug": "i-mamoglu",
+        "name": "İmamoğlu",
+        "slug": "imamoglu",
         "neighborhoods": []
       },
       {
@@ -244,14 +244,14 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "03_i-hsaniye",
-        "name": "İhsaniye",
-        "slug": "i-hsaniye",
+        "name": "İhsaniye",
+        "slug": "ihsaniye",
         "neighborhoods": []
       },
       {
         "id": "03_i-scehisar",
-        "name": "İscehisar",
-        "slug": "i-scehisar",
+        "name": "İscehisar",
+        "slug": "iscehisar",
         "neighborhoods": []
       },
       {
@@ -614,8 +614,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "07_i-bradi",
-        "name": "İbradı",
-        "slug": "i-bradi",
+        "name": "İbradı",
+        "slug": "ibradi",
         "neighborhoods": []
       },
       {
@@ -778,8 +778,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "09_i-ncirliova",
-        "name": "İncirliova",
-        "slug": "i-ncirliova",
+        "name": "İncirliova",
+        "slug": "incirliova",
         "neighborhoods": []
       },
       {
@@ -923,8 +923,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "10_i-vrindi",
-        "name": "İvrindi",
-        "slug": "i-vrindi",
+        "name": "İvrindi",
+        "slug": "ivrindi",
         "neighborhoods": []
       },
       {
@@ -990,8 +990,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "11_i-nhisar",
-        "name": "İnhisar",
-        "slug": "i-nhisar",
+        "name": "İnhisar",
+        "slug": "inhisar",
         "neighborhoods": []
       },
       {
@@ -1295,14 +1295,14 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "16_i-negol",
-        "name": "İnegöl",
-        "slug": "i-negol",
+        "name": "İnegöl",
+        "slug": "inegol",
         "neighborhoods": []
       },
       {
         "id": "16_i-znik",
-        "name": "İznik",
-        "slug": "i-znik",
+        "name": "İznik",
+        "slug": "iznik",
         "neighborhoods": []
       },
       {
@@ -1562,8 +1562,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "19_i-skilip",
-        "name": "İskilip",
-        "slug": "i-skilip",
+        "name": "İskilip",
+        "slug": "iskilip",
         "neighborhoods": []
       },
       {
@@ -1871,8 +1871,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "22_i-psala",
-        "name": "İpsala",
-        "slug": "i-psala",
+        "name": "İpsala",
+        "slug": "ipsala",
         "neighborhoods": []
       },
       {
@@ -1999,8 +1999,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "24_i-lic",
-        "name": "İliç",
-        "slug": "i-lic",
+        "name": "İliç",
+        "slug": "ilic",
         "neighborhoods": []
       },
       {
@@ -2084,8 +2084,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "25_i-spir",
-        "name": "İspir",
-        "slug": "i-spir",
+        "name": "İspir",
+        "slug": "ispir",
         "neighborhoods": []
       },
       {
@@ -2211,8 +2211,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "26_i-nonu",
-        "name": "İnönü",
-        "slug": "i-nonu",
+        "name": "İnönü",
+        "slug": "inonu",
         "neighborhoods": []
       },
       {
@@ -2278,8 +2278,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "27_i-slahiye",
-        "name": "İslahiye",
-        "slug": "i-slahiye",
+        "name": "İslahiye",
+        "slug": "islahiye",
         "neighborhoods": []
       },
       {
@@ -2564,8 +2564,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "31_i-skenderun",
-        "name": "İskenderun",
-        "slug": "i-skenderun",
+        "name": "İskenderun",
+        "slug": "iskenderun",
         "neighborhoods": []
       },
       {
@@ -2778,8 +2778,8 @@ export const TURKEY_LOCATIONS: City[] = [
   },
   {
     "id": "34",
-    "name": "İstanbul",
-    "slug": "i-stanbul",
+    "name": "İstanbul",
+    "slug": "istanbul",
     "districts": [
       {
         "id": "34_adalar",
@@ -3019,8 +3019,8 @@ export const TURKEY_LOCATIONS: City[] = [
   },
   {
     "id": "35",
-    "name": "İzmir",
-    "slug": "i-zmir",
+    "name": "İzmir",
+    "slug": "izmir",
     "districts": [
       {
         "id": "35_aliaga",
@@ -3332,14 +3332,14 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "37_i-hsangazi",
-        "name": "İhsangazi",
-        "slug": "i-hsangazi",
+        "name": "İhsangazi",
+        "slug": "ihsangazi",
         "neighborhoods": []
       },
       {
         "id": "37_i-nebolu",
-        "name": "İnebolu",
-        "slug": "i-nebolu",
+        "name": "İnebolu",
+        "slug": "inebolu",
         "neighborhoods": []
       },
       {
@@ -3423,8 +3423,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "38_i-ncesu",
-        "name": "İncesu",
-        "slug": "i-ncesu",
+        "name": "İncesu",
+        "slug": "incesu",
         "neighborhoods": []
       },
       {
@@ -3642,8 +3642,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "41_i-zmit",
-        "name": "İzmit",
-        "slug": "i-zmit",
+        "name": "İzmit",
+        "slug": "izmit",
         "neighborhoods": []
       },
       {
@@ -4577,8 +4577,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "52_i-kizce",
-        "name": "İkizce",
-        "slug": "i-kizce",
+        "name": "İkizce",
+        "slug": "ikizce",
         "neighborhoods": []
       },
       {
@@ -4680,14 +4680,14 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "53_i-kizdere",
-        "name": "İkizdere",
-        "slug": "i-kizdere",
+        "name": "İkizdere",
+        "slug": "ikizdere",
         "neighborhoods": []
       },
       {
         "id": "53_i-yidere",
-        "name": "İyidere",
-        "slug": "i-yidere",
+        "name": "İyidere",
+        "slug": "iyidere",
         "neighborhoods": []
       },
       {
@@ -4874,8 +4874,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "55_i-lkadim",
-        "name": "İlkadım",
-        "slug": "i-lkadim",
+        "name": "İlkadım",
+        "slug": "ilkadim",
         "neighborhoods": []
       },
       {
@@ -5087,8 +5087,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "58_i-mranli",
-        "name": "İmranlı",
-        "slug": "i-mranli",
+        "name": "İmranlı",
+        "slug": "imranli",
         "neighborhoods": []
       },
       {
@@ -5646,8 +5646,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "65_i-pekyolu",
-        "name": "İpekyolu",
-        "slug": "i-pekyolu",
+        "name": "İpekyolu",
+        "slug": "ipekyolu",
         "neighborhoods": []
       },
       {
@@ -6074,8 +6074,8 @@ export const TURKEY_LOCATIONS: City[] = [
       },
       {
         "id": "73_i-dil",
-        "name": "İdil",
-        "slug": "i-dil",
+        "name": "İdil",
+        "slug": "idil",
         "neighborhoods": []
       },
       {
@@ -6448,3 +6448,25 @@ export const getNeighborhoodsByDistrict = (cityIdentifier: string, districtIdent
 export const getAllCitySlugs = (): string[] => {
   return TURKEY_LOCATIONS.map(c => c.slug);
 };
+
+/** Türkçe duyarlı küçük harf karşılaştırması (İ/ı sorunları için). */
+const trLower = (s: string) => s.normalize('NFC').toLocaleLowerCase('tr-TR');
+
+/** Slug veya isimden şehir adını çözer (DB'de isim saklanır: "İstanbul"). */
+export const resolveCityName = (cityIdentifier?: string | null): string | undefined => {
+  if (!cityIdentifier) return undefined;
+  const id = trLower(cityIdentifier);
+  return TURKEY_LOCATIONS.find(c => c.slug === id || trLower(c.name) === id)?.name ?? cityIdentifier;
+};
+
+/** Slug veya isimden ilçe adını çözer. */
+export const resolveDistrictName = (cityIdentifier?: string | null, districtIdentifier?: string | null): string | undefined => {
+  if (!districtIdentifier) return undefined;
+  const id = trLower(districtIdentifier);
+  const districts = cityIdentifier ? getDistrictsByCity(cityIdentifier) : TURKEY_LOCATIONS.flatMap(c => c.districts);
+  return districts.find(d => d.slug === id || trLower(d.name) === id)?.name ?? districtIdentifier;
+};
+
+/** İki konum değeri aynı yeri mi gösteriyor (slug/isim/büyük-küçük harf bağımsız). */
+export const sameLocation = (a?: string | null, b?: string | null): boolean =>
+  !!a && !!b && trLower(a) === trLower(b);
