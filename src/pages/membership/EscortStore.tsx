@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { HolographicBadge } from '@/components/ui/HolographicBadge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { notifyPaymentsUnavailable } from '@/lib/payments';
 
 const visibilityPackages = [
   {
@@ -94,10 +95,8 @@ export default function EscortStore() {
 
   const handlePurchase = (id: string) => {
     setLoading(id);
-    setTimeout(() => {
-      setLoading(null);
-      alert('Ödeme sayfasına yönlendiriliyorsunuz...');
-    }, 1000);
+    notifyPaymentsUnavailable();
+    setLoading(null);
   };
 
   const [usePoints, setUsePoints] = useState(false);

@@ -13,6 +13,9 @@ import {
   Zap
 } from 'lucide-react';
 import { Footer } from '@/components/Footer';
+import { notifyPaymentsUnavailable } from '@/lib/payments';
+import { useAuth } from '@/contexts/AuthContext';
+import { trpc } from '@/lib/trpc';
 import { StarryBackground } from '@/components/StarryBackground';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -98,15 +101,16 @@ const perksOverview = [
 export default function CustomerMembership() {
   const [loading, setLoading] = useState<string | null>(null);
   const [usePoints, setUsePoints] = useState(false);
-  const userPoints = 3450; // Mock current points
+  const { isAuthenticated } = useAuth();
+  // Gerçek puan bakiyesi (girişsizken 0) — eskiden herkese sabit 3450 gösteriliyordu
+  const loyalty = trpc.loyalty.getMyStatus.useQuery(undefined, { enabled: isAuthenticated, retry: false });
+  const userPoints = loyalty.data?.points ?? 0;
   const pointsValue = (userPoints / 10).toFixed(2); // 100 pts = 10 TL
 
   const handleUpgrade = (id: string) => {
     setLoading(id);
-    setTimeout(() => {
-      setLoading(null);
-      alert('Güvenli ödeme sayfasına yönlendiriliyorsunuz...');
-    }, 1000);
+    notifyPaymentsUnavailable(id.toUpperCase());
+    setLoading(null);
   };
 
   return (

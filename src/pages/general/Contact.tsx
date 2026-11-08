@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { SEOManager } from '@/components/SEOManager';
+import { toast } from 'sonner';
+import { trpc } from '@/lib/trpc';
 
 const ContactMethod = ({ icon: Icon, title, desc, delay }: any) => (
   <motion.div
@@ -33,16 +35,24 @@ const ContactMethod = ({ icon: Icon, title, desc, delay }: any) => (
 );
 
 export default function Contact() {
-  const [formState, setFormState] = useState({ name: '', email: '', subject: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const empty = { name: '', email: '', subject: '', message: '', website: '' };
+  const [formState, setFormState] = useState(empty);
+  const send = trpc.support.contact.useMutation({
+    onSuccess: (r) => {
+      toast.success(r.message);
+      setFormState(empty);
+    },
+    onError: (e) => {
+      const zodMsg = (e.data as { zodError?: { fieldErrors?: Record<string, string[]> } } | undefined)?.zodError?.fieldErrors;
+      const first = zodMsg && Object.values(zodMsg).flat()[0];
+      toast.error(first ?? e.message);
+    },
+  });
+  const isSubmitting = send.isPending;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      alert('Mesajınız Galaktik Merkeze İletildi.');
-    }, 1500);
+    send.mutate({ ...formState, website: formState.website || undefined });
   };
 
   return (
@@ -81,6 +91,17 @@ export default function Contact() {
              className="p-12 rounded-[3.5rem] bg-white/5 border border-white/5 backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)]"
            >
               <form onSubmit={handleSubmit} className="space-y-8">
+                 {/* Bot tuzağı — ekranda görünmez */}
+                 <input
+                   type="text"
+                   name="website"
+                   tabIndex={-1}
+                   autoComplete="off"
+                   aria-hidden="true"
+                   className="hidden"
+                   value={formState.website}
+                   onChange={(e) => setFormState({ ...formState, website: e.target.value })}
+                 />
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                        <label className="text-[10px] font-black text-white/40 uppercase tracking-widest pl-4">AD SOYAD</label>

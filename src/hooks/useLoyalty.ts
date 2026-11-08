@@ -20,16 +20,6 @@ export function useLoyaltyLeaderboard(limit = 10) {
   });
 }
 
-export function useAddPoints() {
-  const utils = trpc.useUtils();
-  return trpc.loyalty.addPoints.useMutation({
-    onSuccess: () => {
-      // Puan eklendikten sonra status'u yenile
-      utils.loyalty.getMyStatus.invalidate();
-    },
-  });
-}
-
 export function useGenerateReferralCode() {
   const utils = trpc.useUtils();
   return trpc.loyalty.generateReferralCode.useMutation({

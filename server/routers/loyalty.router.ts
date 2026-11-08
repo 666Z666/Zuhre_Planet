@@ -89,10 +89,13 @@ export const loyaltyRouter = router({
     }),
 
   /**
-   * Add points to current user (triggered by events)
+   * Olay puanı ekler. GÜVENLİK: eskiden protectedProcedure idi — her kullanıcı kendine
+   * sınırsız puan yazabiliyordu (puan = indirim + görünürlük). Artık yalnız admin;
+   * puanlar sunucu olaylarından (yorum, profil tamamlama vb.) verilmeli.
    */
-  addPoints: protectedProcedure
+  addPoints: adminProcedure
     .input(z.object({
+      userId: z.number().int().positive(),
       eventType: z.enum([
         'profile_complete',
         'first_appointment',
@@ -105,7 +108,7 @@ export const loyaltyRouter = router({
       ]),
       referenceId: z.number().optional(), // appointmentId, reviewId etc.
     }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const pointsToAdd = POINT_EVENTS[input.eventType];
 
       const [updatedUser] = await db.update(schema.users)
@@ -113,7 +116,7 @@ export const loyaltyRouter = router({
           loyaltyPoints: sql`${schema.users.loyaltyPoints} + ${pointsToAdd}`,
           experiencePoints: sql`${schema.users.experiencePoints} + ${pointsToAdd}`,
         })
-        .where(eq(schema.users.id, ctx.user.id))
+        .where(eq(schema.users.id, input.userId))
         .returning({ id: schema.users.id, loyaltyPoints: schema.users.loyaltyPoints, userRank: schema.users.userRank });
 
       const newPoints = updatedUser.loyaltyPoints ?? 0;
@@ -123,7 +126,7 @@ export const loyaltyRouter = router({
       if (updatedUser.userRank !== newRank.rank) {
         await db.update(schema.users)
           .set({ userRank: newRank.rank })
-          .where(eq(schema.users.id, ctx.user.id));
+          .where(eq(schema.users.id, input.userId));
       }
 
       return {

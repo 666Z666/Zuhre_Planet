@@ -1,7 +1,7 @@
 import { router, protectedProcedure, adminProcedure } from '../router.core';
 import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
-import { eq, and, not, sql } from 'drizzle-orm';
+import { eq, and, not, sql, gte } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -84,57 +84,64 @@ export const subscriptionRouter = router({
     }),
 
   /**
-   * Üyelik seviyesini yükselt
+   * Üyelik seviyesini yükselt — YALNIZ ADMİN.
+   * GÜVENLİK: eskiden protectedProcedure idi; ödeme doğrulaması olmadan herkes kendini
+   * Gold/Platinum/VIP yapıp üstüne puan alabiliyordu. Online ödeme yokken akış:
+   * kullanıcı havale/EFT yapar → admin ödemeyi doğrular → bu uçla üyeliği açar.
    */
-  upgradeSubscription: protectedProcedure
+  upgradeSubscription: adminProcedure
     .input(
       z.object({
+        userId: z.number().int().positive(),
         tier: z.enum(['gold', 'platinum', 'vip']),
-        months: z.number().min(1).max(12),
+        months: z.number().int().min(1).max(12),
+        paymentReference: z.string().trim().min(3).max(120),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const user = await db.query.users.findFirst({
-        where: eq(schema.users.id, ctx.user.id),
+        where: eq(schema.users.id, input.userId),
+        columns: { id: true, role: true },
       });
+      if (!user) throw new TRPCError({ code: 'NOT_FOUND', message: 'Kullanıcı bulunamadı.' });
 
       const subscriptionEndDate = new Date();
       subscriptionEndDate.setMonth(subscriptionEndDate.getMonth() + input.months);
 
-      if (ctx.user.role === 'customer') {
+      if (user.role === 'customer') {
         await db.update(schema.customerProfiles)
-          .set({
-            tier: input.tier,
-            subscriptionEndsAt: subscriptionEndDate,
-          })
-          .where(eq(schema.customerProfiles.userId, ctx.user.id));
-      } else if (ctx.user.role === 'escort') {
+          .set({ tier: input.tier, subscriptionEndsAt: subscriptionEndDate })
+          .where(eq(schema.customerProfiles.userId, user.id));
+      } else if (user.role === 'escort') {
         await db.update(schema.escortProfiles)
-          .set({
-            tier: input.tier,
-            subscriptionEndsAt: subscriptionEndDate,
-          })
-          .where(eq(schema.escortProfiles.userId, ctx.user.id));
+          .set({ tier: input.tier, subscriptionEndsAt: subscriptionEndDate })
+          .where(eq(schema.escortProfiles.userId, user.id));
+      } else {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Bu rol için üyelik yok.' });
       }
 
-      // Sadakat puanı ekle
       const benefit = SUBSCRIPTION_BENEFITS[input.tier];
-      const loyaltyPointsToAdd = Math.floor(benefit.monthlyPrice * 10); // 1 TL = 10 puan
-
+      const loyaltyPointsToAdd = Math.floor(benefit.monthlyPrice * 10 * input.months); // 1 TL = 10 puan
       await db.insert(schema.loyaltyTransactions).values({
-        userId: ctx.user.id,
+        userId: user.id,
         amount: loyaltyPointsToAdd,
         type: 'earn',
-        description: `${input.tier.toUpperCase()} üyeliğe yükseltme (${input.months} ay)`,
+        description: `${input.tier.toUpperCase()} üyelik (${input.months} ay)`,
       });
-
       await db.update(schema.users)
-        .set({ loyaltyPoints: (user?.loyaltyPoints || 0) + loyaltyPointsToAdd })
-        .where(eq(schema.users.id, ctx.user.id));
+        .set({ loyaltyPoints: sql`coalesce(${schema.users.loyaltyPoints}, 0) + ${loyaltyPointsToAdd}` })
+        .where(eq(schema.users.id, user.id));
+      await db.insert(schema.auditLogs).values({
+        adminId: ctx.user.id,
+        action: 'UPGRADE_SUBSCRIPTION',
+        targetType: 'USER',
+        targetId: user.id,
+        details: JSON.stringify({ tier: input.tier, months: input.months, paymentReference: input.paymentReference }),
+      });
 
       return {
         success: true,
-        message: `${benefit.name} üyeliğine başarıyla yükseltildiniz.`,
+        message: `${benefit.name} üyeliği açıldı.`,
         subscriptionEndsAt: subscriptionEndDate,
         loyaltyPointsAdded: loyaltyPointsToAdd,
       };
@@ -146,31 +153,26 @@ export const subscriptionRouter = router({
   spendLoyaltyPoints: protectedProcedure
     .input(
       z.object({
-        amount: z.number().min(1),
-        reason: z.string(),
+        amount: z.number().int().min(1).max(1_000_000),
+        reason: z.string().trim().min(1).max(200),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const user = await db.query.users.findFirst({
-        where: eq(schema.users.id, ctx.user.id),
-      });
-
-      if (!user || (user.loyaltyPoints || 0) < input.amount) {
+      // Tek atomik güncelleme: bakiye yetmiyorsa satır güncellenmez (eşzamanlı isteklerde eksiye düşmez)
+      const [updated] = await db.update(schema.users)
+        .set({ loyaltyPoints: sql`${schema.users.loyaltyPoints} - ${input.amount}` })
+        .where(and(eq(schema.users.id, ctx.user.id), gte(schema.users.loyaltyPoints, input.amount)))
+        .returning({ loyaltyPoints: schema.users.loyaltyPoints });
+      if (!updated) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Yeterli sadakat puanınız yok.' });
       }
-
       await db.insert(schema.loyaltyTransactions).values({
         userId: ctx.user.id,
         amount: input.amount,
         type: 'spend',
         description: input.reason,
       });
-
-      await db.update(schema.users)
-        .set({ loyaltyPoints: (user.loyaltyPoints || 0) - input.amount })
-        .where(eq(schema.users.id, ctx.user.id));
-
-      return { success: true, message: 'Sadakat puanları harcandı.', remainingPoints: (user.loyaltyPoints || 0) - input.amount };
+      return { success: true, message: 'Sadakat puanları harcandı.', remainingPoints: updated.loyaltyPoints ?? 0 };
     }),
 
   /**

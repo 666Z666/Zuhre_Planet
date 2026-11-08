@@ -18,20 +18,13 @@ export const appointmentRouter = router({
         price: z.number(),
       })
     )
-    .mutation(async ({ ctx, input }) => {
-      const customerId = ctx.user.id;
-      const [newAppointment] = await db.insert(schema.appointments).values({
-        customerId,
-        escortId: input.escortId,
-        date: input.date,
-        time: input.time,
-        duration: input.duration,
-        notes: input.notes,
-        price: input.price,
-        status: 'pending',
-      }).returning();
-
-      return newAppointment;
+    .mutation(async () => {
+      // Platform randevu/rezervasyon almaz (TCK m.227 aracılık riski; Kaptan kararı, Kasım 2026).
+      // İletişim yalnız ilan sahibiyle doğrudan kurulur (contact.reveal).
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Platform üzerinden randevu alınmıyor. İlan sahibiyle doğrudan iletişime geçin.',
+      });
     }),
 
   list: protectedProcedure

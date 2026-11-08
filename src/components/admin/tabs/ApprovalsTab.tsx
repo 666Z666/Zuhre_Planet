@@ -23,6 +23,7 @@ import { toast } from 'sonner';
 import { trpc } from '@/lib/trpc';
 import { PendingContactsCard } from '@/components/contact/PendingContactsCard';
 import { SafetySignalsCard } from '@/components/admin/SafetySignalsCard';
+import { ContactInboxCard } from '@/components/admin/ContactInboxCard';
 import { usePendingPhotos, useApprovePhoto, useRejectPhoto } from '@/hooks/useAdminData';
 
 export const ApprovalsTab = () => {
@@ -85,6 +86,7 @@ export const ApprovalsTab = () => {
   return (
     <div className="space-y-8 pb-20">
       <SafetySignalsCard />
+      <ContactInboxCard />
       <PendingContactsCard />
       
       {/* HEADER */}

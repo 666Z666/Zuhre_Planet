@@ -18,6 +18,7 @@ import { subscriptionRouter } from './routers/subscription.router';
 import { loyaltyRouter } from './routers/loyalty.router';
 import { contactRouter } from './routers/contact.router';
 import { safetyRouter } from './routers/safety.router';
+import { supportRouter } from './routers/support.router';
 
 export { router, publicProcedure, protectedProcedure, adminProcedure };
 
@@ -38,6 +39,7 @@ export const appRouter = router({
   loyalty: loyaltyRouter,
   contact: contactRouter,
   safety: safetyRouter,
+  support: supportRouter,
   health: publicProcedure.query(async ({ ctx }) => {
     try {
       await ctx.db

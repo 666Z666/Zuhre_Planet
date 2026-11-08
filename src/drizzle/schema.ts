@@ -241,6 +241,25 @@ export const contactClicks = pgTable('contact_clicks', {
 }));
 
 // ============================================
+// İLETİŞİM FORMU MESAJLARI (admin gelen kutusu)
+// ============================================
+
+export const contactMessageStatusEnum = pgEnum('contact_message_status', ['new', 'read', 'closed']);
+
+export const contactMessages = pgTable('contact_messages', {
+  id: serial('id').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  subject: text('subject').notNull(),
+  message: text('message').notNull(),
+  userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
+  status: contactMessageStatusEnum('status').default('new').notNull(),
+  createdAt: timestamp('created_at').defaultNow(),
+}, (t) => ({
+  statusCreatedIdx: index('contact_messages_status_created_idx').on(t.status, t.createdAt),
+}));
+
+// ============================================
 // ŞİFRE SIFIRLAMA — token'ın kendisi değil SHA-256 özeti saklanır, tek kullanımlık, 30 dk.
 // ============================================
 
