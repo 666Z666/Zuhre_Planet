@@ -29,6 +29,7 @@ import {
 import { normalizeEmail, isDisposableEmail } from './lib/email';
 import { checkLoginRate, checkRegisterRate, TOO_MANY_ATTEMPTS } from './lib/authRateLimit';
 import { buildLocationSitemap, seoIndexingEnabled } from './lib/listing';
+import { publicListingCondition } from './lib/publicListing';
 import { blindIndex } from './lib/contactCrypto';
 import { sql as dsql, and as dand } from 'drizzle-orm';
 
@@ -384,7 +385,7 @@ app.get('/sitemap-locations.xml', async (_req: Request, res: Response) => {
       rows = await db
         .select({ city: p.city, district: p.district, count: dsql<number>`count(*)::int` })
         .from(p)
-        .where(dand(eq(p.visibilityStatus, 'public')))
+        .where(dand(publicListingCondition()))
         .groupBy(p.city, p.district);
     }
     res.type('application/xml').set('Cache-Control', 'public, max-age=3600').send(buildLocationSitemap(env.appUrl, rows));

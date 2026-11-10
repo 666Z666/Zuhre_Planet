@@ -7,6 +7,7 @@ import { eq, and, or, sql, desc, asc, ilike, gte, lte, type SQL } from 'drizzle-
 import { listInputSchema, updateProfileInputSchema, shouldIndexLocation } from '../lib/listing';
 import { withActivity, activeSince } from '../lib/activity';
 import { setRatesInputSchema, deriveHourlyRate, sortRates } from '../lib/rates';
+import { publicListingCondition } from '../lib/publicListing';
 import { TRPCError } from '@trpc/server';
 import logger from '@/lib/logger';
 import { RANK_CONFIG } from './loyalty.router';
@@ -77,15 +78,12 @@ function calcVisibilityScore(points: number, tier: string): number {
   return Math.round(points * rankMultiplier * tierMultiplier);
 }
 
-/** Herkese açık profil + onaylı medya + public yorumlar; gizli profil 404. */
+/** Yalnız 18+, admin onaylı ve public profil + onaylı medya + public yorumlar; aksi hâlde 404. */
 async function getPublicProfile(match: SQL) {
       const profile = await db.query.escortProfiles.findFirst({
         columns: PUBLIC_PROFILE_COLUMNS,
-        // Gizli / onay bekleyen profiller slug ile de erişilemez
-        where: and(
-          match,
-          eq(schema.escortProfiles.visibilityStatus, 'public'),
-        ),
+        // Gizli, onaysız veya yaşı bilinmeyen/18 altı profiller slug ile de erişilemez.
+        where: and(match, publicListingCondition()),
         with: {
           // Yalnızca admin onaylı ve herkese açık medya
           media: {
@@ -130,10 +128,8 @@ export const escortRouter = router({
         minPrice, maxPrice, minAge, maxAge, search, activeWithin, sortBy, sortOrder,
       } = input;
       const p = schema.escortProfiles;
-      // CRITICAL: Always filter to only publicly visible profiles
-      const whereConditions: SQL[] = [
-        eq(p.visibilityStatus, 'public'),
-      ];
+      // CRITICAL: Public sonuçlar daima public + approved + 18+ yayın kapısından geçer.
+      const whereConditions: SQL[] = [publicListingCondition()];
 
       if (city) whereConditions.push(eq(p.city, city));
       if (district) whereConditions.push(eq(p.district, district));
@@ -206,7 +202,7 @@ export const escortRouter = router({
     .input(z.object({ city: z.string().trim().max(80).optional() }).optional())
     .query(async ({ input }) => {
       const p = schema.escortProfiles;
-      const conds: SQL[] = [eq(p.visibilityStatus, 'public')];
+      const conds: SQL[] = [publicListingCondition()];
       if (input?.city) conds.push(eq(p.city, input.city));
       const rows = await db
         .select({

@@ -5,7 +5,6 @@ import { useReducedMotion } from 'framer-motion';
 import {
   ArrowRight,
   Camera,
-  Flag,
   Lock,
   ShieldCheck,
   Sparkles,
@@ -39,12 +38,6 @@ const featureCards = [
     icon: Lock,
     color: 'text-emerald-400'
   },
-  {
-    title: 'İlanı bildir',
-    desc: 'Uygunsuz içerik veya güvenlik endişelerini bildirme aracı, konunun incelemeye iletilmesini sağlar.',
-    icon: Flag,
-    color: 'text-rose-400'
-  }
 ];
 
 const escortFeatures = [
@@ -259,7 +252,7 @@ export default function Home() {
 
       <section ref={featuresRef} className="relative py-12 md:py-32 px-4 md:px-6 max-w-7xl mx-auto z-20">
         <SectionHeading label="İlan güvenliği" title="Açık kurallar, kontrollü yayın" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {featureCards.map((feature, i) => (
             <div key={i} className="feature-card group p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all relative overflow-hidden">
               <div className={`p-4 rounded-full bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform`}>

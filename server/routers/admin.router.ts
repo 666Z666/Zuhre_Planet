@@ -2,9 +2,10 @@ import { router, adminProcedure } from '../router.core';
 import { z } from 'zod';
 import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
-import { eq, sql, and, or, ilike, desc, type SQL } from 'drizzle-orm';
+import { eq, sql, and, or, ilike, desc, gte, type SQL } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
-import { updateProfileInputSchema } from '../lib/listing';
+import { MIN_AGE, updateProfileInputSchema } from '../lib/listing';
+import { canPublishListing, publicListingCondition } from '../lib/publicListing';
 
 type AdminAuditAction =
   | 'ADJUST_LOYALTY' | 'APPROVE_LISTING' | 'APPROVE_PHOTO' | 'APPROVE_PROFILE_UPDATE'
@@ -115,7 +116,7 @@ export const adminRouter = router({
   getPlatformStats: adminProcedure.query(async () => {
     const [totalUsers] = await db.select({ count: sql`count(*)` }).from(schema.users);
     const [pendingListings] = await db.select({ count: sql`count(*)` }).from(schema.escortProfiles).where(eq(schema.escortProfiles.verificationStatus, 'pending_admin'));
-    const [activeListings] = await db.select({ count: sql`count(*)` }).from(schema.escortProfiles).where(eq(schema.escortProfiles.visibilityStatus, 'public'));
+    const [activeListings] = await db.select({ count: sql`count(*)` }).from(schema.escortProfiles).where(publicListingCondition());
     const [reportsCount] = await db.select({ count: sql`count(*)` }).from(schema.reports).where(eq(schema.reports.status, 'pending'));
     
     // Transactions table might not have amount in some schemas, but based on admin.router it does
@@ -473,12 +474,39 @@ export const adminRouter = router({
     .input(z.object({ listingId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const id = Number(input.listingId);
-      await db.update(schema.escortProfiles).set({ 
-        verificationStatus: 'approved', 
+      if (!Number.isSafeInteger(id) || id <= 0) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Geçersiz ilan numarası.' });
+      }
+
+      const profile = await db.query.escortProfiles.findFirst({
+        where: eq(schema.escortProfiles.id, id),
+        columns: { age: true },
+      });
+      if (!profile) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'İlan bulunamadı.' });
+      }
+      if (!canPublishListing(profile.age)) {
+        throw new TRPCError({
+          code: 'PRECONDITION_FAILED',
+          message: `İlan yayımlanamaz: yaş bilgisi ${MIN_AGE} veya üzerinde olmalıdır.`,
+        });
+      }
+
+      const [published] = await db.update(schema.escortProfiles).set({
+        verificationStatus: 'approved',
         visibilityStatus: 'public',
         isVerifiedByAdmin: true,
-        verifiedAt: new Date()
-      }).where(eq(schema.escortProfiles.id, id));
+        verifiedAt: new Date(),
+      }).where(and(
+        eq(schema.escortProfiles.id, id),
+        gte(schema.escortProfiles.age, MIN_AGE),
+      )).returning({ id: schema.escortProfiles.id });
+      if (!published) {
+        throw new TRPCError({
+          code: 'PRECONDITION_FAILED',
+          message: 'İlanın yaşı değiştiği için yayınlanamadı; profili yeniden kontrol edin.',
+        });
+      }
       await logAdminAction(ctx, { action: 'APPROVE_LISTING', targetType: 'LISTING', targetId: id });
       return { success: true };
     }),
@@ -487,7 +515,10 @@ export const adminRouter = router({
     .input(z.object({ listingId: z.string(), reason: z.string().optional() }))
     .mutation(async ({ ctx, input }) => {
       const id = Number(input.listingId);
-      await db.update(schema.escortProfiles).set({ verificationStatus: 'rejected' }).where(eq(schema.escortProfiles.id, id));
+      await db.update(schema.escortProfiles).set({
+        verificationStatus: 'rejected',
+        visibilityStatus: 'hidden',
+      }).where(eq(schema.escortProfiles.id, id));
       await logAdminAction(ctx, { action: 'REJECT_LISTING', targetType: 'LISTING', targetId: id, newData: { reason: input.reason } });
       return { success: true };
     }),
