@@ -8,8 +8,13 @@
  *   (aynı anda gelen 401'ler tek bir refresh isteğini paylaşır).
  */
 
-export const API_BASE_URL: string = (import.meta.env.VITE_API_URL || 'http://localhost:4000/api').replace(/\/$/, '');
-export const SERVER_BASE_URL: string = API_BASE_URL.replace(/\/api$/, '');
+export function resolveApiBaseUrl(isProduction: boolean, configuredUrl?: string): string {
+  const fallback = isProduction ? '/api' : 'http://localhost:4000/api';
+  return (configuredUrl || fallback).replace(/\/$/, '');
+}
+
+export const API_BASE_URL = resolveApiBaseUrl(import.meta.env.PROD, import.meta.env.VITE_API_URL);
+export const SERVER_BASE_URL = API_BASE_URL.replace(/\/api$/, '');
 export const CSRF_HEADER = 'x-csrf-token';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);

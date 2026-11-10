@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   Float, 
@@ -6,97 +6,15 @@ import {
   OrbitControls, 
   Sphere, 
   Stars,
-  Text,
-  useTexture,
-  Center
+  useTexture
 } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Precision Luxury Color Palette
 const COLORS = {
   primary: '#3fae86', // Zümrüt (parlak)
-  secondary: '#a8e6cf', // Mint
-  gold: '#d4af37', // Altın
-  white: '#f5efe1', // Fildişi
-  deepSpace: '#04140f'
+  secondary: '#a8e6cf' // Mint
 };
-
-/**
- * Breathing 3D Text Header
- */
-function CosmicHeader() {
-  const groupRef = useRef<THREE.Group>(null);
-  const textRef1 = useRef<any>(null);
-  const textRef2 = useRef<any>(null);
-  const textRef3 = useRef<any>(null);
-
-  useFrame((state) => {
-    const t = state.clock.getElapsedTime();
-    // Soft breathing scale animation
-    const breath = 1 + Math.sin(t * 1.5) * 0.03;
-    if (groupRef.current) {
-      groupRef.current.scale.set(breath, breath, breath);
-    }
-
-    // Individual floating and glowing
-    if (textRef2.current) {
-       // "PARLAK" glowing effect
-       const glow = 0.5 + Math.sin(t * 2) * 0.5;
-       textRef2.current.material.emissiveIntensity = glow;
-    }
-  });
-
-  const commonProps = {
-    // Self-hosted marka fontu (Türkçe karakter destekli; harici URL Suspense'i kilitliyordu)
-    font: "/fonts/cormorant-garamond-700-tr.woff",
-    anchorX: "center" as const,
-    anchorY: "middle" as const,
-    letterSpacing: -0.05,
-  };
-
-  return (
-    <Center position={[0, 2, 0]}>
-      <group ref={groupRef}>
-        <Text 
-          ref={textRef1}
-          {...commonProps}
-          fontSize={5.5}
-          position={[0, 6, 0]}
-          fontWeight={900}
-        >
-          GECENİN
-          <meshStandardMaterial color={COLORS.white} />
-        </Text>
-
-        <Text 
-          ref={textRef2}
-          {...commonProps}
-          fontSize={8.5}
-          position={[0, 0, 0]}
-          fontWeight={900}
-        >
-          PARLAK
-          <meshStandardMaterial 
-            color={COLORS.primary} 
-            emissive={COLORS.primary} 
-            emissiveIntensity={1}
-          />
-        </Text>
-
-        <Text 
-          ref={textRef3}
-          {...commonProps}
-          fontSize={5.5}
-          position={[0, -6, 0]}
-          fontWeight={900}
-        >
-          YILDIZLARI
-          <meshStandardMaterial color={COLORS.white} />
-        </Text>
-      </group>
-    </Center>
-  );
-}
 
 interface PlanetProps {
   position: [number, number, number];
@@ -212,7 +130,7 @@ function EliteParticleSwarm() {
 
 export function CosmicCanvas() {
   return (
-    <div className="absolute inset-0 z-0 bg-[#020205]">
+    <div className="absolute inset-0 z-0 bg-[#020205]" aria-hidden="true" role="presentation">
       <Canvas 
         camera={{ position: [0, 0, 45], fov: 45 }}
         gl={{ 
@@ -233,9 +151,6 @@ export function CosmicCanvas() {
 
         <Stars radius={100} depth={50} count={6000} factor={6} saturation={0} fade speed={1} />
         <EliteParticleSwarm />
-        
-        {/* The 3D Header */}
-        <CosmicHeader />
         
         {/* Elements */}
         <Planet position={[-22, 12, -15]} scale={2.5} texturePath="/textures/lava.jpg" color={COLORS.secondary} />

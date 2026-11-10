@@ -8,6 +8,7 @@
 
 import { ListingProfile, FilterOptions } from '@/types/domain';
 import { ApiListingService } from './apiListingService';
+import { resolveListingSource } from './listingSource';
 
 // --- INTERFACE ---
 
@@ -16,7 +17,7 @@ export interface IListingService {
   getListingBySlug(slug: string): Promise<ListingProfile | null>;
   getListingById(id: number | string): Promise<ListingProfile | null>;
   getFeaturedListings(): Promise<ListingProfile[]>;
-  /** İletişim bağlantısını tıklamada açar (tel: / wa.me). Numara sayfada tutulmaz. */
+  /** API modunda onaylı iletişim bağlantısını açar; demo modunda iletişim numarası döndürülmez. */
   revealContact(id: number | string, channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }>;
 }
 
@@ -41,8 +42,6 @@ const MOCK_LISTINGS: ListingProfile[] = [
     reviewCount: 128,
     viewCount: 5420,
     isOnline: true,
-    phoneNumber: '+905321234567',
-    whatsappNumber: '+905321234567',
     biography: 'Merhaba, ben Elara. Yüksek standartlarda, entelektüel ve unutulmaz anlar için buradayım.',
     services: ['classic', 'tantric', 'dinner_date'],
     serviceTags: ['Sensual', 'Elite'],
@@ -75,8 +74,6 @@ const MOCK_LISTINGS: ListingProfile[] = [
     reviewCount: 45,
     viewCount: 1200,
     isOnline: false,
-    phoneNumber: '+905333334455',
-    whatsappNumber: '+905333334455',
     services: ['sport', 'classic'],
     physicalTraits: {
       height: 170,
@@ -101,8 +98,6 @@ const MOCK_LISTINGS: ListingProfile[] = [
     reviewCount: 22,
     viewCount: 890,
     isOnline: true,
-    phoneNumber: '+905445556677',
-    whatsappNumber: '+905445556677',
     services: ['classic'],
     physicalTraits: {
       height: 168,
@@ -133,8 +128,6 @@ const MOCK_LISTINGS: ListingProfile[] = [
     reviewCount: 210,
     viewCount: 15000,
     isOnline: true,
-    phoneNumber: '+905307778899',
-    whatsappNumber: '+905307778899',
     services: ['tantric', 'relaxation'],
     physicalTraits: {
       height: 172,
@@ -234,18 +227,13 @@ export class MockListingService implements IListingService {
     return MOCK_LISTINGS.filter(l => l.isBoosted);
   }
 
-  async revealContact(id: number | string, channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }> {
-    const l = MOCK_LISTINGS.find(x => String(x.id) === String(id));
-    const n = channel === 'phone' ? l?.phoneNumber : l?.whatsappNumber;
-    if (!n) return { error: 'Bu ilan için bu iletişim kanalı açık değil.' };
-    return { url: channel === 'phone' ? `tel:${n}` : `https://wa.me/${n.replace(/^\+/, '')}` };
+  async revealContact(_id: number | string, _channel: 'phone' | 'whatsapp'): Promise<{ url: string } | { error: string }> {
+    return { error: 'Demo ortamında iletişim bağlantısı gösterilmez.' };
   }
 }
 
-// Singleton Instance — kaynak: VITE_LISTING_SOURCE=api → gerçek backend, aksi halde mock.
-// Mock yalnız geliştirme/demo içindir; yayında mutlaka "api" olmalı.
-export const LISTING_SOURCE: 'api' | 'mock' =
-  import.meta.env.VITE_LISTING_SOURCE === 'api' ? 'api' : 'mock';
+// Production'da gerçek API kullanılır; demo kaynağı yalnızca geliştirme ortamında açıktır.
+export const LISTING_SOURCE = resolveListingSource(import.meta.env.PROD, import.meta.env.VITE_LISTING_SOURCE);
 
 export const listingService: IListingService =
   LISTING_SOURCE === 'api' ? new ApiListingService() : new MockListingService();

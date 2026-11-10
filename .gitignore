@@ -57,3 +57,6 @@ sdxl-outputs/
 # Temporary files
 *.tmp
 .cache/
+
+# Manus calisma artiklari (pid vb.)
+.work/

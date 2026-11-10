@@ -20,7 +20,7 @@ interface SEOManagerProps {
 
 export function SEOManager({
   title = 'Zühre Planet - Gecenin Yıldızları',
-  description = 'Zühre Planet; seçkin escorts katalogu, güvenli mesajlaşma ve gerçek zamanlı bildirimlerle gecenin en parlak yıldızlarını keşfedin.',
+  description = 'Zühre Planet, 18 yaş ve üzerindeki yetişkinlere yönelik bir ilan platformudur. İlanlar yayın öncesi incelenir; platform randevu veya ödeme aracılığı yapmaz.',
   keywords = ['escort', 'gece hayatı', 'istanbul escort', 'vip escort', 'zühre planet'],
   ogImage = '/og-image.png',
   ogType = 'website',

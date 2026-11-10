@@ -63,7 +63,18 @@ Bu dosya, projenin geri kalan geliştirmelerinin düzenli bir şekilde yapılabi
 - [x] Seed script'ini çalıştır ve veritabanını doldur.
 
 ## 7. Yayın Öncesi (Kasım 2026 hazırlık turu sonrası)
-- [ ] `listingService` mock veriden `trpc.escort.list` / `escort.getBySlug`'a geçirilecek (katalog şu an mock).
+- [x] Üretimde `listingService` gerçek `apiListingService`'ı zorunlu kullanır; mock yalnızca yerel geliştirme ve test içindir.
 - [ ] Ödeme (iyzico) akışı router'lara bağlanacak (`src/lib/payment/*` henüz kullanılmıyor).
 - [ ] `robots` meta `noindex` → hukuki onaydan sonra açılacak.
 - [ ] Gerçek DB ile e2e smoke test (`npm run test:e2e`).
+
+## 8. Kasım 2026 Yerel Kalite ve Çalıştırma
+- [x] Üretim listeleme kaynağı gerçek API'ye kapanır; demo/mock kayıtları production'da seçilemez.
+- [x] Ana sayfadaki doğrulanmamış vaatler kaldırıldı; 18+ ilan panosu kapsamı ve aracılık/ödeme yapılmadığı açıklandı.
+- [x] Ana başlık görünür semantik HTML metni; 3D/GSAP/CSS hareketi azaltılmış hareket tercihine uyar.
+- [x] `public/manus-routes.json` 73 canlı Wouter route'u içerir; 404-only rota eklenmemiş ve eşleşme doğrulanmıştır.
+
+## 9. Kalan Kalite Bakımı
+- [ ] Repo geneli ESLint parser yapılandırması ve mevcut uyarılar temizlenecek; kapsamlı çalıştırma şu an 6 hata ve 389 uyarıyla kapanıyor.
+- [ ] `Sparkles` bundle parçası optimize edilecek; son build'de 808 KB (gzip 218.62 KB) uyarısı verdi.
+- [ ] Browserslist `caniuse-lite` veritabanı bağımlılık güncellemesi sırasında yenilenecek; son build verinin 9 aylık olduğunu bildirdi.
