@@ -36,7 +36,7 @@ export function Header() {
               whileHover={{ scale: 1.03 }}
               className="cursor-pointer flex items-center group"
             >
-              <Logo size={46} showTagline className="max-sm:[&_.text-brand-wordmark]:text-[1.1rem]" />
+              <Logo size={60} showTagline className="max-sm:[&_.text-brand-wordmark]:text-[1.1rem] max-sm:[&_img]:size-12" />
             </motion.div>
           </Link>
 

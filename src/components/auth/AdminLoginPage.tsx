@@ -70,7 +70,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
               transition={{ delay: 0.2, type: 'spring', stiffness: 200, damping: 20 }}
               className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-600/20 to-gold-500/20 border border-emerald-600/30 mb-4 shadow-lg shadow-emerald-600/10"
             >
-              <Logo size={52} showWordmark={false} />
+              <Logo size={64} showWordmark={false} />
             </motion.div>
 
             <motion.div

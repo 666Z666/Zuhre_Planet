@@ -55,7 +55,7 @@ export function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20 p-8 md:p-16 rounded-[3rem] md:rounded-[4rem] bg-white/5 border border-white/5 backdrop-blur-3xl mb-24">
            <div className="space-y-8">
               <div className="flex items-center gap-4">
-                 <Logo size={64} showTagline />
+                 <Logo size={76} showTagline />
               </div>
               <p className="max-w-md text-sm font-black italic uppercase tracking-widest text-white/30 leading-loose">
                  Galaksinin en seçkin escort platformu. Lüks, gizlilik ve 3D teknolojisinin birleştiği tek nokta.
