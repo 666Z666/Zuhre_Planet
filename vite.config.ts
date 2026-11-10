@@ -9,7 +9,6 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
       "@/_core": path.resolve(__dirname, "./src/_core"),
-      "three": path.resolve(__dirname, "./node_modules/three/src/Three.js"),
     },
   },
   server: {
@@ -57,10 +56,9 @@ export default defineConfig({
             "@radix-ui/react-checkbox",
           ],
           "motion-vendor": ["framer-motion", "swiper"],
-          "three-vendor": ["three"],
-          "r3f-vendor": ["@react-three/fiber"],
-          "drei-vendor": ["@react-three/drei"],
-          "postprocessing-vendor": ["@react-three/postprocessing"],
+          // 3D kütüphaneleri (three, @react-three/*) bilinçli olarak burada değil:
+          // manualChunks'a konulduklarında her sayfada modulepreload edilip ilk yüklemeye ~860 KB ekliyorlar.
+          // Yalnız lazy CosmicCanvas/UniverseScene ile, gerektiğinde yüklenirler.
           "form-vendor": ["zod"],
           "utils-vendor": ["date-fns", "clsx", "class-variance-authority", "tailwind-merge"],
         },

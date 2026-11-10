@@ -37,4 +37,4 @@ TypeScript typecheck ve `npm run check:docs` başarılı; Vitest 23 dosya/146 te
 
 Bağımsız hukuk/ürün incelemesi; gerçek yaş/kimlik güvencesi ve rıza; insan moderasyonu/takedown/appeal; KVKK ve veri saklama/ihlâl planı; Drizzle başlangıç migrasyonlarının test DB'sinde sıfırdan kurulum/upgrade/rollback provası; admin ve publicListing integration testleri; medya ingest lifecycle; production secret/MFA/backup/monitoring/incident; CI/E2E ve lint warning temizliği; büyük chunk optimizasyonu. Doğrulanmış production domain/Similarweb ölçümü yoktur.
 
-Öncelik/acceptance: [ROADMAP.md](./ROADMAP.md). Kurulum/komutlar: [README.md](../README.md). Görev indeksi: [TODO.md](../TODO.md).
+Ayrıntılı başvuru haritası (ortam değişkenleri, sayfalar, sunucu uçları, tablolar): [PROJE_HARITASI_DETAY.md](./PROJE_HARITASI_DETAY.md). Öncelik/acceptance: [ROADMAP.md](./ROADMAP.md). Kurulum/komutlar: [README.md](../README.md). Görev indeksi: [TODO.md](../TODO.md).

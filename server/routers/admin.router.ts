@@ -5,7 +5,7 @@ import * as schema from '@/drizzle/schema';
 import { eq, sql, and, or, ilike, gte, inArray, type SQL } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 import { MIN_AGE, updateProfileInputSchema } from '../lib/listing';
-import { canPublishListing, publicListingCondition } from '../lib/publicListing';
+import { canPublishListing, getListingStatus, publicListingCondition } from '../lib/publicListing';
 
 type AdminAuditAction =
   | 'ADJUST_LOYALTY' | 'APPROVE_LISTING' | 'APPROVE_PHOTO' | 'APPROVE_PROFILE_UPDATE'
@@ -54,12 +54,6 @@ function getUserStatus(user: Pick<typeof schema.users.$inferSelect, 'isBanned' |
   return 'active';
 }
 
-function getListingStatus(profile: Pick<typeof schema.escortProfiles.$inferSelect, 'verificationStatus' | 'visibilityStatus'>) {
-  if (profile.verificationStatus === 'rejected') return 'rejected';
-  if (profile.visibilityStatus === 'public') return 'active';
-  if (profile.verificationStatus === 'approved') return 'hidden';
-  return 'pending';
-}
 
 type ReportRow = Pick<typeof schema.reports.$inferSelect, 'targetType' | 'targetId'>;
 
@@ -236,7 +230,7 @@ export const adminRouter = router({
       const [listings, totalRows] = await Promise.all([
         db.query.escortProfiles.findMany({
           where,
-          columns: { id: true, displayName: true, stageName: true, slug: true, city: true, district: true, hourlyRate: true, verificationStatus: true, visibilityStatus: true, isVerifiedByAdmin: true, isVip: true, isBoosted: true, verifiedAt: true, lastActive: true, viewCount: true, reviewCount: true, averageRating: true, rating: true, hasPendingUpdate: true, coverImage: true },
+          columns: { id: true, displayName: true, stageName: true, slug: true, city: true, district: true, hourlyRate: true, verificationStatus: true, visibilityStatus: true, age: true, isVerifiedByAdmin: true, isVip: true, isBoosted: true, verifiedAt: true, lastActive: true, viewCount: true, reviewCount: true, averageRating: true, rating: true, hasPendingUpdate: true, coverImage: true },
           with: {
             user: { columns: { fullName: true } },
             media: {

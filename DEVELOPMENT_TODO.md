@@ -23,9 +23,9 @@ Bu liste production hazırlığı kanıtı değildir. Öncelik ve kabul koşulla
 - [ ] Drizzle şemasıyla migrasyon zincirini disposable test DB'sinde karşılaştır; boş kurulum/upgrade/rollback provası yap.
 - [ ] Disposable PostgreSQL hizmeti bulunduğunda migrasyon zincirini gerçek DB'de doğrula; bu makinede Docker/psql yoktu, henüz DB entegrasyon testi çalıştırılmadı.
 - [ ] Admin mutasyonları ve `publicListingCondition` için gerçek DB/API integration testleri ekle.
-- [ ] `npm run lint:strict` kalan 77 warning: 47 unused-symbol/API-prop review, 29 explicit-any sözleşmesi, 1 generic hook’un variable-length dependency uyarısı. Kapatma/ignore yerine kaynağı doğrula; hook uyarısı `src/hooks/admin/useAdminBase.ts` çağrılarındaki sabit kullanım şekilleriyle ayrıca tasarlanmalı.
+- [ ] `npm run lint:strict` kalan 61 warning (10 Kasım 2026 son ölçüm; 0 error): unused-symbol/API-prop, explicit-any sözleşmeleri ve 1 generic hook dependency uyarısı. Kapatma/ignore yerine kaynağı doğrula; hook uyarısı `src/hooks/admin/useAdminBase.ts` çağrılarındaki sabit kullanım şekilleriyle ayrıca tasarlanmalı.
 - [ ] CI: lockfile `npm ci`, check:docs, typecheck, unit, lint, build ve ayrı test DB E2E.
-- [ ] Büyük bundle/performans bütçesi (son build: `Sparkles` 808.03 kB, gzip 218.62 kB).
+- [ ] Büyük bundle/performans bütçesi: `Sparkles` (three + @react-three) 808.03 kB, gzip 218.62 kB. Yalnız ana sayfanın lazy 3D sahnesiyle yüklenir; ilk yükte modulepreload edilmez. 3D paketlerini `manualChunks`'a koymayın — her sayfada önceden yüklenip ilk yükü ~860 kB artırır (Manus turu 4'te denendi, geri alındı).
 
 ## Yayın kapıları
 

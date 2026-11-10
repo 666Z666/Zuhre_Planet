@@ -30,10 +30,10 @@
 ## P2 — Sürekli entegrasyon, kod sağlığı ve performans
 
 - [x] ESLint flat-config kapsamı tüm TS/TSX dosyalarını TypeScript parser ile işleyecek biçimde düzeltildi; repo genel lint taramasındaki parser ve kullanılmayan disable hataları giderildi.
-- [ ] `npm run lint:strict` taraması (10 Kasım 2026): 0 error, **389 warning**; unused, `any`, console ve hook uyarılarını kaynakta düzeltip temiz sonuç alın.
+- [ ] `npm run lint:strict` taraması (10 Kasım 2026 son ölçüm): 0 error, **61 warning** (ilk ölçüm 389); unused, `any`, console ve hook uyarılarını kaynakta düzeltip temiz sonuç alın.
 - [ ] CI kurun: lockfile `npm ci`, check:docs, typecheck, unit, lint, build ve ayrı test DB E2E; merge koşullarına bağlayın.
 - [ ] Admin filtre/mutation ve yayın kapısı için server/API integration testleri ekleyin; AgeGate/Panic unit testlerini koruyun.
-- [ ] Son Vite build'de `Sparkles` chunk `808.03 kB` (gzip `218.62 kB`) oldu ve `600 kB` uyarı eşiğini aştı. Kod bölme/lazy-load ve ölçülebilir LCP/INP/CLS budget çalışın.
+- [ ] Son Vite build'de `Sparkles` chunk `808.03 kB` (gzip `218.62 kB`) `600 kB` eşiğini aşıyor. Chunk yalnız ana sayfanın lazy 3D sahnesiyle yüklenir (ilk yükte preload yok). 3D paketlerini `manualChunks`'a koymak onları her sayfada preload ettirir; bunun yerine 3D'yi düşük güçlü cihazda/azaltılmış harekette hiç yüklememe ve ölçülebilir LCP/INP/CLS bütçesi üzerinde çalışın.
 - [ ] Riskli rotalar için privacy-safe audit/operational logging, rate limit, alert ve incident playbook sağlayın.
 
 ## P3 — Ürün/veri yetenekleri (P0 onayı ve kullanım senaryosu netleşince)
