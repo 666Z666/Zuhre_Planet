@@ -55,7 +55,7 @@ export function AnalyticsDashboard({
   escortId,
   autoRefresh = false,
   className = '',
-  userRole,
+  userRole: _userRole,
 }: AnalyticsDashboardProps) {
   const {
     period,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
-import { CardSkeleton, ProfileSkeleton, ListSkeleton, TableSkeleton, GallerySkeleton, TextBlockSkeleton, AvatarSkeleton, ButtonSkeleton, ReviewSkeleton, StatsCardSkeleton, FormSkeleton, MessageSkeleton, Skeleton } from './ui/skeleton';
+import { CardSkeleton, ProfileSkeleton, ListSkeleton, TableSkeleton, GallerySkeleton, AvatarSkeleton, ReviewSkeleton, StatsCardSkeleton, Skeleton } from './ui/skeleton';
 
 /**
  * LoadingStates - Centralized loading component with animations

@@ -22,6 +22,7 @@
     "db:reset": "tsx scripts/migrate.ts reset",
     "test": "vitest",
     "test:ci": "vitest run",
+    "check:docs": "node scripts/check-doc-commands.mjs",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",

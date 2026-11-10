@@ -50,7 +50,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
   Lock, Phone, MessageCircle, Mail, Crown, Shield,
-  Eye, EyeOff, Sparkles, ChevronRight, AlertCircle
+  Eye, EyeOff, Sparkles, ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -151,7 +151,7 @@ export default function ContactLock({
   isLocked,
   isVip = false,
   lockMessage,
-  unlockButtonText,
+  unlockButtonText: _unlockButtonText,
   showBlur = true,
   size = 'default',
   direction = 'vertical',

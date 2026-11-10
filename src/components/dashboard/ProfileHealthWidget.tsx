@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, ChevronRight, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Trophy, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'wouter';
 
 interface ProfileHealthProps {

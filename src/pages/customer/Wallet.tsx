@@ -1,11 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Wallet as WalletIcon, 
   ArrowUpRight, 
   ArrowDownLeft, 
   Zap, 
-  CreditCard, 
   History, 
   ShieldCheck,
   Gift,

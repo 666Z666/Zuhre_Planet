@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Heart, Users, Award, Sparkles, Star, Globe, Zap } from 'lucide-react';
+import { Shield, Award, Sparkles, Globe, Zap } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const ValueCard = ({ icon: Icon, title, desc, delay }: any) => (

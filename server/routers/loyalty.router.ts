@@ -47,12 +47,6 @@ function calculateRank(points: number) {
   return RANK_CONFIG.find(r => points >= r.minPoints && points <= r.maxPoints) ?? RANK_CONFIG[0];
 }
 
-function calculateVisibilityScore(points: number, tier: string): number {
-  const rankInfo = calculateRank(points);
-  const tierMultiplier = { free: 1, gold: 1.5, platinum: 2, vip: 3 }[tier] ?? 1;
-  return Math.round(points * rankInfo.multiplier * tierMultiplier);
-}
-
 // ============================================
 // ROUTER
 // ============================================

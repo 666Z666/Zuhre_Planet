@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 async function main() {
   const dbUrl = process.env.DATABASE_URL || 'not set';
-  console.log('DATABASE_URL protocol:', dbUrl.split(':')[0]);
+  console.warn('DATABASE_URL protocol:', dbUrl.split(':')[0]);
   
   const email = 'admin@zuhre.com';
   const password = 'Test123!';
@@ -32,7 +32,7 @@ async function main() {
         provider: 'email'
       });
     }
-    console.log('✅ Admin user ready!');
+    console.warn('Admin user ready.');
   } catch (e) {
     console.error('❌ Error:', e);
   }

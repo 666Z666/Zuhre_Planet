@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Lock, Eye, FileText, CheckCircle, Sparkles, Fingerprint, Scale } from 'lucide-react';
+import { Lock, Eye, CheckCircle, Fingerprint, Scale } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const DocSection = ({ icon: Icon, title, content, delay }: any) => (

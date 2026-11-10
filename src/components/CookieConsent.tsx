@@ -194,6 +194,14 @@ export default function CookieConsent() {
                   {/* Buttons */}
                   <div className="flex gap-3 w-full md:w-auto">
                     <Button
+                      onClick={handleOpenSettings}
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 md:flex-none text-white/70 hover:text-white hover:bg-white/5 uppercase font-black text-[10px] tracking-widest italic"
+                    >
+                      Tercihler
+                    </Button>
+                    <Button
                       onClick={handleRejectAll}
                       variant="ghost"
                       size="sm"

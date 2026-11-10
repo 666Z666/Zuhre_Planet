@@ -636,7 +636,7 @@ export function useFeaturedEscorts(refetchInterval?: number) {
     position: index + 1,
     badge: listing.isFeatured ? 'Vitrin' : listing.isVerified ? 'Onaylı' : 'Yeni',
     enabled: Boolean(listing.isFeatured),
-    assignedAt: listing.updatedAt || listing.createdAt,
+    assignedAt: null,
     assignedBy: 'system',
     name: listing.escortName,
     location: listing.location,

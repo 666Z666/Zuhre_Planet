@@ -127,10 +127,10 @@ export function usePaginatedData<T>(
   const [error, setError] = useState<string | null>(null);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(initialFilters.page as number || 1);
-  const [limit, setLimit] = useState(initialFilters.limit as number || 20);
+  const [limit] = useState(initialFilters.limit as number || 20);
   const [hasMore, setHasMore] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
-  const [filters, setFilters] = useState(initialFilters);
+  const [filters] = useState(initialFilters);
   const hasMountedRef = useRef(false);
 
   const fetchData = useCallback(async () => {

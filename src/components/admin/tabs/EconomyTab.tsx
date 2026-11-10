@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { 
   Trophy, 
   Coins, 
@@ -7,16 +6,14 @@ import {
   Users, 
   ArrowUpRight, 
   History, 
-  ShieldCheck, 
   Plus,
   Minus,
   Save,
   Info
 } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Slider } from '@/components/ui/slider';
 import { toast } from 'sonner';
 

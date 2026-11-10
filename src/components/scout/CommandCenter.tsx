@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Sparkles, Terminal, X, ArrowRight, Zap, Star } from 'lucide-react';
+import { Search, Terminal, X, Zap, Star } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { ZMaiaAvatar } from '../ui/ZMaiaAvatar';
 import { 

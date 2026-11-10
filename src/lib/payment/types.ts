@@ -169,7 +169,7 @@ export interface WebhookPayload {
   /** User ID */
   userId?: number;
   /** Additional metadata */
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
   /** Timestamp */
   timestamp: number;
   /** Signature for verification */

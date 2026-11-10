@@ -12,6 +12,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge, LoadingSpinner, EmptyState } from '../AdminShared';
 import type { AdminQuickActionHandler } from '@/types/admin';
+import type { useReviews } from '@/hooks/useAdminData';
+
+type ReviewRow = ReturnType<typeof useReviews>['data'][number];
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -20,7 +23,7 @@ const fadeInVariants = {
 };
 
 interface ReviewsTabProps {
-  reviewsData: any;
+  reviewsData: { data: ReviewRow[]; items?: ReviewRow[]; total: number; totalPages: number };
   reviewsLoading: boolean;
   handleQuickAction: AdminQuickActionHandler;
   page: number;
@@ -60,7 +63,7 @@ export const ReviewsTab: React.FC<ReviewsTabProps> = ({
             <EmptyState title="Değerlendirme bulunamadı" description="Henüz platformda yazılmış bir değerlendirme yok." />
           ) : (
             <div className="space-y-6">
-              {(reviewsData.items || reviewsData.data || []).map((review: any) => (
+              {(reviewsData.items || reviewsData.data).map((review) => (
                 <div key={review.id} className="p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white/10 transition-all group relative overflow-hidden">
                   <div className="flex items-start justify-between mb-6">
                     <div className="flex gap-5">

@@ -1,28 +1,22 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Send, 
   Paperclip, 
   Smile, 
-  MoreVertical, 
   Phone, 
   Video, 
   Info,
   Shield,
   Mic,
-  Camera,
-  Image as ImageIcon,
   File,
   Lock,
-  Zap,
   Check,
   CheckCheck,
   Clock
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { useTheme } from '@/contexts/ThemeContext';
 import { CodeRain } from '@/components/ui/CodeRain';
 import { PhantomMediaBox } from '@/components/ui/PhantomMediaBox';
 import type { Message as SharedMessage, Conversation as SharedConversation } from '@/types/message';
@@ -70,7 +64,7 @@ export function ChatWindow({
   conversation,
   messages,
   onSendMessage,
-  onSendMedia,
+  onSendMedia: _onSendMedia,
   onCall,
   onVideoCall,
   onShowInfo,
@@ -80,9 +74,6 @@ export function ChatWindow({
   const [inputValue, setInputValue] = useState('');
   const [isStealthMode, setIsStealthMode] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-
   // Scroll to bottom on new messages
   useEffect(() => {
     if (messagesContainerRef.current) {

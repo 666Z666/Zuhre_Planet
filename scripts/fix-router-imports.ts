@@ -31,10 +31,10 @@ for (const file of routerFiles) {
     );
 
     fs.writeFileSync(filePath, content, "utf-8");
-    console.log(`✅ Fixed: ${file}`);
+    console.warn(`Fixed: ${file}`);
   } else {
-    console.log(`⚠️ Not found: ${file}`);
+    console.warn(`Not found: ${file}`);
   }
 }
 
-console.log("\n✅ All router imports fixed!");
+console.warn("All router imports processed.");

@@ -28,7 +28,7 @@ interface ProfileCompletionStep {
 
 export function UnverifiedMembershipWarning({
   userStatus,
-  userTier,
+  userTier: _userTier,
   totalMediaCount,
   visibleMediaCount,
   registrationDate,

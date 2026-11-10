@@ -9,12 +9,12 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Crown, CheckCircle2, Star, MapPin, Heart, ChevronRight, Sparkles } from "lucide-react";
+import { Crown, Star, MapPin, Heart, ChevronRight, Sparkles } from "lucide-react";
 import { useTheme } from '@/contexts/ThemeContext';
 import { VerifiedBadge } from './VerifiedBadge';
 import { ListingProfile } from '@/types/domain';
 
-import { Link, useLocation } from 'wouter';
+import { useLocation } from 'wouter';
 
 interface VipPremiumCardProps {
   escort: ListingProfile;

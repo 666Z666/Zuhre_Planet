@@ -132,7 +132,7 @@ export function OnlineStatusBadge({
           addSuffix: true,
           locale: tr,
         })}`;
-      } catch (error) {
+      } catch {
         return 'Çevrimdışı';
       }
     }
@@ -240,7 +240,7 @@ export function OnlineStatusText({
           addSuffix: true,
           locale: tr,
         })}`;
-      } catch (error) {
+      } catch {
         return config.label;
       }
     }

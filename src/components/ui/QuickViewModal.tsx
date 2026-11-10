@@ -11,7 +11,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   X, MapPin, Star, CheckCircle, 
-  MessageCircle, Phone, ArrowRight 
+  MessageCircle, ArrowRight 
 } from 'lucide-react';
 import { Link } from 'wouter';
 import { ListingProfile } from '@/types/domain';

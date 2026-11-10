@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import { MessageSquare, Phone, MessageCircle, Send, Check, X, Clock } from 'lucide-react';
+import { MessageSquare, Phone, MessageCircle, Send } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ContactRequestManagerProps {
@@ -38,7 +38,7 @@ interface ContactRequest {
 }
 
 export function ContactRequestManager({
-  escortId,
+  escortId: _escortId,
   escortName,
   userTier,
   userStatus,

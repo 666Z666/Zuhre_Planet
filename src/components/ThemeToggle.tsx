@@ -1,6 +1,6 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 export function ThemeToggle() {
   const { setTheme, actualTheme } = useTheme();

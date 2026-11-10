@@ -3,7 +3,7 @@ import { router, protectedProcedure } from '../router.core';
 import { z } from 'zod';
 import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
-import { eq, and, or, desc, sql } from 'drizzle-orm';
+import { eq, and, or, desc, sql, type SQL } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 
 export const appointmentRouter = router({
@@ -48,7 +48,7 @@ export const appointmentRouter = router({
           })
         : null;
 
-      const whereConditions = [
+      const whereConditions: SQL[] = [
         or(
           eq(schema.appointments.customerId, userId),
           // Use escortProfile.id if user is an escort, otherwise this branch never matches
@@ -61,7 +61,7 @@ export const appointmentRouter = router({
       }
 
       const appointments = await db.query.appointments.findMany({
-        where: and(...whereConditions as any),
+        where: and(...whereConditions),
         orderBy: [desc(schema.appointments.createdAt)],
         limit: limit,
         offset: (page - 1) * limit,

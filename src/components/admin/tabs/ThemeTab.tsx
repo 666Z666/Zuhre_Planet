@@ -4,7 +4,6 @@ import {
   Palette, 
   Type, 
   Monitor, 
-  Save, 
   Sparkles,
   LayoutDashboard,
   ShieldCheck,
@@ -26,6 +25,7 @@ import { useAdminSettings } from '@/contexts/AdminSettingsContext';
 
 import { useLuxuryTheme, LuxuryThemeMode } from '@/contexts/LuxuryThemeContext';
 import { toast } from 'sonner';
+import type { LucideIcon } from 'lucide-react';
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -37,7 +37,7 @@ export const ThemeTab: React.FC = () => {
   const { settings, updateSettings } = useAdminSettings();
   const { theme, setTheme } = useLuxuryTheme();
 
-  const themes: { id: LuxuryThemeMode; name: string; desc: string; icon: any; color: string }[] = [
+  const themes: { id: LuxuryThemeMode; name: string; desc: string; icon: LucideIcon; color: string }[] = [
     { id: 'diamond', name: 'DIAMOND VAULT', desc: 'Güç, Lüks, Altın Işıltısı', icon: Sparkles, color: 'from-amber-400 to-orange-600' },
     { id: 'ocean', name: 'OCEAN DESIRE', desc: 'Gizem, Derinlik, Akışkanlık', icon: Monitor, color: 'from-blue-600 to-emerald-500' },
     { id: 'velvet', name: 'VELVET HEART', desc: 'Tutku, Sıcaklık, Romantizm', icon: Zap, color: 'from-rose-600 to-red-600' },
@@ -132,7 +132,7 @@ export const ThemeTab: React.FC = () => {
                    <Select 
                      disabled={!settings.showPremiumGlow}
                      value={settings.glowIntensity} 
-                     onValueChange={(val: any) => updateSettings({ glowIntensity: val })}
+                     onValueChange={(val) => updateSettings({ glowIntensity: val as typeof settings.glowIntensity })}
                    >
                      <SelectTrigger className="glass-extreme border-white/10 rounded-xl">
                        <SelectValue placeholder="Yoğunluk Seçin" />
@@ -169,7 +169,7 @@ export const ThemeTab: React.FC = () => {
                    <Select 
                      disabled={!settings.showVerificationBadge}
                      value={settings.badgePosition} 
-                     onValueChange={(val: any) => updateSettings({ badgePosition: val })}
+                     onValueChange={(val) => updateSettings({ badgePosition: val as typeof settings.badgePosition })}
                    >
                      <SelectTrigger className="glass-extreme border-white/10 rounded-xl">
                        <SelectValue placeholder="Konum Seçin" />

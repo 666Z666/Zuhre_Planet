@@ -23,7 +23,6 @@ import {
   MessageSquare,
   Smartphone,
   Moon,
-  Sun,
   Save,
   RotateCcw,
   Wifi,

@@ -41,7 +41,7 @@ import { useLocation } from 'wouter';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Lock, ArrowRight, Home, Loader2 } from 'lucide-react';
+import { Shield, Lock, ArrowRight, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -177,7 +177,7 @@ export function DashboardAuthGuard({
   unauthorizedRedirect,
   loadingComponent,
 }: DashboardAuthGuardProps) {
-  const { user, userRole, isAuthenticated, isLoading } = useAuth();
+  const { userRole, isAuthenticated, isLoading } = useAuth();
   const [, navigate] = useLocation();
 
   useEffect(() => {

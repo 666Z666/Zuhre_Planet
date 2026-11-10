@@ -35,18 +35,17 @@
  * ```
  */
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import {
   Check, Crown, Sparkles, Zap, ArrowRight, Star,
   Shield, Video, Image as ImageIcon, MessageCircle,
   TrendingUp, Users, Heart, ExternalLink, Info, Search
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 /**
  * Subscription plan type

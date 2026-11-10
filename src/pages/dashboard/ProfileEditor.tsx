@@ -23,7 +23,6 @@ import {
   Clock,
   CheckCircle2,
   Shield,
-  Zap,
   ArrowRight
 } from 'lucide-react';
 import { VerificationWizard } from '@/components/escort/VerificationWizard';

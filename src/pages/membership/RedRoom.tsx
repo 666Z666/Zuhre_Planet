@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Eye, Zap, KeyRound, Lock, Crown, ChevronRight, Star } from 'lucide-react';
+import { Eye, Zap, KeyRound, Lock, Crown, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'wouter';
 import { Footer } from '@/components/Footer';

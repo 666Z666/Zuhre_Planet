@@ -7,8 +7,6 @@
 import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLuxuryTheme } from '@/contexts/LuxuryThemeContext';
-import { ThemeToggle } from './ThemeToggle';
 import { useState } from 'react';
 import { ROUTES, getDashboardRouteByRole } from '@/constants/routes';
 import { ThemeIcon } from './ui/ThemeIcon';
@@ -18,8 +16,7 @@ import { Logo } from '@/components/brand/Logo';
 
 export function Header() {
   const [location] = useLocation();
-  const { user, logout, isAuthenticated } = useAuth();
-  const { theme } = useLuxuryTheme();
+  const { user, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -48,7 +45,7 @@ export function Header() {
             {[
               { name: 'Keşfet', path: ROUTES.CATALOG, icon: 'star' as const },
               { name: 'VIP', path: ROUTES.VIP, icon: 'zap' as const, special: true },
-            ].map((item: any) => (
+            ].map((item) => (
                <Link key={item.name} href={item.path}>
                 <motion.div
                   whileHover={{ y: -1 }}

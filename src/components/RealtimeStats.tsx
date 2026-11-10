@@ -8,7 +8,6 @@
  */
 
 import { RealtimeData } from '@/types/analytics';
-import { Card } from '@/components/ui/card';
 import { Activity, Users, Eye, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 

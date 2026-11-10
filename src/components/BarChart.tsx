@@ -24,7 +24,7 @@ export function BarChart({
   height = 250,
   className = '',
   showValues = true,
-  horizontal = false,
+  horizontal: _horizontal = false,
 }: BarChartProps) {
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 

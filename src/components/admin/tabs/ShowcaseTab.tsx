@@ -14,6 +14,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { useFeaturedEscorts } from '@/hooks/useAdminData';
+
+type FeaturedEscortRow = ReturnType<typeof useFeaturedEscorts>['data'][number];
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -22,7 +25,7 @@ const fadeInVariants = {
 };
 
 interface ShowcaseTabProps {
-  featuredEscorts: any[];
+  featuredEscorts: FeaturedEscortRow[];
   navigate: (path: string) => void;
 }
 
@@ -54,23 +57,24 @@ export const ShowcaseTab: React.FC<ShowcaseTabProps> = ({
             <CardDescription>Anasayfada ve katalogda öne çıkan yıldız isimler.</CardDescription>
           </CardHeader>
           <CardContent>
+            {featuredEscorts.length === 0 ? (
+              <p className="py-8 text-center text-sm text-muted-foreground">Vitrinde gösterilecek ilan bulunmuyor.</p>
+            ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {(featuredEscorts || [
-                { id: '1', name: 'Ayşe Yılmaz', location: 'İstanbul', badge: 'VIP', image: null },
-                { id: '2', name: 'Zeynep Kaya', location: 'Ankara', badge: 'Yeni', image: null },
-                { id: '3', name: 'Elif Şahin', location: 'İzmir', badge: 'Premium', image: null },
-              ]).map((escort: any) => (
+              {featuredEscorts.map((escort) => {
+                const displayName = escort.name || escort.escortName || 'İsim bilgisi yok';
+                return (
                 <div key={escort.id} className="p-4 border rounded-xl hover:shadow-md transition-all group border-border/50 bg-muted/5">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500/20 to-gold-500/20 border border-emerald-500/20 flex items-center justify-center font-bold text-emerald-700 group-hover:scale-105 transition-transform overflow-hidden">
                       {escort.image ? (
-                        <img src={escort.image} alt={escort.name} className="w-full h-full object-cover" />
+                        <img src={escort.image} alt={displayName} className="w-full h-full object-cover" />
                       ) : (
-                        escort.name.charAt(0).toUpperCase()
+                        displayName.charAt(0).toUpperCase()
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground/90 truncate">{escort.name}</p>
+                      <p className="font-bold text-foreground/90 truncate">{displayName}</p>
                       <p className="text-xs text-muted-foreground">{escort.location}</p>
                     </div>
                     <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] uppercase font-bold py-0.5">
@@ -92,8 +96,10 @@ export const ShowcaseTab: React.FC<ShowcaseTabProps> = ({
                     </Button>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
+            )}
           </CardContent>
         </Card>
 

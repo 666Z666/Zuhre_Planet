@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { Star, MapPin, Heart, Eye, MessageCircle, ChevronRight, Badge, Zap, Clock, Play } from 'lucide-react';
+import { Star, MapPin, Heart, Badge, Zap, Play } from 'lucide-react';
 
 interface AdvancedListingCardProps {
   id: number;

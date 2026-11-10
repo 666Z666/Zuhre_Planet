@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { motion, useMotionValue, useSpring, type HTMLMotionProps } from 'framer-motion';
+import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@/lib/utils';
 import { Loader2, Check, X } from 'lucide-react';
 
@@ -143,7 +144,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
     const intensity = intensityValues[animationIntensity];
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
       if (!magnetic || !buttonRef.current) return;
       const rect = buttonRef.current.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
@@ -157,9 +158,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       mouseY.set(0);
     };
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+      if (isDisabled) {
+        e.preventDefault();
+        return;
+      }
       if (!ripple || !buttonRef.current) {
-        onClick?.(e);
+        onClick?.(e as React.MouseEvent<HTMLButtonElement>);
         return;
       }
 
@@ -175,29 +180,47 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
       }, 600);
 
-      onClick?.(e);
+      onClick?.(e as React.MouseEvent<HTMLButtonElement>);
     };
 
     const isDisabled = disabled || loading;
     const showSuccess = success && !loading;
     const showError = error && !loading;
+    const buttonClassName = cn(
+      'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'disabled:pointer-events-none disabled:opacity-50',
+      'relative overflow-hidden',
+      buttonVariants[variant],
+      sizeVariants[size],
+      shapeVariants[shape],
+      fullWidth && 'w-full',
+      iconOnly && 'p-0',
+      glow && 'hover:shadow-lg',
+      className
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          ref={buttonRef as unknown as React.Ref<HTMLElement>}
+          className={buttonClassName}
+          aria-disabled={isDisabled || undefined}
+          style={props.style}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onClick={handleClick as React.MouseEventHandler<HTMLElement>}
+          {...(props as React.ComponentPropsWithoutRef<typeof Slot>)}
+        >
+          {children}
+        </Slot>
+      );
+    }
 
     return (
       <motion.button
       ref={buttonRef as unknown as React.Ref<HTMLButtonElement>}
-        className={cn(
-          'inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-          'disabled:pointer-events-none disabled:opacity-50',
-          'relative overflow-hidden',
-          buttonVariants[variant],
-          sizeVariants[size],
-          shapeVariants[shape],
-          fullWidth && 'w-full',
-          iconOnly && 'p-0',
-          glow && 'hover:shadow-lg',
-          className
-        )}
+        className={buttonClassName}
         disabled={isDisabled}
         aria-disabled={isDisabled}
         style={magnetic ? { x: magneticX, y: magneticY } : undefined}
@@ -207,7 +230,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         whileTap={intensity.activeScale < 1 ? { scale: intensity.activeScale } : undefined}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        onClick={handleClick}
+        onClick={handleClick as React.MouseEventHandler<HTMLButtonElement>}
         {...(props as unknown as HTMLMotionProps<"button">)}
       >
         {glow && (
@@ -390,7 +413,7 @@ export function ButtonGroup({
               : 'rounded-none';
           }
 
-          return React.cloneElement(child as React.ReactElement<any>, {
+          return React.cloneElement(child as React.ReactElement<{ className?: string }>, {
             className: cn(
               borderRadius,
               index > 0 && orientation === 'horizontal' && 'border-l-0',

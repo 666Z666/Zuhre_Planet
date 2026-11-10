@@ -10,7 +10,7 @@ import React from 'react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { 
-  LayoutDashboard, Heart, Calendar, MessageCircle, Settings, User, 
+  LayoutDashboard, Heart, MessageCircle, User, 
   LogOut, Shield, Bell, Star, Flag, DollarSign, BarChart3
 } from 'lucide-react';
 

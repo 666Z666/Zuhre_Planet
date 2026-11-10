@@ -32,6 +32,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { StatusBadge, LoadingSpinner, EmptyState } from '../AdminShared';
 import type { AdminQuickActionHandler } from '@/types/admin';
+import type { UserFilters } from '@/types/admin';
+import type { useUsers } from '@/hooks/useAdminData';
+
+type UserRow = ReturnType<typeof useUsers>['data'][number];
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -40,10 +44,10 @@ const fadeInVariants = {
 };
 
 interface UsersTabProps {
-  usersData: any;
+  usersData: { data: UserRow[]; total: number; totalPages: number };
   usersLoading: boolean;
-  userFilters: any;
-  setUserFilters: (filters: any) => void;
+  userFilters: UserFilters;
+  setUserFilters: (filters: UserFilters) => void;
   userSearch: string;
   setUserSearch: (search: string) => void;
   handleQuickAction: AdminQuickActionHandler;
@@ -60,6 +64,8 @@ export const UsersTab: React.FC<UsersTabProps> = ({
   handleQuickAction,
   navigate
 }) => {
+  const currentPage = userFilters.page ?? 1;
+
   return (
     <motion.div
       initial="hidden"
@@ -98,7 +104,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
             <Select
               value={userFilters.role}
               onValueChange={(v) =>
-                setUserFilters({ ...userFilters, role: v })
+                setUserFilters({ ...userFilters, role: v as UserFilters['role'] })
               }
             >
               <SelectTrigger className="w-40">
@@ -114,7 +120,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
             <Select
               value={userFilters.status}
               onValueChange={(v) =>
-                setUserFilters({ ...userFilters, status: v })
+                setUserFilters({ ...userFilters, status: v as UserFilters['status'] })
               }
             >
               <SelectTrigger className="w-40">
@@ -142,7 +148,7 @@ export const UsersTab: React.FC<UsersTabProps> = ({
             />
           ) : (
             <div className="space-y-4">
-              {usersData.data.map((user: any, index: number) => (
+              {usersData.data.map((user, index) => (
                 <motion.div
                   key={user.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -229,19 +235,19 @@ export const UsersTab: React.FC<UsersTabProps> = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setUserFilters({ ...userFilters, page: userFilters.page - 1 })}
-                      disabled={userFilters.page === 1}
+                      onClick={() => setUserFilters({ ...userFilters, page: currentPage - 1 })}
+                      disabled={currentPage === 1}
                     >
                       <ChevronDown className="w-4 h-4 rotate-90 mr-1" />
                       Önceki
                     </Button>
                     <span className="text-sm font-medium px-4">
-                      Sayfa {userFilters.page} / {usersData.totalPages}
+                      Sayfa {currentPage} / {usersData.totalPages}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setUserFilters({ ...userFilters, page: userFilters.page + 1 })}
+                      onClick={() => setUserFilters({ ...userFilters, page: currentPage + 1 })}
                       disabled={userFilters.page === usersData.totalPages}
                     >
                       Sonraki

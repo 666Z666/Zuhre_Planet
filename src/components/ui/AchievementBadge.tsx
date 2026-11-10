@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Star, Shield, Zap, Heart, Award } from 'lucide-react';
+import { Star, Shield, Zap, Heart, Award } from 'lucide-react';
 
 export type AchievementType = 'pioneer' | 'top_star' | 'loyalty_king' | 'vault_hunter' | 'nova_elite';
 

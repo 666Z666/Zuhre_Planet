@@ -4,14 +4,20 @@
  * Intent-based semantic analysis for handling user commands via CommandCenter.
  */
 
-export type ScoutAction = {
-  type: 'NAVIGATE' | 'SEARCH' | 'ACTION' | 'MESSAGE';
-  payload: any;
-  response: string;
-};
+export type ScoutAction =
+  | { type: 'NAVIGATE'; payload: string; response: string }
+  | { type: 'SEARCH'; payload: string; response: string }
+  | { type: 'ACTION'; payload: 'TOGGLE_STEALTH' | 'CLEAR_TRAIL'; response: string }
+  | { type: 'MESSAGE'; payload: null; response: string };
+
+type ScoutIntent =
+  | { pattern: RegExp; action: 'NAVIGATE'; path: string; response: string }
+  | { pattern: RegExp; action: 'SEARCH'; response: string }
+  | { pattern: RegExp; action: 'ACTION'; payload: 'TOGGLE_STEALTH' | 'CLEAR_TRAIL'; response: string }
+  | { pattern: RegExp; action: 'MESSAGE'; response: string };
 
 class ScoutService {
-  private intents = [
+  private intents: ScoutIntent[] = [
     { pattern: /(keşfet|katalog|bülten|escortlar)/i, action: 'NAVIGATE', path: '/catalog', response: 'Galaksinin en parlak yıldızlarına giden kapı açılıyor. Kimin ışığını takip etmek istersiniz?' },
     { pattern: /(giriş|login|üye)/i, action: 'NAVIGATE', path: '/login', response: 'Kimliğinizi Nebula ağında doğrulama noktasına aktarıyorum...' },
     { pattern: /(puanım|kaç puan|np)/i, action: 'MESSAGE', response: 'Şu an galaktik hanenizde 4,850 Nebula Point (NP) bulunuyor. PULSAR rütbesine yükselmek için hala yolunuz var.' },
@@ -26,7 +32,7 @@ class ScoutService {
   ];
 
   analyze(input: string): ScoutAction {
-    const query = input.toLowerCase().trim();
+    const query = input.toLocaleLowerCase('tr-TR').trim();
 
     for (const intent of this.intents) {
       const match = query.match(intent.pattern);
@@ -35,7 +41,10 @@ class ScoutService {
           return { type: 'NAVIGATE', payload: intent.path, response: intent.response };
         }
         if (intent.action === 'SEARCH') {
-          return { type: 'SEARCH', payload: match[2], response: intent.response.replace('$2', match[2]) };
+          return { type: 'SEARCH', payload: match[2] ?? '', response: intent.response.replace('$2', match[2]) };
+        }
+        if (intent.action === 'ACTION') {
+          return { type: 'ACTION', payload: intent.payload, response: intent.response };
         }
         return { type: 'MESSAGE', payload: null, response: intent.response };
       }

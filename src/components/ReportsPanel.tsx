@@ -36,7 +36,6 @@ import {
   Trash2,
   Eye,
   FileSpreadsheet,
-  FileJson,
   FileOutput,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

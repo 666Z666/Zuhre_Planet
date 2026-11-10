@@ -2,10 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Settings, 
-  FileEdit, 
   Save, 
   Globe, 
-  Mail, 
   DollarSign, 
   ShieldCheck 
 } from 'lucide-react';

@@ -73,7 +73,7 @@ export function KPICard({
   value,
   icon: Icon,
   color,
-  format = 'number',
+  format: _format = 'number',
   className = '',
 }: KPICardProps) {
   const colors = colorClasses[color as keyof typeof colorClasses] || colorClasses.blue;

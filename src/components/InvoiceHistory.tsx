@@ -34,8 +34,8 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
   Download, FileText, Calendar, CreditCard, CheckCircle2,
-  Clock, XCircle, AlertCircle, Search, Filter, ChevronDown,
-  Eye, Trash2, RefreshCw, Receipt
+  Clock, XCircle, Search, ChevronDown,
+  Eye, RefreshCw, Receipt
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';

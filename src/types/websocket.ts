@@ -51,7 +51,7 @@ export type WebSocketCallback<T = unknown> = (data: T) => void;
 /** Internal handler structure */
 export interface WebSocketHandler {
   type: WebSocketEventType;
-  callback: WebSocketCallback<any>; // Keep generic internally but use specific at call site
+  callback: WebSocketCallback<unknown>;
 }
 
 /** 

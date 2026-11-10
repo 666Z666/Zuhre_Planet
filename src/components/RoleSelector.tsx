@@ -6,7 +6,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { User, Sparkles, Heart, Star, Shield } from 'lucide-react';
 
 export type UserRole = 'customer' | 'escort' | null;

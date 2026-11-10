@@ -21,10 +21,6 @@ import {
   MessageCircle,
   Wifi,
   WifiOff,
-  Bell,
-  BellOff,
-  Info,
-  MoreVertical,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SEO } from '@/pages/SEO';

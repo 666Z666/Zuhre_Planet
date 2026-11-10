@@ -118,7 +118,7 @@ export function ReadReceipt({
       const formattedDate = format(timestamp, 'dd MMMM yyyy', { locale: tr });
       
       return `${config.label} - ${formattedDate} ${formattedTime}`;
-    } catch (error) {
+    } catch {
       return config.label;
     }
   };
@@ -228,7 +228,7 @@ export function MessageTimestamp({
         {format(timestamp, formatString, { locale: tr })}
       </span>
     );
-  } catch (error) {
+  } catch {
     return null;
   }
 }

@@ -10,8 +10,8 @@ import React from 'react';
 import { Link, useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { 
-  LayoutDashboard, User, Image, Settings, 
-  LogOut, Shield, Bell, Calendar, Users, Crop,
+  LayoutDashboard, User, Settings, 
+  LogOut, Shield, Bell, Calendar, Users,
   Trophy, Package, ShieldAlert
 } from 'lucide-react';
 import { DashboardAuthGuard } from '@/components/DashboardAuthGuard';

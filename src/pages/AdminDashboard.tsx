@@ -251,7 +251,7 @@ export default function AdminDashboard() {
                     </LuxuryText>
                     <Badge className="bg-red-500 text-white border-none px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest italic shadow-lg shadow-red-500/20">
                       <Shield className="w-3.5 h-3.5 mr-1.5 animate-pulse" />
-                      ADMIN SECURE
+                      YÖNETİM
                     </Badge>
                   </div>
                   <p className="text-white/60 text-xs font-black uppercase tracking-[0.3em] italic text-shadow-premium">Platform Yönetimi & Kozmik Kontrol Merkezi</p>
@@ -270,9 +270,11 @@ export default function AdminDashboard() {
                 <Button 
                   variant="outline" 
                   size="sm"
+                  disabled
+                  title="Kişisel veri dışa aktarma kapsamı ve denetim kaydı henüz tanımlı değil."
                   className="h-14 px-8 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 text-[10px] font-black uppercase tracking-widest italic transition-all"
                 >
-                  <Download className="w-4 h-4 mr-3" /> Dışa Aktar
+                  <Download className="w-4 h-4 mr-3" /> Dışa Aktarma Kapalı
                 </Button>
               </div>
             </div>

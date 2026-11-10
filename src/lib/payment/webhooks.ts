@@ -5,7 +5,6 @@
  */
 
 import logger from '../logger';
-import { db } from '@/drizzle/db';
 
 export type WebhookStatus = 'success' | 'failure' | 'pending';
 

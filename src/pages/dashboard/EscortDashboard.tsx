@@ -8,7 +8,7 @@
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import {
   Eye, Heart, MousePointerClick, TrendingUp,
-  AlertCircle, ChevronRight, Zap, Lock, Unlock, DollarSign
+  AlertCircle, ChevronRight, Zap, Lock, Unlock
 } from 'lucide-react';
 import { Link } from 'wouter';
 

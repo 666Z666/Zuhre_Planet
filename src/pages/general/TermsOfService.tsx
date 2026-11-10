@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Gavel, ShieldCheck, AlertCircle, Sparkles, Scale, Info, CheckCircle } from 'lucide-react';
+import { Gavel, ShieldCheck, AlertCircle, Scale, Info, CheckCircle } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const TermSection = ({ icon: Icon, title, content, delay }: any) => (

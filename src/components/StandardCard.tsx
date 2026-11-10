@@ -11,7 +11,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { ListingProfile } from '@/types/domain';
 import { VerifiedBadge } from './VerifiedBadge';
 
-import { Link, useLocation } from 'wouter';
+import { useLocation } from 'wouter';
 
 interface StandardCardProps {
   profile: ListingProfile;

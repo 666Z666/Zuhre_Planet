@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Globe, Check, ChevronDown } from 'lucide-react';
+import { Globe, ChevronDown } from 'lucide-react';
 import { useLanguage, type Language } from '@/contexts/LanguageContext';
 
 export function LanguageSwitcher() {

@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Zap, 
   Gift, 
   Users, 
-  Copy, 
-  CheckCircle2, 
   Star, 
-  TrendingUp, 
-  Trophy,
-  Package,
+  TrendingUp,
   Image as ImageIcon,
-  Video,
   ShieldCheck,
   ChevronRight,
   Info
@@ -19,7 +13,7 @@ import {
 import { Link } from 'wouter';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { TrustScoreIndicator } from '@/components/ui/TrustScoreIndicator';
 import { toast } from 'sonner';

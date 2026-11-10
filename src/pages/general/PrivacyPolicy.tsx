@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Eye, Shield, Lock, FileCheck, Sparkles, UserCheck, Database, Globe } from 'lucide-react';
+import { Eye, Lock, UserCheck, Database, Globe } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const PrivacySection = ({ icon: Icon, title, content, delay }: any) => (

@@ -8,7 +8,7 @@ import { PremiumHeroBanner } from '@/components/PremiumHeroBanner';
 import { StoryRingGallery } from '@/components/StoryRing';
 import { DiscoveryFeed } from '@/components/DiscoveryFeed';
 import { Search, SlidersHorizontal, X, Map as MapIcon, Grid } from 'lucide-react';
-import { LipsIcon, MaskIcon } from '@/components/ui/SensualIcons';
+import { MaskIcon } from '@/components/ui/SensualIcons';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '@/contexts/ThemeContext';

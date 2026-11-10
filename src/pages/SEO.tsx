@@ -47,7 +47,7 @@ interface SEOProps {
   keywords?: string;
   canonical?: string;
   ogImage?: string;
-  schemaData?: Record<string, any>; // Dinamik Schema objesi (Opsiyonel)
+  schemaData?: Record<string, unknown>; // Dinamik Schema objesi (Opsiyonel)
 }
 
 export function SEO({ title, description, keywords, canonical, ogImage, schemaData }: SEOProps) {

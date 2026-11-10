@@ -10,7 +10,6 @@ import {
   Smile, 
   Paperclip, 
   Mic, 
-  Image as ImageIcon, 
   X,
   Loader2
 } from 'lucide-react';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Cookie, Shield, Eye, Settings, Sparkles, Zap, Info, CheckCircle } from 'lucide-react';
+import { Cookie, Shield, Settings, Info, CheckCircle } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const CookieSection = ({ icon: Icon, title, content, delay }: any) => (

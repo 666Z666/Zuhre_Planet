@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Calendar, Shield, Award, Heart, Settings, Edit2, LogOut, MapPin, Zap, TrendingUp, Share2, Facebook, Instagram, Twitter } from 'lucide-react';
+import { Mail, Phone, Calendar, Shield, Award, Heart, Settings, Edit2, LogOut, MapPin, Zap, TrendingUp, Share2, Facebook, Instagram, Twitter } from 'lucide-react';
 
 interface Appointment {
   id: number;
@@ -71,7 +71,6 @@ export const EnhancedCustomerProfile: React.FC<EnhancedCustomerProfileProps> = (
   const tierColor = getTierColor(profile.tier);
 
   const loyaltyLevel = Math.floor(profile.loyaltyPoints / 1000);
-  const nextLevelPoints = (loyaltyLevel + 1) * 1000;
   const loyaltyProgress = (profile.loyaltyPoints % 1000) / 10;
 
   return (

@@ -125,7 +125,6 @@ async function syncNotifications() {
     // Fetch pending notifications from IndexedDB
     // Send to server
     // Clear IndexedDB
-    console.log('Syncing notifications...');
   } catch (error) {
     console.error('Failed to sync notifications:', error);
   }
@@ -145,7 +144,6 @@ async function fetchNotifications() {
   try {
     // Fetch new notifications from server
     // Show as local notifications
-    console.log('Fetching notifications...');
   } catch (error) {
     console.error('Failed to fetch notifications:', error);
   }

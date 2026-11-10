@@ -5,9 +5,6 @@ import {
   User, 
   ArrowRight, 
   Share2, 
-  Heart, 
-  MessageCircle, 
-  Zap, 
   Sparkles,
   TrendingUp,
   Bookmark

@@ -481,7 +481,12 @@ wss.on('connection', (ws: WebSocket, req: http.IncomingMessage) => {
 
   ws.on('message', (message) => {
     // Message size limit (1MB)
-    if (Buffer.byteLength(message as any) > 1024 * 1024) {
+    const messageSize = typeof message === 'string'
+      ? Buffer.byteLength(message)
+      : Array.isArray(message)
+        ? message.reduce((size, part) => size + part.byteLength, 0)
+        : message.byteLength;
+    if (messageSize > 1024 * 1024) {
       logger.warn('Message too large, dropping connection');
       ws.close(1009, 'Message too large');
       return;

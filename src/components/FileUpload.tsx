@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UploadCloud, Image, Video, X } from 'lucide-react';
+import { UploadCloud, X } from 'lucide-react';
 
 interface FileUploadProps {
   onUpload: (files: File[]) => Promise<void>;

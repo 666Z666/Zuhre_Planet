@@ -16,18 +16,11 @@ import {
   Play, 
   X,
   ArrowLeft,
-  CheckCircle2,
-  MessageCircle,
   Shield,
   Eye,
-  Ruler,
-  Weight,
   Palette,
   Languages,
-  Calendar,
-  Layers,
-  Lock,
-  Zap
+  Layers
 } from 'lucide-react';
 
 import { 
@@ -48,9 +41,7 @@ import { listingService } from '@/services/listingService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import { AchievementBadge } from '@/components/ui/AchievementBadge';
 import { useTheme } from '@/contexts/ThemeContext';
 import { SEO } from '@/pages/SEO';
 import { Footer } from '@/components/Footer';
@@ -144,44 +135,52 @@ export default function EscortProfile() {
     );
   }
 
-  // Dinamik SEO Schema (Person & Offer)
-  const profileSchema = {
+  // JSON-LD yalnız API'den gerçekten gelen ve anlamlı olan değerleri içerir.
+  const profileSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": profile.displayName,
-    "description": profile.biography || `${profile.city} ${profile.district} VIP Escort`,
-    "image": profile.coverImage,
-    "gender": "Female",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": profile.district,
-      "addressRegion": profile.city,
-      "addressCountry": "TR"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": profile.rates?.hourly || 0,
-      "priceCurrency": "TRY",
-      "availability": "https://schema.org/InStock"
-    },
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": profile.rating || 5,
-      "reviewCount": profile.reviewCount || 1,
-      "bestRating": 5,
-      "worstRating": 1
-    }
+    name: profile.displayName,
   };
+  const schemaDescription = profile.biography?.trim() || profile.slogan?.trim();
+  if (schemaDescription) profileSchema.description = schemaDescription;
+  if (profile.coverImage) profileSchema.image = profile.coverImage;
+  if (profile.city || profile.district) {
+    profileSchema.address = {
+      "@type": "PostalAddress",
+      ...(profile.district ? { addressLocality: profile.district } : {}),
+      ...(profile.city ? { addressRegion: profile.city } : {}),
+      addressCountry: "TR",
+    };
+  }
+  const hourlyPrice = profile.rates?.hourly;
+  if (typeof hourlyPrice === 'number' && Number.isFinite(hourlyPrice) && hourlyPrice > 0) {
+    profileSchema.offers = { "@type": "Offer", price: hourlyPrice, priceCurrency: "TRY" };
+  }
+  const rating = Number(profile.rating);
+  const reviewCount = Number(profile.reviewCount ?? 0);
+  if (Number.isFinite(rating) && rating > 0 && reviewCount > 0) {
+    profileSchema.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: rating,
+      reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
 
-  const seoTitle = `${profile.displayName} - ${profile.city} ${profile.hairColor || 'VIP'} Escort | Doğrulanmış Profil - Zühre Planet`;
-  const seoDesc = `Zühre Planet güvencesiyle ${profile.city} ${profile.district} konumunda hizmet veren ${profile.age} yaşındaki ${profile.displayName} (${profile.hairColor || 'Sarışın'}) için hemen randevu detaylarını inceleyin.`;
+  const seoTitle = `${profile.displayName} - ${profile.city} İlanı | Zühre Planet`;
+  const seoDesc = `${profile.city}${profile.district ? `, ${profile.district}` : ''} bölgesindeki ${profile.displayName} ilanı. Profil ayrıntılarını ve mevcut bilgileri inceleyin.`;
+  const seoKeywords = [profile.city, profile.district, profile.displayName]
+    .filter((value): value is string => Boolean(value?.trim()))
+    .map((value) => `${value} ilanı`)
+    .join(', ');
 
   return (
     <div className="min-h-screen bg-transparent pb-32">
       <SEO
         title={seoTitle}
         description={seoDesc}
-        keywords={`${profile.city} escort, ${profile.district} escort, ${profile.displayName} escort, vip escort bayan, ${profile.hairColor || 'sarışın'} escort`}
+        keywords={seoKeywords}
         ogImage={profile.coverImage}
         schemaData={profileSchema}
       />
@@ -351,12 +350,12 @@ export default function EscortProfile() {
               <TabsContent value="details" className="mt-10">
                 <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
                   {[
-                    { icon: MetricHeightIcon, label: 'BOY', value: profile.physicalTraits?.height ? `${profile.physicalTraits.height} CM` : '175 CM', color: 'from-blue-500/20 to-emerald-500/20' },
-                    { icon: MetricWeightIcon, label: 'KİLO', value: profile.physicalTraits?.weight ? `${profile.physicalTraits.weight} KG` : '55 KG', color: 'from-emerald-500/20 to-teal-500/20' },
-                    { icon: MetricChestIcon, label: 'GÖĞÜS', value: profile.physicalTraits?.chest || '90', color: 'from-pink-500/20 to-rose-500/20' },
-                    { icon: MetricWaistIcon, label: 'BEL', value: profile.physicalTraits?.waist || '60', color: 'from-gold-500/20 to-emerald-500/20' },
-                    { icon: MetricHipsIcon, label: 'KALÇA', value: profile.physicalTraits?.hips || '92', color: 'from-amber-500/20 to-orange-500/20' },
-                  ].map((feat, i) => (
+                    { icon: MetricHeightIcon, label: 'BOY', value: profile.physicalTraits?.height ? `${profile.physicalTraits.height} CM` : '', color: 'from-blue-500/20 to-emerald-500/20' },
+                    { icon: MetricWeightIcon, label: 'KİLO', value: profile.physicalTraits?.weight ? `${profile.physicalTraits.weight} KG` : '', color: 'from-emerald-500/20 to-teal-500/20' },
+                    { icon: MetricChestIcon, label: 'GÖĞÜS', value: profile.physicalTraits?.chest ? String(profile.physicalTraits.chest) : '', color: 'from-pink-500/20 to-rose-500/20' },
+                    { icon: MetricWaistIcon, label: 'BEL', value: profile.physicalTraits?.waist ? String(profile.physicalTraits.waist) : '', color: 'from-gold-500/20 to-emerald-500/20' },
+                    { icon: MetricHipsIcon, label: 'KALÇA', value: profile.physicalTraits?.hips ? String(profile.physicalTraits.hips) : '', color: 'from-amber-500/20 to-orange-500/20' },
+                  ].filter((feat) => feat.value).map((feat, i) => (
                     <motion.div 
                       key={i}
                       initial={{ opacity: 0, y: 20 }}
@@ -375,14 +374,14 @@ export default function EscortProfile() {
                   ))}
                 </div>
 
-                {/* Additional Traits Summary */}
+                {/* Yalnızca gerçekten belirtilen ek özellikleri göster. */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
                    {[
-                     { icon: Palette, label: 'SAÇ', value: profile.physicalTraits?.hairColor || profile.hairColor || 'Sarışın' },
-                     { icon: Eye, label: 'GÖZ', value: profile.physicalTraits?.eyeColor || profile.eyeColor || 'Mavi' },
-                     { icon: Languages, label: 'DİLLER', value: profile.languages?.join(', ') || 'Türkçe, İngilizce' },
-                     { icon: Layers, label: 'VÜCUT', value: profile.physicalTraits?.bodyType === 'slim' ? 'İnce' : profile.physicalTraits?.bodyType === 'athletic' ? 'Atletik' : 'Kıvrımlı' },
-                   ].map((item, idx) => (
+                     { icon: Palette, label: 'SAÇ', value: profile.physicalTraits?.hairColor || profile.hairColor || '' },
+                     { icon: Eye, label: 'GÖZ', value: profile.physicalTraits?.eyeColor || profile.eyeColor || '' },
+                     { icon: Languages, label: 'DİLLER', value: profile.languages?.filter(Boolean).join(', ') || '' },
+                     { icon: Layers, label: 'VÜCUT', value: profile.physicalTraits?.bodyType === 'slim' ? 'İnce' : profile.physicalTraits?.bodyType === 'athletic' ? 'Atletik' : profile.physicalTraits?.bodyType === 'curvy' ? 'Kıvrımlı' : profile.physicalTraits?.bodyType === 'plus' ? 'Dolgun' : '' },
+                   ].filter((item) => item.value).map((item, idx) => (
                      <div key={idx} className="glass-panel p-5 rounded-[2rem] border-none flex items-center gap-4 hover:bg-white/5 transition-all">
                         <item.icon className="w-5 h-5 text-primary/60" />
                         <div>

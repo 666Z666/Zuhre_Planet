@@ -35,9 +35,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import {
-  Eye, Heart, Calendar, Star, Edit, Share2, Settings,
-  CheckCircle2, Clock, TrendingUp, Shield, Crown,
-  AlertCircle, ChevronRight, ExternalLink
+  Eye, Heart, Calendar, Star, Edit, Settings,
+  CheckCircle2, Clock, TrendingUp, Crown,
+  AlertCircle, ChevronRight
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { VerifiedBadge } from './VerifiedBadge';

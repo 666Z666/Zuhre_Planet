@@ -12,6 +12,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { StatusBadge, LoadingSpinner, EmptyState } from '../AdminShared';
 import type { AdminQuickActionHandler } from '@/types/admin';
+import type { useReports } from '@/hooks/useAdminData';
+
+type ReportRow = ReturnType<typeof useReports>['data'][number];
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -20,7 +23,7 @@ const fadeInVariants = {
 };
 
 interface ReportsTabProps {
-  reportsData: any;
+  reportsData: { data: ReportRow[]; items?: ReportRow[]; total: number; totalPages: number };
   reportsLoading: boolean;
   handleQuickAction: AdminQuickActionHandler;
   page: number;
@@ -59,12 +62,12 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
           ) : !reportsData || (reportsData.items || reportsData.data || []).length === 0 ? (
             <EmptyState 
               title="Şikayet bulunamadı" 
-              description="Platformda bekleyen aktif bir şikayet kaydı yok." 
+              description="Seçili filtreye uygun bir şikayet kaydı bulunmuyor." 
               icon={Flag}
             />
           ) : (
             <div className="space-y-4">
-              {(reportsData.items || reportsData.data || []).map((report: any) => (
+              {(reportsData.items || reportsData.data).map((report) => (
                 <div key={report.id} className="p-5 border rounded-xl hover:bg-red-50/10 transition-colors group relative border-red-100/50">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex gap-4">
@@ -85,7 +88,7 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <StatusBadge status={report.status} size="sm" />
+                      <StatusBadge status={report.status ?? 'unknown'} size="sm" />
                       <span className="text-[10px] text-muted-foreground font-mono">{report.id?.slice(0, 8)}</span>
                     </div>
                   </div>
@@ -119,14 +122,9 @@ export const ReportsTab: React.FC<ReportsTabProps> = ({
                       </Button>
                     </div>
                     
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-9 hover:bg-muted text-xs transition-all"
-                      onClick={() => console.log('Hizli İnceleme', report.id)}
-                    >
-                      Kanıtları Gör
-                    </Button>
+                    <span className="text-xs text-muted-foreground">
+                      Ek kanıt görüntüleme bu sürümde desteklenmiyor.
+                    </span>
                   </div>
                 </div>
               ))}

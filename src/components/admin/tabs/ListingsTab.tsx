@@ -21,6 +21,10 @@ import {
 } from '@/components/ui/select';
 import { StatusBadge, LoadingSpinner, EmptyState } from '../AdminShared';
 import type { AdminQuickActionHandler } from '@/types/admin';
+import type { ListingFilters } from '@/types/admin';
+import type { useListings } from '@/hooks/useAdminData';
+
+type ListingRow = ReturnType<typeof useListings>['data'][number];
 
 const fadeInVariants = {
   hidden: { opacity: 0, y: 10 },
@@ -29,10 +33,10 @@ const fadeInVariants = {
 };
 
 interface ListingsTabProps {
-  listingsData: any;
+  listingsData: { data: ListingRow[]; total: number; totalPages: number };
   listingsLoading: boolean;
-  listingFilters: any;
-  setListingFilters: (filters: any) => void;
+  listingFilters: ListingFilters;
+  setListingFilters: (filters: ListingFilters) => void;
   listingSearch: string;
   setListingSearch: (search: string) => void;
   handleQuickAction: AdminQuickActionHandler;
@@ -49,6 +53,8 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
   handleQuickAction,
   navigate
 }) => {
+  const currentPage = listingFilters.page ?? 1;
+
   return (
     <motion.div
       initial="hidden"
@@ -83,7 +89,7 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
             <Select
               value={listingFilters.status}
               onValueChange={(v) =>
-                setListingFilters({ ...listingFilters, status: v })
+                setListingFilters({ ...listingFilters, status: v as ListingFilters['status'] })
               }
             >
               <SelectTrigger className="w-40">
@@ -112,7 +118,7 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
             />
           ) : (
             <div className="space-y-4">
-              {listingsData.data.map((listing: any, index: number) => (
+              {listingsData.data.map((listing, index) => (
                 <motion.div
                   key={listing.id}
                   initial={{ opacity: 0, y: 10 }}
@@ -137,7 +143,7 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
                         {listing.escortName} • {listing.location}
                       </p>
                       <p className="text-sm font-bold text-primary mt-1">
-                        ₺{listing.price?.toLocaleString()}
+                        {listing.price == null ? 'Fiyat bilgisi belirtilmemiş' : `₺${listing.price.toLocaleString('tr-TR')}`}
                       </p>
                     </div>
                   </div>
@@ -145,7 +151,7 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
                   <div className="flex items-center gap-4">
                     <div className="text-right text-xs text-muted-foreground mr-2">
                       <p>{listing.views || 0} Görüntülenme</p>
-                      <p>{listing.reviews || 0} Değerlendirme</p>
+                      <p>{listing.reviews == null ? '— Değerlendirme' : `${listing.reviews} Değerlendirme`}</p>
                     </div>
                     <div className="flex gap-2">
                        <Button
@@ -192,19 +198,19 @@ export const ListingsTab: React.FC<ListingsTabProps> = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setListingFilters({ ...listingFilters, page: listingFilters.page - 1 })}
-                      disabled={listingFilters.page === 1}
+                      onClick={() => setListingFilters({ ...listingFilters, page: currentPage - 1 })}
+                      disabled={currentPage === 1}
                     >
                       <ChevronDown className="w-4 h-4 rotate-90" />
                     </Button>
                     <span className="text-sm font-medium px-4">
-                      Sayfa {listingFilters.page} / {listingsData.totalPages}
+                      Sayfa {currentPage} / {listingsData.totalPages}
                     </span>
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setListingFilters({ ...listingFilters, page: listingFilters.page + 1 })}
-                      disabled={listingFilters.page === listingsData.totalPages}
+                      onClick={() => setListingFilters({ ...listingFilters, page: currentPage + 1 })}
+                      disabled={currentPage === listingsData.totalPages}
                     >
                       <ChevronDown className="w-4 h-4 -rotate-90" />
                     </Button>

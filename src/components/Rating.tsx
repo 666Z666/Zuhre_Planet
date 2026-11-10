@@ -71,7 +71,6 @@ export function Rating({
     const starValue = index + 1;
     const isFull = displayValue >= starValue;
     const isHalf = !isFull && displayValue >= starValue - 0.5 && displayValue < starValue;
-    const isEmpty = !isFull && !isHalf;
 
     return (
       <motion.button

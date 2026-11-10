@@ -15,7 +15,6 @@ import {
   Save,
   Trash2
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface ImageEditorProps {
   imageSrc: string;

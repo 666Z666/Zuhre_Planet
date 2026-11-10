@@ -7,7 +7,7 @@
 
 import { test, expect } from '@playwright/test';
 import { PROFILE, UI } from './utils/selectors';
-import { navigateToPage, waitForLoadingToFinish } from './utils/helpers';
+import { waitForLoadingToFinish } from './utils/helpers';
 
 test.describe('Escort Profile - Profil Yükleme', () => {
   test.beforeEach(async ({ page }) => {

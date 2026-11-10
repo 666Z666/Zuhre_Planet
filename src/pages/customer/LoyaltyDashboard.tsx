@@ -3,16 +3,11 @@ import { motion } from 'framer-motion';
 import { 
   Zap, 
   Gift, 
-  Users, 
-  ChevronRight, 
-  Copy, 
-  CheckCircle2,
+  ChevronRight,
   Trophy,
-  History,
   Star,
   ShieldCheck,
   Loader2,
-  AlertCircle,
   Calendar,
   CreditCard,
   Target

@@ -6,21 +6,15 @@ import {
   Twitter, 
   Send, 
   ShieldCheck, 
-  Sparkles, 
-  Globe, 
-  Zap,
+  Globe,
   Mail,
-  PhoneCall,
-  MapPin
+  PhoneCall
 } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
-import { useLuxuryTheme } from '@/contexts/LuxuryThemeContext';
 import { ThemeIcon } from './ui/ThemeIcon';
 import { Logo } from '@/components/brand/Logo';
 
 export function Footer() {
-  const { theme } = useLuxuryTheme();
-
   const footerLinks = [
     {
       title: 'KEŞFET',

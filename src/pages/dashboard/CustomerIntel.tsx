@@ -3,22 +3,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldAlert, 
   Search, 
-  Clock, 
-  MessageSquare, 
-  ShieldCheck, 
   AlertTriangle,
   User,
   Phone,
   Filter,
-  Calendar,
   Lock,
-  EyeOff,
-  Star as StarIcon
+  EyeOff
 } from 'lucide-react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 

@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Ruler, Weight, User, Scissors, Eye, Zap, MapPin, BadgeCheck, Wallet } from 'lucide-react';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useT } from '@/contexts/LanguageContext';
 import { TURKEY_LOCATIONS, getDistrictsByCity } from '@/data/locations';
 import { LipsIcon, MaskIcon, CorsetIcon, SilkBowIcon } from './ui/SensualIcons';
@@ -13,6 +12,12 @@ interface FilterOption {
   value: string;
   icon?: React.ElementType;
 }
+
+type FilterValue = string | number | boolean | string[] | undefined;
+
+const selectedOptions = (value: FilterValue): string[] => Array.isArray(value) ? value : [];
+const filterControlValue = (value: FilterValue, fallback: string | number) =>
+  typeof value === 'string' || typeof value === 'number' ? value : fallback;
 
 interface FilterSection {
   id: string;
@@ -31,7 +36,7 @@ interface FilterSection {
 }
 
 interface AdvancedFilterPanelProps {
-  onFilterChange?: (filters: Record<string, any>) => void;
+  onFilterChange?: (filters: Record<string, FilterValue>) => void;
   onReset?: () => void;
   className?: string;
 }
@@ -151,10 +156,8 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
   onReset,
   className = ''
 }) => {
-  const [activeFilters, setActiveFilters] = useState<Record<string, any>>({});
+  const [activeFilters, setActiveFilters] = useState<Record<string, FilterValue>>({});
   const [expandedSections, setExpandedSections] = useState<string[]>(['location', 'verified', 'age', 'price']);
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
   const t = useT();
 
   const toggleSection = (id: string) => {
@@ -163,7 +166,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
     );
   };
 
-  const handleValueChange = (sectionId: string, value: any) => {
+  const handleValueChange = (sectionId: string, value: FilterValue) => {
     const newFilters = { ...activeFilters, [sectionId]: value };
     // Şehir değişince eski ilçe geçersiz olur
     if (sectionId === 'location') delete newFilters.district;
@@ -172,7 +175,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
   };
 
   const handleToggleValue = (sectionId: string, value: string) => {
-    const currentValues = activeFilters[sectionId] || [];
+    const currentValues = selectedOptions(activeFilters[sectionId]);
     const newValues = currentValues.includes(value)
       ? currentValues.filter((v: string) => v !== value)
       : [...currentValues, value];
@@ -187,7 +190,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
 
   const selectedCityDistricts = useMemo(() => {
     if (activeFilters.location) {
-      return getDistrictsByCity(activeFilters.location);
+      return typeof activeFilters.location === 'string' ? getDistrictsByCity(activeFilters.location) : [];
     }
     return [];
   }, [activeFilters.location]);
@@ -235,7 +238,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                   {section.type === 'select' && (
                     <div className="space-y-4">
                       <select
-                        value={activeFilters[section.id] || ''}
+                        value={filterControlValue(activeFilters[section.id], '')}
                         onChange={(e) => handleValueChange(section.id, e.target.value)}
                         className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                         style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
@@ -248,7 +251,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
 
                       {section.id === 'location' && activeFilters.location && selectedCityDistricts.length > 0 && (
                         <select
-                          value={activeFilters.district || ''}
+                          value={typeof activeFilters.district === 'string' ? activeFilters.district : ''}
                           onChange={(e) => handleValueChange('district', e.target.value)}
                           className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-primary/50 transition-all appearance-none"
                           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
@@ -290,7 +293,7 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                             min={section.min}
                             max={section.max}
                             step={section.step}
-                            value={activeFilters[key] ?? ''}
+                            value={typeof activeFilters[key] === 'number' ? activeFilters[key] : ''}
                             placeholder={String(i === 0 ? section.min : section.max)}
                             onChange={(e) => {
                               const raw = e.target.value;
@@ -312,14 +315,14 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                         min={section.min}
                         max={section.max}
                         step={section.step}
-                        value={activeFilters[section.id] || section.min}
+                        value={filterControlValue(activeFilters[section.id], section.min ?? 0)}
                         onChange={(e) => handleValueChange(section.id, parseInt(e.target.value))}
                         className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer accent-primary"
                       />
                       <div className="flex justify-between items-center text-[9px] font-black tracking-widest text-white/40">
                         <span>{section.min} {section.unit}</span>
                         <span className="text-primary bg-primary/10 px-4 py-1.5 rounded-full border border-primary/20 shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-                          {activeFilters[section.id] || section.min} {section.unit}
+                          {typeof activeFilters[section.id] === 'number' ? activeFilters[section.id] : section.min} {section.unit}
                         </span>
                         <span>{section.max} {section.unit}</span>
                       </div>
@@ -333,15 +336,15 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
                           key={option.id}
                           onClick={() => handleToggleValue(section.id, option.value)}
                           className={`flex items-center gap-3 p-4 rounded-2xl border transition-all ${
-                            (activeFilters[section.id] || []).includes(option.value)
+                            selectedOptions(activeFilters[section.id]).includes(option.value)
                               ? 'bg-primary/10 border-primary text-primary shadow-[0_0_20px_rgba(212,175,55,0.1)]'
                               : 'bg-white/5 border-white/10 text-white/40 hover:border-white/20'
                           }`}
                         >
                           {option.icon ? (
-                            <option.icon size={14} className={(activeFilters[section.id] || []).includes(option.value) ? 'text-primary' : 'text-white/20'} />
+                            <option.icon size={14} className={selectedOptions(activeFilters[section.id]).includes(option.value) ? 'text-primary' : 'text-white/20'} />
                           ) : (
-                            <div className={`w-2 h-2 rounded-full ${(activeFilters[section.id] || []).includes(option.value) ? 'bg-primary animate-pulse' : 'bg-white/10'}`} />
+                            <div className={`w-2 h-2 rounded-full ${selectedOptions(activeFilters[section.id]).includes(option.value) ? 'bg-primary animate-pulse' : 'bg-white/10'}`} />
                           )}
                           <span className="text-[9px] font-black uppercase tracking-widest">{option.label}</span>
                         </button>

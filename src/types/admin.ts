@@ -137,10 +137,12 @@ export interface PlatformStats {
   pendingReviews: number;
   flaggedReviews: number;
   totalRevenue: number;
-  monthlyRevenue: number;
+  /** null means no verified payment data source is configured; it is not zero. */
+  monthlyRevenue: number | null;
   weeklyRevenue: number;
   dailyRevenue: number;
-  activeNow: number;
+  /** null means no reliable shared presence source is configured. */
+  activeNow: number | null;
   reportsCount: number;
   pendingReports: number;
   resolvedReports: number;
@@ -195,8 +197,8 @@ export interface AdminUser {
   phoneVisibility: 'visible' | 'masked' | 'hidden';
   messageAvailability: boolean;
   createdAt: string;
-  updatedAt: string;
-  lastActive: string;
+  updatedAt: string | null;
+  lastActive: string | null;
   lastLogin?: string;
   location?: string;
   age?: number;
@@ -210,7 +212,7 @@ export interface AdminUser {
   restrictions?: string[];
   banReason?: string;
   suspendedUntil?: string;
-  isOnline: boolean;
+  isOnline: boolean | null;
 }
 
 /**
@@ -227,7 +229,7 @@ export interface AdminListing {
   location: string;
   city: string;
   district?: string;
-  price: number;
+  price: number | null;
   priceUnit: 'hourly' | 'daily' | 'weekly' | 'monthly';
   status: ListingStatus;
   isVerified: boolean;
@@ -235,8 +237,8 @@ export interface AdminListing {
   featuredPosition?: number;
   isBoosted: boolean;
   boostUntil?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | null;
+  updatedAt: string | null;
   expiresAt?: string;
   views: number;
   favorites: number;
@@ -268,8 +270,8 @@ export interface AdminReview {
   isFlagged: boolean;
   flagReason?: string;
   createdAt: string;
-  updatedAt: string;
-  helpfulVotes: number;
+  updatedAt: string | null;
+  helpfulVotes: number | null;
   reportCount?: number;
   adminResponse?: string;
   adminRespondedAt?: string;
@@ -295,7 +297,7 @@ export interface AdminReport {
   reporterName: string;
   reporterEmail?: string;
   status: ReportStatus;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
+  priority: 'low' | 'medium' | 'high' | 'urgent' | null;
   category: string;
   createdAt: string;
   updatedAt: string;
@@ -504,7 +506,7 @@ export interface FeaturedEscort {
   badge?: string;
   enabled: boolean;
   expiresAt?: string;
-  assignedAt: string;
+  assignedAt: string | null;
   assignedBy: string;
   name?: string;
   location?: string;

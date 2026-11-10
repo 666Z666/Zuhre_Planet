@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Zap, ShoppingCart, TrendingDown, Check, Lock, Star } from 'lucide-react';
+import { Zap, ShoppingCart, TrendingDown, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface CreditPackage {

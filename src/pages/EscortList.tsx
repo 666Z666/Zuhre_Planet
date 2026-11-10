@@ -9,10 +9,10 @@
  */
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
-  Filter, Sparkles, SlidersHorizontal, Search, MapPin, 
-  ChevronDown, X, Star, Crown, Plus
+  Filter, Sparkles, Search, MapPin, 
+  ChevronDown, Plus
 } from 'lucide-react';
 
 // Domain Types & Service

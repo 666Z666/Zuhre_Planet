@@ -1,192 +1,58 @@
-# Zühre Planet — Gelecek Planlar & Yol Haritası 🚀
+# Zühre Planet — Yol Haritası ve Açık İşler
 
-> **Son Güncelleme:** Nisan 2026  
-> **Mevcut Sürüm:** V4.0 Shadow Diamond Edition
+**Güncelleme:** 10 Kasım 2026 · Durum, teslim edilen kaynak ağacının incelemesine dayanır; production erişimi veya canlı kullanım kanıtı değildir.
 
----
+## P0 — Yayın engelleri (ürün/uyum kararı olmadan başlatmayın)
 
-## Öncelik Matrisi
+- [ ] **Bağımsız hukuk incelemesi:** ürün sınırı, ilan modeli, ödeme, içerik, sorumluluk ve gerekli kayıt/başvuru yükümlülükleri için yazılı onay alın. Yeni işlevleri görüş öncesi yayına eklemeyin.
+- [ ] **Yaş ve kimlik güvencesi:** UI yaşı öz-beyan ettiğini açıkça belirtir; buna rağmen mevzuat/risk modeline uygun, veri-minimizasyonlu gerçek age/identity assurance tasarlanmalı ve bypass, ret, itiraz, yeniden kontrol akışları belgelenmelidir.
+- [ ] **Rıza ve sömürü önleme:** ilan sahibinin 18+ oluşu, içerik/iletişim üzerinde yetkisi ve yayın rızası için bağımsız süreç kurun; şüpheli/zorlanmış/üçüncü kişiye ait içerikte yayınlamama ve insan eskalasyonu tanımlayın.
+- [ ] **Moderasyon operasyonu:** rapor alma, acil risk triajı, ilan/medya kaldırma, itiraz, olay kaydı, süre hedefi ve erişim yetkisini yazılı hale getirip test edin.
+- [ ] **Veri koruma:** aydınlatma, saklama/silme, veri sahibi talepleri, tedarikçi/ülke aktarımı, yedekleme ve ihlal müdahalesi için hukuk/teknik onay alın.
+- [ ] **Üretim erişimi ve secret:** secret manager, rotasyon, admin MFA/ayrıcalık en azlığı ve acil erişim prosedürünü doğrulayın.
+- [ ] **İndeksleme:** yazılı hukuk/uyum, yaş güvencesi ve moderasyon onayı tamamlanana kadar `SEO_INDEXING=false`, `VITE_SEO_INDEXING=false` tutun.
 
-| Öncelik | Kategori | Açıklama |
-|---|---|---|
-| 🔴 Kritik | Altyapı | Production deployment, SSL, CDN |
-| 🟠 Yüksek | Özellik | Gerçek ödeme entegrasyonu |
-| 🟡 Orta | UI/UX | Eksik sayfaları tamamla |
-| 🟢 Düşük | Gelişim | Yeni özellikler |
+**Kabul ölçütü:** her madde sahibini, kanıtını ve istisna/olay akışını içermeli; bu kanıtlar onaylanmadan public production yayını yok.
 
----
+## P1 — Veri tabanı ve uçtan uca güvenlik
 
-## Faz 1 — Üretim Hazırlığı (Acil) 🔴
+- [ ] Güncel Drizzle şemasını (`src/drizzle/schema.ts`) tüm migration'larla karşılaştırın; başlangıç migration'ının boş DB kurulumu, upgrade ve rollback provasını disposable test ortamında yapın. Production'da kör reset/push çalıştırmayın.
+- [ ] Gerçek test DB'sinde `publicListingCondition` için public/private, onaysız/onaylı, 18 altı/18+, ret/gizleme kombinasyonlarını test edin; tüm public list/profile/location/sitemap/favorite/contact yollarının aynı kuralı kullandığını doğrulayın.
+- [ ] Admin list/mutation için yetki, Zod validation, audit log, sayfalama, filtre ve çoklu rol senaryolarını API seviyesinde test edin.
+- [ ] Medya ingest pipeline yoksa production upload kapalı olsun. Eklenecekse MIME/codec/metadata, malware/abuse tarama, özel depolama/signed URL, moderasyon öncesi gizlilik ve kaldırma/itiraz akışı şart.
+- [x] No-op “Kanıtları Gör” rapor eylemi kaldırıldı; ayrı kanıt görüntüleme bu sürümde desteklenmediği açıkça belirtiliyor. Gelecekte eklenecekse güvenli hedef erişimi ve audit trail gerekir.
+- [x] Admin kişisel veri export'u, kapsam ve denetim kaydı tanımlı olmadığı için devre dışı bırakıldı.
+- [ ] Test ve production verisini kesin ayırın; seed/example şifreleri disposable test DB'si dışına çıkarmayın.
+- [x] Yıkıcı `db:reset` öncesi development/test ortamı, açık `ALLOW_DB_RESET=true` ve loopback PostgreSQL hedefi doğrulanır; uzak/production hedefler reddedilir (12 saf unit testi; gerçek DB provası değildir).
 
-### 1.1 Gerçek Veritabanı Bağlantısı
-- [ ] PostgreSQL production instance kurulumu (Supabase veya Railway önerilir)
-- [ ] `DATABASE_URL` ortam değişkeni production'da ayarla
-- [ ] `drizzle-kit push` ile şema senkronizasyonu
-- [ ] Seed data: admin kullanıcı, test escort profilleri
+**Tamamlanan bu tur:** public listing kapısı, age/panic testleri, admin null/unknown veri gösterimi ve filtre haritalaması, sayfalama, rapor hedefi N+1 iyileştirmesi ve yalnız açık yerel/test opt-in ile çalışan yıkıcı DB-reset guard'ı. Bunlar release onayı değildir.
 
-### 1.2 Kimlik Doğrulama Backend
-- [ ] JWT secret key production'da güçlü key ile değiştir
-- [ ] Refresh token mekanizması tamamla
-- [ ] Password reset e-posta akışı test et
-- [ ] Rate limiting: Login endpoint'e brute-force koruması
+## P2 — Sürekli entegrasyon, kod sağlığı ve performans
 
-### 1.3 Ortam Değişkenleri
-```env
-# Kritik — production'da mutlaka ayarla
-DATABASE_URL=
-JWT_SECRET=                  # Min 64 karakter random
-VITE_API_URL=               # Production API URL
-VITE_WS_URL=                # WebSocket URL (wss://)
+- [x] ESLint flat-config kapsamı tüm TS/TSX dosyalarını TypeScript parser ile işleyecek biçimde düzeltildi; repo genel lint taramasındaki parser ve kullanılmayan disable hataları giderildi.
+- [ ] `npm run lint:strict` taraması (10 Kasım 2026): 0 error, **389 warning**; unused, `any`, console ve hook uyarılarını kaynakta düzeltip temiz sonuç alın.
+- [ ] CI kurun: lockfile `npm ci`, check:docs, typecheck, unit, lint, build ve ayrı test DB E2E; merge koşullarına bağlayın.
+- [ ] Admin filtre/mutation ve yayın kapısı için server/API integration testleri ekleyin; AgeGate/Panic unit testlerini koruyun.
+- [ ] Son Vite build'de `Sparkles` chunk `808.03 kB` (gzip `218.62 kB`) oldu ve `600 kB` uyarı eşiğini aştı. Kod bölme/lazy-load ve ölçülebilir LCP/INP/CLS budget çalışın.
+- [ ] Riskli rotalar için privacy-safe audit/operational logging, rate limit, alert ve incident playbook sağlayın.
 
-# E-posta
-SMTP_HOST=
-SMTP_USER=
-SMTP_PASS=
+## P3 — Ürün/veri yetenekleri (P0 onayı ve kullanım senaryosu netleşince)
 
-# Ödeme
-IYZICO_API_KEY=
-IYZICO_SECRET_KEY=
-IYZICO_BASE_URL=            # Production: https://api.iyzipay.com
+- [ ] Ödeme/üyelik modelini hukuk ve sağlayıcı kabulünden sonra seçin; webhook imza doğrulama, idempotency, iade/uyuşmazlık ve muhasebe olmadan tahsilat açmayın. SDK varlığı, ödeme özelliğinin hazır olduğu anlamına gelmez.
+- [ ] E-posta, mesajlaşma, forum, bildirim ve rapor sayfalarını gerçek API'ye bağlayın veya demo olduğunu görünür biçimde belirtin; sahte başarı/şifreleme/online göstergesi üretmeyin.
+- [ ] Arama/analitik için amaç, rıza/hukuki dayanak, saklama ve opt-out tasarlayın; toplamadan önce gizlilik incelemesi yapın.
+- [ ] Trafik/rekabet analizi istenirse doğrulanmış domain ile Similarweb tahminlerini tarih, kaynak ve sınırlılıklarıyla belgeleyin; bu teslimde canlı domain/Similarweb ölçümü yok.
 
-# Storage
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+## P4 — Erişilebilirlik, içerik ve bakım
 
-# Opsiyonel
-VITE_GA_ID=                 # Google Analytics
-SENTRY_DSN=                 # Error tracking
-```
+- [ ] Keyboard, screen reader, modal focus, contrast ve reduced-motion akışlarını CI'a ekleyin.
+- [ ] TR/EN ve desteklenen diğer dil dosyalarının anahtar/parite denetimini otomatikleştirin.
+- [ ] Rating, fiyat, doğrulanmışlık, online, şifreleme ve hizmet vaatlerini kanıt/kaynakla eşleyin; kanıtsız iddiayı çıkarın. Görsel maske yalnız preview ise bu durumu upload öncesi görünür tutun.
+- [ ] README, harita, TODO, sürüm notu ve komutları `npm run check:docs` ile güncel tutun.
 
-### 1.4 Ölü Dosya Temizliği
-Aşağıdaki dosyalar hiçbir yerde import edilmiyor — manuel silinmesi gerekiyor:
+## Sonraki adımlar
 
-```bash
-# Çalıştır (Git'e commit edilmeden önce):
-rm src/components/CosmicNav.tsx
-rm src/components/ModernNavBar.tsx
-rm src/components/FloatingNavigation.tsx
-rm src/components/CustomIcon.tsx
-rm src/components/AdvancedFilter.tsx
-rm src/components/AdminLoginPage.tsx      # auth/AdminLoginPage.tsx varken duplicate
-rm src/components/SpaceBackground.tsx
-rm src/components/SpaceTheme.tsx
-rm src/components/StarryBackground.tsx
-```
-
----
-
-## Faz 2 — Temel Özellik Tamamlama (1-2 Hafta) 🟠
-
-### 2.1 Ödeme Sistemi (Iyzico)
-- [ ] Iyzico sandbox ortamında gerçek ödeme testi
-- [ ] NP (Nebula Points) satın alma akışı tamamla
-- [ ] Abonelik/membership satın alma backend bağlantısı
-- [ ] Webhook handler: Ödeme başarı/başarısızlık eventi
-- [ ] Otomatik fatura oluşturma (PDF)
-
-### 2.2 Gerçek Zamanlı Mesajlaşma
-- [ ] `mockWebSocket.ts` → gerçek WebSocket sunucusuna geçiş
-- [ ] Mesaj şifreleme (uçtan uca veya server-side)
-- [ ] Okundu bildirimleri backend ile sync
-- [ ] Dosya paylaşımı (Cloudinary upload)
-- [ ] Engelme ve şikayet mekanizması
-
-### 2.3 Medya Yönetimi
-- [ ] Cloudinary entegrasyonu — escort fotoğraf/video upload
-- [ ] Admin medya onay sistemi (`AdminMediaApprovals.tsx` aktif edilecek)
-- [ ] Otomatik watermark ekleme
-- [ ] NSFW içerik tarama (API tabanlı)
-- [ ] Lazy loading + blur-hash placeholder
-
-### 2.4 Bildirim Sistemi
-- [ ] Push notification (Browser Notification API)
-- [ ] E-posta bildirimleri (MatchAlert, MessagesNotif)
-- [ ] SMS bildirimleri (Twilio)
-
----
-
-## Faz 3 — Gelişmiş Özellikler (2-4 Hafta) 🟡
-
-### 3.1 Arama & Keşif
-- [ ] Elastic Search / Meilisearch entegrasyonu
-- [ ] Harita tabanlı arama (Leaflet.js)
-- [ ] Gelişmiş filtrelerde gerçek veri (şu an mock)
-- [ ] Arama olaylarını analytics'e kaydet
-
-### 3.2 Admin Panel Güçlendirme
-- [ ] Kullanıcı/escort yönetim CRUD tamamla
-- [ ] İlan moderasyon akışı
-- [ ] Finansal raporlar gerçek veriyle
-- [ ] IP banlama ve güvenlik logları
-
-### 3.3 Forum Sistemi
-- [ ] Forum backend — konu/yorum CRUD
-- [ ] Moderasyon araçları (edit/delete/pin)
-- [ ] Upvote/downvote sistemi
-- [ ] Spam filtresi
-
-### 3.4 Sadakat & Gamification
-- [ ] Puan kazanma event'leri backend ile sync
-- [ ] Rozet sistemi gerçek trigger'larla
-- [ ] Üyelik tier otomatik yükseltme
-- [ ] Referral kod sistemi
-
----
-
-## Faz 4 — Elite Ecosystem Genişlemesi (1 Ay+) 🟢
-
-### 4.1 The Red Room Gerçek İçerik
-- [ ] VIP/Platinum kullanıcılara özel içerik upload sistemi
-- [ ] İçerik erişim log'u (kim ne gördü)
-- [ ] Zaman sınırlı içerik (24h visibility)
-- [ ] Escort'ların kendi Red Room galeri yönetimi
-
-### 4.2 Turneler (Tours) Backend
-- [ ] Escort tur duyurusu oluşturma API
-- [ ] Tur rezervasyon sistemi
-- [ ] Takvim entegrasyonu (Google Calendar API)
-- [ ] Tur bildirim aboneliği
-
-### 4.3 Ajans Yönetim Sistemi
-- [ ] Ajans kayıt ve onay akışı
-- [ ] Ajans altında escort profil yönetimi
-- [ ] Ajans analytics dashboard
-
-### 4.4 Mobil Uygulama (Uzun Vade)
-- [ ] React Native taşıması veya PWA güçlendirme
-- [ ] Biometrik giriş
-- [ ] Offline mesaj kuyruğu
-
----
-
-## Teknik Borç Takibi
-
-| Borç | Ağırlık | Öncelik |
-|---|---|---|
-| Ölü dosyaların silinmesi | Orta | Bu Sprint |
-| `any` tiplerini temizle | Yüksek | Bu Sprint |
-| Mock data → gerçek API | Çok Yüksek | Faz 2 |
-| Test coverage artırma | Orta | Faz 3 |
-| i18n eksik çeviriler | Düşük | Faz 3 |
-| SEO meta tag'leri tüm sayfalarda | Orta | Faz 2 |
-| Performance: LCP optimizasyonu | Yüksek | Faz 2 |
-
----
-
-## Güvenlik Kontrol Listesi (Pre-Production)
-
-- [ ] Rate limiting her endpoint'te
-- [ ] Input sanitization (XSS/SQL Injection)
-- [ ] JWT token expiry: Access 15dk, Refresh 7 gün
-- [ ] HTTPS zorunlu (HTTP redirect)
-- [ ] Content Security Policy header
-- [ ] CORS kısıtlaması (sadece domain listesi)
-- [ ] Admin paneline 2FA (Google Authenticator)
-- [ ] Dosya upload: mime-type kontrolü + boyut sınırı
-- [ ] S3/Cloudinary signed URL'ler (public bucket değil)
-- [ ] Audit log: Kim ne değiştirdi
-
----
-
-*Bu roadmap canlı bir belge olarak takip edilecek ve her sprint güncelleneecektir.*
+1. Önce P0 hukuk/ürün/safety kapsamı ve sahiplerini netleştirin; alan adı yoksa Similarweb ölçümü başlatmayın.
+2. Disposable PostgreSQL test ortamında migration karşılaştırması ve public listing gate integration testleri kurun.
+3. Lint warning'leri ve ayrı DB E2E/CI kabul ölçütlerini sıfırdan doğrulayın.
+4. Büyük chunk'ı küçültün; kullanıcı verisi export veya medya kanıtı görüntüleme gerekirse kapsam/izin/audit tasarımından sonra açın.

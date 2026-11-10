@@ -105,7 +105,7 @@ export interface Notification {
   title: string;
   message: string;
   icon?: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   isRead: boolean;
   read?: boolean; // Alternative isRead için
   createdAt: Date;
@@ -197,7 +197,7 @@ export interface EmailNotification {
   to: string;
   subject: string;
   template: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 // Bildirim yapılandırması
@@ -698,7 +698,7 @@ export function checkSpam(messages: Array<{ content: string; timestamp: number }
     messageCounts.set(m.content, count + 1);
   });
 
-  for (const [message, count] of messageCounts) {
+  for (const count of messageCounts.values()) {
     if (count >= MESSAGE_RULES.spamDetection.repeatedMessageThreshold) {
       return true;
     }
@@ -710,16 +710,14 @@ export function checkSpam(messages: Array<{ content: string; timestamp: number }
   }
 
   // Caps lock spam kontrolü
-  recentMessages.forEach(m => {
+  for (const m of recentMessages) {
     const upperCase = m.content.replace(/[^A-Z]/g, '').length;
     const total = m.content.replace(/[^a-zA-Z]/g, '').length;
     if (total > 0) {
       const ratio = upperCase / total;
-      if (ratio >= MESSAGE_RULES.spamDetection.capsLockThreshold) {
-        return true;
-      }
+      if (ratio >= MESSAGE_RULES.spamDetection.capsLockThreshold) return true;
     }
-  });
+  }
 
   return false;
 }
@@ -728,7 +726,7 @@ export function checkSpam(messages: Array<{ content: string; timestamp: number }
 export function createNotification(
   userId: string,
   type: NotificationType,
-  data: Record<string, any>
+  data: Record<string, unknown>
 ): Notification {
   const template = NOTIFICATION_TEMPLATES[type];
 
@@ -737,11 +735,11 @@ export function createNotification(
     userId,
     type,
     title: template.title,
-    message: template.message.replace(/\{(\w+)\}/g, (_, key) => data[key] || ''),
+    message: template.message.replace(/\{(\w+)\}/g, (_, key: string) => String(data[key] ?? '')),
     data,
     isRead: false,
     createdAt: new Date(),
-    actionUrl: data.actionUrl,
+    actionUrl: typeof data.actionUrl === 'string' ? data.actionUrl : undefined,
     category: template.category || 'system',
   };
 }

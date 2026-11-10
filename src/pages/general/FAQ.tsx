@@ -10,7 +10,7 @@
 
 import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Footer } from '@/components/Footer';
 import { ChevronDown, HelpCircle, Search, MessageCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';

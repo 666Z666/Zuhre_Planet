@@ -6,12 +6,11 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { CATALOG, UI } from './utils/selectors';
+import { CATALOG } from './utils/selectors';
 import { 
   navigateToPage, 
   waitForLoadingToFinish,
   clearFilters,
-  verifyElementCount,
 } from './utils/helpers';
 import { TEST_CITIES, TEST_SERVICES } from './utils/fixtures';
 

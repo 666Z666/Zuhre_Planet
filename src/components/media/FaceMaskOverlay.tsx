@@ -5,17 +5,16 @@ import { Loader2 } from 'lucide-react';
 interface FaceMaskOverlayProps {
     imageUrl: string;
     onFaceDetected?: (detected: boolean) => void;
-    maskStyle?: 'lace' | 'minimal' | 'luxury';
 }
 
-export function FaceMaskOverlay({ imageUrl, onFaceDetected, maskStyle = 'luxury' }: FaceMaskOverlayProps) {
+export function FaceMaskOverlay({ imageUrl, onFaceDetected }: FaceMaskOverlayProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const imageRef = useRef<HTMLImageElement>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [faceLandmarker, setFaceLandmarker] = useState<FaceLandmarker | null>(null);
 
-    useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
         async function setupFaceLandmarker() {
             const vision = await FilesetResolver.forVisionTasks(
                 "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
@@ -35,7 +34,7 @@ export function FaceMaskOverlay({ imageUrl, onFaceDetected, maskStyle = 'luxury'
         setupFaceLandmarker();
     }, []);
 
-    useEffect(() => { // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => {
         if (!faceLandmarker || !imageRef.current) return;
 
         const detectFace = async () => {
@@ -93,7 +92,7 @@ export function FaceMaskOverlay({ imageUrl, onFaceDetected, maskStyle = 'luxury'
         } else {
             imageRef.current!.onload = detectFace;
         }
-    }, [faceLandmarker, imageUrl]);
+    }, [faceLandmarker, imageUrl, onFaceDetected]);
 
     return (
         <div ref={containerRef} className="relative w-full h-full group">
@@ -113,8 +112,8 @@ export function FaceMaskOverlay({ imageUrl, onFaceDetected, maskStyle = 'luxury'
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full pointer-events-none"
             />
-            <div className="absolute bottom-4 right-4 bg-zinc-900/80 backdrop-blur-md text-white text-[10px] px-3 py-1.5 rounded-md border border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                AI Yüz Koruması Aktif (MediaPipe)
+            <div role="status" className="absolute bottom-2 left-2 right-2 bg-zinc-900/90 text-white text-xs p-2 rounded-md border border-amber-500/50">
+                Bu yalnızca önizleme efektidir; kaynak veya yüklenen görseli maskelemez.
             </div>
         </div>
     );

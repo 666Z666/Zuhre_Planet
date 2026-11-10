@@ -8,7 +8,7 @@
 
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, vi as vitest } from 'vitest';
+import { vi as vitest } from 'vitest';
 import { Button } from '@/components/ui/button';
 
 describe('Button Component', () => {
@@ -75,6 +75,7 @@ describe('Button Component', () => {
     const link = screen.getByRole('link');
     expect(link).toHaveTextContent('Link Button');
     expect(link).toHaveAttribute('href', '/test');
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
   it('renders icon and text together', () => {

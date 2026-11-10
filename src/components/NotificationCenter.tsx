@@ -19,7 +19,6 @@ import {
   X,
   Settings,
   Trash2,
-  MoreVertical,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';

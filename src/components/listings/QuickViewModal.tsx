@@ -7,7 +7,6 @@ import {
 import { ListingProfile } from '@/types/domain';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { LipsIcon, MaskIcon, CorsetIcon } from '@/components/ui/SensualIcons';
 import { useLocation } from 'wouter';
 
 interface QuickViewModalProps {

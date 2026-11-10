@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Link, useLocation } from 'wouter';
 import { 
   Eye, 
   Heart, 
   Calendar, 
-  Briefcase, 
   MessageSquare, 
   Settings, 
   Home,
@@ -15,14 +14,11 @@ import {
   TrendingUp,
   Clock,
   ExternalLink,
-  ChevronRight,
   Sparkles,
   Camera,
-  History,
-  Lock
+  History
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { LuxuryText } from '@/components/ui/LuxuryText';

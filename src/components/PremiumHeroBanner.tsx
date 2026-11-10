@@ -8,7 +8,6 @@
 
 import React from 'react';
 import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
-import { useTheme } from '@/contexts/ThemeContext';
 import { ShieldCheck } from 'lucide-react';
 import { LipsIcon, MaskIcon, HeelsIcon } from './ui/SensualIcons';
 
@@ -21,9 +20,6 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
   title,
   subtitle,
 }) => {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
-  
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseX = useSpring(x, { stiffness: 40, damping: 25 });

@@ -1,40 +1,32 @@
-# ZÜHRE PLANET - MASTER PROJE DÖKÜMANI
+# Zühre Planet — Ana Teknik Belge
 
-## 1. Proje Vizyonu ve Amaç
-Zühre Planet, yüksek etkileşimli, 3D kozmik arayüzü ile desteklenen, premium escort/hizmet ve içerik yönetim platformudur. Temel amacımız, kullanıcı deneyimini (UX) kozmik ve sürükleyici bir temayla birleştirerek, güvenli ve şeffaf bir moderasyon sistemi üzerinde yüksek performanslı bir pazar yeri sunmaktır.
+**Güncelleme:** 10 Kasım 2026. Bu dosya mevcut source tree rehberidir; deploy, canlı veri, remote Git veya production onayı kanıtı değildir.
 
-## 2. Teknik Mimari
-- **Frontend:** React + Vite, TypeScript, TailwindCSS (CSS-in-JS kaçınılmıştır, Vanilla CSS ile estetik arayüzler), Three.js (Kozmik 3D deneyimi).
-- **Backend:** Node.js (Express), tRPC (Tip güvenli iletişim).
-- **Veritabanı:** Drizzle ORM + PostgreSQL.
-- **Entegrasyonlar:** Real-time WebSocket (Chat), S3/Cloudinary (Medya yönetimi), Iyzico (Ödemeler).
+## Ürün çerçevesi
 
-## 3. Yapılan İşler (Geçmiş ve Mevcut Durum)
-- [x] **Altyapı Konsolidasyonu:** Skill çakışmaları ve MCP yapılandırmaları düzeltildi.
-- [x] **Linting ve Tip Güvenliği:** ESLint (Flat Config) kurulumu, tip hatalarının %90'ı giderildi.
-- [x] **Kod Temizliği:** Ölü/Kullanılmayan 9+ bileşen silindi.
-- [x] **Versiyon Kontrolü:** CI/CD süreçleri ve GitHub depo senkronizasyonu aktif.
+Yetişkin ilan/listeme uygulaması. Aracılık (randevu/buluşma/ödeme) kapsamını eklemeden önce hukuk/safety incelemesi yapılmalıdır. AgeGate yalnız öz-beyan; kimlik/yaş doğrulaması değildir. `server/lib/publicListing.ts` sunucu tarafı public ilan eligibility predicate'idir; teknik kontrol hukuki/operasyonel uyum sağlamaz.
 
-## 4. Teknik Borçlar ve Eksikler (TODO)
-- **Kritik:** Hook bağımlılık hataları (`exhaustive-deps`) ve `any` türlerinin tamamen temizlenmesi.
-- **Özellik:** WebSocket entegrasyonu (Mock'tan Real'e geçiş).
-- **Finansal:** Iyzico ödeme sistemi ve webhook handler kurulumu.
-- **Medya:** Watermark sistemi ve otomatik görsel işleme hattı.
+## Mimari
 
-## 5. Gelecek Adımlar (Yol Haritası)
+- İstemci: React 18, TypeScript, Vite 5, Tailwind, wouter (`src/`).
+- API: Express 5, tRPC, Zod (`server/`).
+- Veri: PostgreSQL + Drizzle (`src/drizzle/schema.ts`, `drizzle/`, `scripts/`).
+- Test: Vitest; Playwright E2E altyapısı (`src/tests/`, `server/__tests__/`, `tests/e2e/`).
+- Repo talimatı/beceri: `AGENTS.md`, `.agent/skills/adult-marketplace-safety-engineering/`.
 
-### Adım 1: Kod Sağlığı Sprinti (Bu hafta)
-- [ ] Hook'larda `exhaustive-deps` hatalarını `useCallback` ile refactor et.
-- [ ] Tüm `any` tiplerini `src/types/` altındaki interfacelerle değiştir.
-- [ ] `no-console` kurallarını uygulayarak logları `browserLogger.ts` servisine taşı.
+## Bu kalite turu
 
-### Adım 2: WebSocket & İletişim Sprinti
-- [ ] `src/services/realWebSocket.ts` gerçek bağlantı servisini kodla.
-- [ ] Chat arayüzünü (ChatWindow.tsx) gerçek soket olaylarına bağla.
+AgeGate storage/odak ve 18+ metnini, Panic Protocol bağlam koruması ve testlerini güçlendirdi. Profilde kaynaksız JSON-LD ve admin'de ölçülmeyen KPI'lar kaldırıldı. Admin filtre/istatistik/sayfalama sorguları iyileştirildi; kaynağı olmayan zaman, online, fiyat/priority null bilinmeyen değer olarak sunulur. Rapor hedefi N+1 iyileştirildi, fake “Kanıtları Gör” kaldırıldı, export privacy/audit kapsamı oluşana kadar kapalı. Face mask yalnız preview'dur; orijinal/yüklenen görseli anonimize etmez. `npm run check:docs` ve dokümantasyon güncellemeleri eklendi.
 
-### Adım 3: Ödeme & Finans Sprinti
-- [ ] Iyzico API entegrasyonunu `/api/payment` rotasına ekle.
-- [ ] Webhook handler ile başarılı ödemeleri veritabanına işle.
+## Doğrulama ve sınırlar
 
----
-*Proje durumu her sprint sonunda güncellenecektir.*
+Typecheck ve build başarılı; 22 Vitest dosyasında 134 test başarılı. Markdown npm script checker başarılı. ESLint strict sonucu 0 error/389 warning; `Sparkles` chunk 808.03 kB (gzip 218.62 kB) ve eşik üstü build uyarısı veriyor. Ayrılmış test PostgreSQL'i olmadığından Playwright/DB E2E ve migrasyon provası çalıştırılmadı. Canlı domain/Similarweb verisi yok.
+
+Production hazır olduğu doğrulanmamıştır. Açık kapılar hukuk/kapsam, age/identity assurance, rıza/moderasyon, migration baseline, real DB integration, medya lifecycle, secret/MFA/backup/incident, lint/CI/E2E ve performance. Search indexing kapalı kalmalıdır.
+
+## Operasyonel referanslar
+
+- [Kurulum ve komutlar](./README.md)
+- [Güncel mimari ve kod haritası](./docs/PROJE_HARITASI.md)
+- [Öncelik/acceptance ve gelecek işler](./docs/ROADMAP.md)
+- [Görev indeksi](./TODO.md)

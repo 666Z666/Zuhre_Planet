@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
-import { MessageCircle, Bell, Star, Calendar, User, Filter, Search } from 'lucide-react';
+import { MessageCircle, Bell, Star, Calendar, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Message {
@@ -56,7 +56,7 @@ const mockMessages: Message[] = [
   },
 ];
 
-export function InteractionsCenter({ escortId, className = '' }: InteractionsCenterProps) {
+export function InteractionsCenter({ escortId: _escortId, className = '' }: InteractionsCenterProps) {
   const [selectedMessage, setSelectedMessage] = useState<string | null>(null);
   const [filterType, setFilterType] = useState<'all' | 'unread' | 'booking' | 'review'>('all');
   const [searchQuery, setSearchQuery] = useState('');

@@ -1,6 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import * as fs from 'fs';
-import * as path from 'path';
 
 const SCREENSHOT_DIR = 'docs/guides/assets/screenshots';
 

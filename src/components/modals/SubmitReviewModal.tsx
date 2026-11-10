@@ -3,13 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Star, 
   X, 
-  CheckCircle2, 
   ShieldAlert, 
-  ShieldCheck, 
   MessageSquare,
   Clock,
   AlertTriangle,
-  User,
   Send,
   Lock
 } from 'lucide-react';

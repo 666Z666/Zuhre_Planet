@@ -15,12 +15,10 @@ import {
   ShieldCheck, 
   ChevronLeft, 
   ChevronRight,
-  Info,
   Clock,
   Heart,
   Share2,
-  CheckCircle2,
-  AlertCircle, Globe
+  CheckCircle2, Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Eye, Lock, Zap, CheckCircle, AlertTriangle, Sparkles, Fingerprint } from 'lucide-react';
+import { Shield, Lock, CheckCircle, AlertTriangle, Fingerprint } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
 const SafetyModule = ({ icon: Icon, title, desc, points, delay }: any) => (

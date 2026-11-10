@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { CustomerDashboardLayout } from '@/components/layout/CustomerDashboardLayout';
 import {
   Star, ThumbsUp, Award, MessageSquare, Heart,
-  Edit2, Trash2, ChevronDown, Filter
+  Edit2, Trash2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SEO } from '@/pages/SEO';

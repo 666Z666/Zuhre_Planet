@@ -1,27 +1,79 @@
-/**
- * Zühre Planet V3.1 - Cinematic Age Gate
- * 
- * Slow-reveal overlay to set the sensual atmosphere and verify age.
- * High-fidelity blur (40px+) and premium magenta typography.
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, CheckCircle2 } from 'lucide-react';
 import { BRAND } from '@/config/brand';
 
+const AGE_CONSENT_KEY = 'zuhre_age_consent_v1';
+
+function readAgeConsent(): boolean {
+  try {
+    return window.localStorage.getItem(AGE_CONSENT_KEY) === 'true';
+  } catch {
+    // Storage may be disabled; require consent for this page view instead of crashing.
+    return false;
+  }
+}
+
 export function AgeGateOverlay() {
   const [isVisible, setIsVisible] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
-    const hasVerified = localStorage.getItem('zuhre_age_verified');
-    if (!hasVerified) {
-      setIsVisible(true);
-    }
+    if (!readAgeConsent()) setIsVisible(true);
   }, []);
 
+  useEffect(() => {
+    if (!isVisible) {
+      const previous = returnFocusRef.current;
+      if (previous?.isConnected) previous.focus();
+      return;
+    }
+
+    returnFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const dialog = dialogRef.current;
+    const firstControl = dialog?.querySelector<HTMLElement>('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    (firstControl ?? dialog)?.focus();
+
+    const keepFocusInside = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        // Consent dialog is intentionally not dismissible with Escape.
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+      if (event.key !== 'Tab' || !dialog) return;
+      const controls = Array.from(dialog.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ));
+      if (controls.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', keepFocusInside, true);
+    return () => document.removeEventListener('keydown', keepFocusInside, true);
+  }, [isVisible]);
+
   const handleVerify = () => {
-    localStorage.setItem('zuhre_age_verified', 'true');
+    try {
+      window.localStorage.setItem(AGE_CONSENT_KEY, 'true');
+    } catch {
+      // Keep the accepted state only in memory for this page view.
+    }
     setIsVisible(false);
   };
 
@@ -29,6 +81,8 @@ export function AgeGateOverlay() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
+          ref={dialogRef}
+          tabIndex={-1}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, filter: 'blur(16px)', scale: 1.04 }}
@@ -37,6 +91,7 @@ export function AgeGateOverlay() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="age-gate-title"
+          aria-describedby="age-gate-description"
         >
           <div className="relative z-10 grid w-full max-w-5xl items-center gap-10 px-6 py-10 md:grid-cols-2">
             <motion.img
@@ -62,22 +117,24 @@ export function AgeGateOverlay() {
                 <h2 id="age-gate-title" className="text-5xl md:text-6xl leading-[1.05] text-3d-premium">
                   Zühre <span className="text-3d-gold">Planet</span>
                 </h2>
-                <p className="max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
-                  Bu platform yalnızca yetişkinlere yöneliktir. Devam etmek için 18 yaşından büyük olduğunuzu
-                  ve bulunduğunuz yerde bu içeriği görüntülemenin yasal olduğunu onaylayın.
+                <p id="age-gate-description" className="max-w-md text-sm leading-relaxed text-muted-foreground md:text-base">
+                  Bu platform yalnızca yetişkinlere yöneliktir. Devam etmek için 18 yaşında veya daha büyük olduğunuzu
+                  ve bulunduğunuz yerde bu içeriği görüntülemenin yasal olduğunu onaylayın. Bu beyan tek başına
+                  kimlik veya yaş doğrulaması değildir.
                 </p>
               </div>
 
               <div className="flex flex-col gap-3">
                 <button
+                  type="button"
                   onClick={handleVerify}
-                  autoFocus
                   className="btn-cosmic group flex h-14 items-center justify-center gap-3 text-sm uppercase tracking-[0.2em]"
                 >
-                  Evet, 18 yaşından büyüğüm
+                  Evet, 18 yaşında veya daha büyüğüm
                   <CheckCircle2 className="h-5 w-5 transition-transform group-hover:scale-110" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => window.location.replace('https://www.google.com')}
                   className="h-14 rounded-[0.9rem] border border-border text-sm font-semibold uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:border-destructive hover:text-destructive"
                 >

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Edit2, Trash2, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
+import { Trash2, Eye, EyeOff, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface Listing {
   id: number;

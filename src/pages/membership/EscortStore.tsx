@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Gift, Zap, TrendingUp, ShieldCheck, Sparkles, ArrowRight, CheckCircle2, Package, Video, MessageSquare, Rocket, Gem, Crown } from 'lucide-react';
+import { Gift, Zap, ShieldCheck, Sparkles, ArrowRight, CheckCircle2, Package, Video, MessageSquare, Rocket, Crown } from 'lucide-react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { HolographicBadge } from '@/components/ui/HolographicBadge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { notifyPaymentsUnavailable } from '@/lib/payments';
 
 const visibilityPackages = [

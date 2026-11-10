@@ -6,8 +6,8 @@
  */
 
 import { test, expect } from '@playwright/test';
-import { A11Y, NAV, CATALOG } from './utils/selectors';
-import { navigateToPage, waitForLoadingToFinish } from './utils/helpers';
+import { A11Y, CATALOG } from './utils/selectors';
+import { waitForLoadingToFinish } from './utils/helpers';
 
 test.describe('Accessibility - Klavye Navigasyonu', () => {
   test.beforeEach(async ({ page }) => {

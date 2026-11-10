@@ -7,7 +7,7 @@
 
 import { test, expect } from '@playwright/test';
 import { NAV, FOOTER } from './utils/selectors';
-import { navigateToPage, waitForLoadingToFinish } from './utils/helpers';
+import { waitForLoadingToFinish } from './utils/helpers';
 
 test.describe('Navigation - Ana Rotalar', () => {
   test('ana sayfa erişilebilir olmalı', async ({ page }) => {

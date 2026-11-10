@@ -28,7 +28,7 @@ interface DisappearTimerSettingProps {
 }
 
 export default function DisappearTimerSetting({
-    conversationId,
+    conversationId: _conversationId,
     currentHours = null,
     onUpdate,
 }: DisappearTimerSettingProps) {

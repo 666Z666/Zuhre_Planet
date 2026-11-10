@@ -130,7 +130,7 @@ function UnauthorizedAccess({
   title,
   message,
   accessLevel,
-  returnUrl
+  returnUrl: _returnUrl
 }: {
   icon: React.ElementType;
   title: string;
@@ -247,7 +247,7 @@ export default function ProtectedRoute({
   message,
   title
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading, user, viewRole, isAdmin, isSuperAdmin } = useAuth();
+  const { isAuthenticated, isLoading, user, viewRole: _viewRole, isAdmin, isSuperAdmin } = useAuth();
   const [location] = useLocation();
   const storedRole = getStoredRole();
   const [isChecking, setIsChecking] = useState(true);

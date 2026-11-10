@@ -17,7 +17,6 @@ import {
   Heart,
   MessageCircle,
   Share2,
-  MoreVertical,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { VideoProcessingService } from '../services/videoProcessingService';

@@ -86,7 +86,7 @@ export function RangeSlider({
   );
 
   const handleMouseDown = React.useCallback(
-    (thumb: 'min' | 'max') => (e: React.MouseEvent) => {
+    (thumb: 'min' | 'max') => () => {
       setIsDragging(thumb);
     },
     []

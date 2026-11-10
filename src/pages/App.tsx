@@ -38,6 +38,7 @@ import CommandCenter from "@/components/scout/CommandCenter";
 import { Route, Switch, Redirect } from "wouter";
 import NotFound from "@/pages/NotFound";
 import { ROUTES } from "@/constants/routes";
+import { isPanicShortcutEligible } from '@/lib/panicProtocol';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // LAZY-LOADED PAGES — All routes code-split for performance
@@ -141,13 +142,16 @@ function PanicProtocol() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        const now = Date.now();
-        if (now - lastEscPress.current < 400) {
-          window.location.href = 'https://www.google.com';
-        }
-        lastEscPress.current = now;
+      if (e.key !== 'Escape' || e.repeat || !isPanicShortcutEligible(e.target, e.isComposing) || document.querySelector('[aria-modal="true"]')) {
+        lastEscPress.current = 0;
+        return;
       }
+      const now = Date.now();
+      if (now - lastEscPress.current < 500) {
+        e.preventDefault();
+        window.location.replace('https://www.google.com');
+      }
+      lastEscPress.current = now;
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -304,7 +308,10 @@ export default function App() {
 
                         {/* Main Content */}
                         <div className="relative z-10 min-h-screen flex flex-col">
-                          <main className="flex-grow pointer-events-auto">
+                          <main className="flex-grow pointer-events-auto" aria-describedby="panic-protocol-description">
+                            <p id="panic-protocol-description" className="sr-only">
+                              Gizlilik için, yazı alanları ve modal pencereler dışında Escape tuşuna iki kez hızlıca basarak sayfadan ayrılabilirsiniz.
+                            </p>
                             <AppRouter />
                           </main>
                           <div className="relative z-50 pointer-events-auto">

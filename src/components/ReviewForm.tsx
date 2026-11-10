@@ -18,7 +18,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import {
   Star,
-  Image as ImageIcon,
   X,
   Upload,
   CheckCircle2,
@@ -37,7 +36,6 @@ import {
   REVIEW_VALIDATION,
   DEFAULT_REVIEW_CRITERIA,
   REVIEW_CRITERIA_INFO,
-  canSubmitReview,
 } from "@/types/reviewsExtended";
 import { InteractiveRating, MultiCriteriaRating } from "./Rating";
 

@@ -2,6 +2,7 @@ import 'dotenv/config';
 import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import { migrate } from 'drizzle-orm/postgres-js/migrator';
+import { assertSafeDatabaseReset } from '../server/lib/databaseResetSafety';
 
 async function main() {
   const command = process.argv[2] || 'migrate';
@@ -9,6 +10,14 @@ async function main() {
 
   if (!databaseUrl) {
     throw new Error('DATABASE_URL tanımlı değil. Migrasyon çalıştırılamadı.');
+  }
+
+  if (command === 'reset') {
+    assertSafeDatabaseReset({
+      databaseUrl,
+      nodeEnv: process.env.NODE_ENV,
+      allowReset: process.env.ALLOW_DB_RESET,
+    });
   }
 
   const client = postgres(databaseUrl, {

@@ -10,6 +10,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import type { ElementType } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -17,7 +18,6 @@ import {
   Star,
   Gift,
   Calendar,
-  CreditCard,
   Shield,
   User,
   MessageCircle,
@@ -40,7 +40,7 @@ const CATEGORY_COLORS: Record<NotificationType, string> = {
   profile: 'bg-emerald-500',
 };
 
-const CATEGORY_ICONS: Record<NotificationType, any> = {
+const CATEGORY_ICONS: Record<NotificationType, ElementType> = {
   message: MessageCircle,
   booking: Calendar,
   review: Star,

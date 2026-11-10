@@ -4,11 +4,8 @@ import {
   UserPlus, 
   Search, 
   MessageCircle, 
-  Heart, 
-  Star, 
   ShieldCheck, 
-  Sparkles, 
-  ArrowRight,
+  Sparkles,
   TrendingUp,
   Zap,
   Award

@@ -13,10 +13,7 @@ import {
   Edit2,
   Trash2,
   Star,
-  Lock,
   CheckCircle,
-  AlertCircle,
-  Zap,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -286,7 +283,7 @@ export function EscortMediaUploader({
 
           <div className="space-y-2">
             <AnimatePresence>
-              {uploadedMedia.map((media, idx) => (
+              {uploadedMedia.map((media) => (
                 <motion.div
                   key={media.id}
                   initial={{ opacity: 0, x: -10 }}

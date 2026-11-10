@@ -19,7 +19,7 @@ interface LoyaltyRankCardProps {
     className?: string;
 }
 
-export default function LoyaltyRankCard({ xp, loyaltyPoints, role = 'customer', className = '' }: LoyaltyRankCardProps) {
+export default function LoyaltyRankCard({ xp, loyaltyPoints, role: _role = 'customer', className = '' }: LoyaltyRankCardProps) {
     const rank = getRankByXP(xp);
     const progress = getRankProgress(xp);
     const rankIndex = RANK_CONFIG.findIndex(r => r.name === rank.name);

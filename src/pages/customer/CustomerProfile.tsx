@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams, Link } from 'wouter';
 import { motion } from 'framer-motion';
 import { 
-  User, 
   Shield, 
   Star, 
   Calendar, 
@@ -15,7 +14,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { SEO } from '@/pages/SEO';
 
 export default function CustomerProfile() {

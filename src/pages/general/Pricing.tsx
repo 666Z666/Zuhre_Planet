@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { 
-  Crown, Zap, CheckCircle2, Star, Shield, 
-  ArrowRight, Sparkles, Flame, 
-  TrendingUp, Users, Eye, Calendar, Clock,
-  Gem, Award, Check
+  Crown, Shield, 
+  ArrowRight, Sparkles, 
+  TrendingUp, Users, Eye, Clock,
+  Gem, Check
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { SEOManager } from '@/components/SEOManager';
 
 const PricingCard = ({ plan, delay, activeTab }: any) => {

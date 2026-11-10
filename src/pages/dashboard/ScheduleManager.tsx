@@ -8,8 +8,8 @@
 import { useState } from 'react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { 
-  Calendar as CalendarIcon, Clock, Save, 
-  Check, X, Globe, Power
+  Calendar as CalendarIcon, Save, 
+  Check, Globe
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, X, Crown, Zap, Gift } from 'lucide-react';
+import { Check, Crown, Zap, Gift } from 'lucide-react';
 
 interface SubscriptionBenefit {
   name: string;
