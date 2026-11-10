@@ -77,4 +77,4 @@ Bu dosya, projenin geri kalan geliştirmelerinin düzenli bir şekilde yapılabi
 ## 9. Kalan Kalite Bakımı
 - [ ] Repo geneli ESLint parser yapılandırması ve mevcut uyarılar temizlenecek; kapsamlı çalıştırma şu an 6 hata ve 389 uyarıyla kapanıyor.
 - [ ] `Sparkles` bundle parçası optimize edilecek; son build'de 808 KB (gzip 218.62 KB) uyarısı verdi.
-- [ ] Browserslist `caniuse-lite` veritabanı bağımlılık güncellemesi sırasında yenilenecek; son build verinin 9 aylık olduğunu bildirdi.
+- [x] Browserslist `caniuse-lite` veritabanı bağımlılık güncellemesi sırasında yenilenecek; son build verinin 9 aylık olduğunu bildirdi.
