@@ -6,6 +6,7 @@ import * as schema from '@/drizzle/schema';
 import { and, eq, gte, sql, or, inArray } from 'drizzle-orm';
 import { createRateLimiter } from '@/lib/security/rateLimit';
 import { clientIp } from '../lib/session';
+import { publicListingCondition } from '../lib/publicListing';
 import {
   encryptContact, decryptContact, normalizeTrPhone, maskPhone, contactLink, blindIndex,
 } from '../lib/contactCrypto';
@@ -102,6 +103,12 @@ export const contactRouter = router({
   availability: publicProcedure
     .input(z.object({ profileId: z.number().int().positive() }))
     .query(async ({ input }) => {
+      // Yayın kapısını geçmeyen ilanlar için kanal bilgisi de verilmez.
+      const visible = await db.query.escortProfiles.findFirst({
+        where: and(eq(schema.escortProfiles.id, input.profileId), publicListingCondition()),
+        columns: { id: true },
+      });
+      if (!visible) return { phone: false, whatsapp: false };
       const c = await db.query.escortContacts.findFirst({
         where: eq(schema.escortContacts.escortProfileId, input.profileId),
         columns: { phoneEnc: true, whatsappEnc: true },
@@ -109,7 +116,7 @@ export const contactRouter = router({
       return { phone: Boolean(c?.phoneEnc), whatsapp: Boolean(c?.whatsappEnc) };
     }),
 
-  /** Tıklamada bağlantıyı açar ve sayar. Yalnız public profil + onaylı numara. */
+  /** Tıklamada bağlantıyı açar ve sayar. Yalnız yayın kapısını geçen profil (public + onaylı + 18+) ve onaylı numara. */
   reveal: publicProcedure
     .input(z.object({ profileId: z.number().int().positive(), channel: channelSchema }))
     .mutation(async ({ ctx, input }) => {
@@ -118,7 +125,7 @@ export const contactRouter = router({
         throw new TRPCError({ code: 'TOO_MANY_REQUESTS', message: 'Çok fazla istek. Lütfen biraz sonra tekrar deneyin.' });
       }
       const profile = await db.query.escortProfiles.findFirst({
-        where: and(eq(schema.escortProfiles.id, input.profileId), eq(schema.escortProfiles.visibilityStatus, 'public')),
+        where: and(eq(schema.escortProfiles.id, input.profileId), publicListingCondition()),
         columns: { id: true },
       });
       if (!profile) throw new TRPCError({ code: 'NOT_FOUND', message: 'Profil bulunamadı.' });

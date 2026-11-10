@@ -5,6 +5,7 @@ import { db } from '@/drizzle/db';
 import * as schema from '@/drizzle/schema';
 import { and, desc, eq, sql } from 'drizzle-orm';
 import { withActivity } from '../lib/activity';
+import { publicListingCondition } from '../lib/publicListing';
 
 /** Kullanıcı başına favori üst sınırı (kötüye kullanım / kazıma sınırı). */
 export const MAX_FAVORITES = 500;
@@ -23,7 +24,7 @@ export const favoritesRouter = router({
         return { favorited: false };
       }
       const profile = await db.query.escortProfiles.findFirst({
-        where: and(eq(schema.escortProfiles.id, input.profileId), eq(schema.escortProfiles.visibilityStatus, 'public')),
+        where: and(eq(schema.escortProfiles.id, input.profileId), publicListingCondition()),
         columns: { id: true },
       });
       if (!profile) throw new TRPCError({ code: 'NOT_FOUND', message: 'İlan bulunamadı.' });
@@ -43,7 +44,7 @@ export const favoritesRouter = router({
     return rows.map((r) => r.id);
   }),
 
-  /** Favori ilanlar — yalnız hâlâ herkese açık olanlar, public alanlarla. */
+  /** Favori ilanlar — yalnız hâlâ yayın kapısını geçenler (public + onaylı + 18+), public alanlarla. */
   list: protectedProcedure
     .input(z.object({ limit: z.number().int().min(1).max(100).default(50) }).optional())
     .query(async ({ ctx, input }) => {
@@ -57,7 +58,7 @@ export const favoritesRouter = router({
         })
         .from(schema.favorites)
         .innerJoin(p, eq(p.id, schema.favorites.escortProfileId))
-        .where(and(eq(schema.favorites.userId, ctx.user.id), eq(p.visibilityStatus, 'public')))
+        .where(and(eq(schema.favorites.userId, ctx.user.id), publicListingCondition()))
         .orderBy(desc(schema.favorites.createdAt))
         .limit(input?.limit ?? 50);
       const now = Date.now();
