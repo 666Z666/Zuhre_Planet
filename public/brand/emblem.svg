@@ -1,19 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Zühre Planet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Zühre Planet">
   <defs>
-    <radialGradient id="zp-planet" cx="0.36" cy="0.32" r="0.8">
-      <stop offset="0" stop-color="#3fae86"/>
-      <stop offset="0.45" stop-color="#127a59"/>
-      <stop offset="1" stop-color="#063d2c"/>
+    <!-- Gezegen gövdesi: sol üstten aydınlanan zümrüt -->
+    <radialGradient id="zp-body" cx="0.34" cy="0.3" r="0.82">
+      <stop offset="0" stop-color="#9cf5d2"/>
+      <stop offset="0.18" stop-color="#3fd39c"/>
+      <stop offset="0.48" stop-color="#14946b"/>
+      <stop offset="0.78" stop-color="#0a5a41"/>
+      <stop offset="1" stop-color="#03281c"/>
     </radialGradient>
-    <linearGradient id="zp-gold" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#f6e3a1"/>
-      <stop offset="0.5" stop-color="#d4af37"/>
-      <stop offset="1" stop-color="#9c7a1e"/>
+    <!-- Gölge tarafı (sağ alt) -->
+    <radialGradient id="zp-shade" cx="0.78" cy="0.82" r="0.75">
+      <stop offset="0" stop-color="#010d09" stop-opacity="0.75"/>
+      <stop offset="0.55" stop-color="#010d09" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#010d09" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Parlak yansıma -->
+    <radialGradient id="zp-spec" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.35" stop-color="#e9fff6" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#e9fff6" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Atmosfer kenar ışığı -->
+    <radialGradient id="zp-atmo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.86" stop-color="#7ef0c4" stop-opacity="0"/>
+      <stop offset="0.95" stop-color="#7ef0c4" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#7ef0c4" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Altın halka: metalik, çok duraklı -->
+    <linearGradient id="zp-gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7a5a12"/>
+      <stop offset="0.14" stop-color="#e8c25a"/>
+      <stop offset="0.3" stop-color="#fff3c4"/>
+      <stop offset="0.46" stop-color="#c99a2e"/>
+      <stop offset="0.62" stop-color="#f7dc86"/>
+      <stop offset="0.8" stop-color="#a87b1c"/>
+      <stop offset="1" stop-color="#e2b84c"/>
     </linearGradient>
+    <linearGradient id="zp-gold-edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a3f08"/>
+      <stop offset="1" stop-color="#2e2003"/>
+    </linearGradient>
+    <linearGradient id="zp-star" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#fff0b8"/>
+      <stop offset="1" stop-color="#d4af37"/>
+    </linearGradient>
+    <clipPath id="zp-clip"><circle cx="64" cy="64" r="36"/></clipPath>
+    <filter id="zp-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="zp-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="zp-drop" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2.2" stdDeviation="2.2" flood-color="#000" flood-opacity="0.45"/>
+    </filter>
   </defs>
-  <path d="M8.5 39.2c-3.3-5.3 6.6-12.6 22-16.3 15.4-3.7 28.5-2.4 29.3 2.9" fill="none" stroke="url(#zp-gold)" stroke-width="3" stroke-linecap="round"/>
-  <circle cx="32" cy="32" r="17" fill="url(#zp-planet)"/>
-  <path d="M26 22.5c3-2.2 7.4-2.6 10.6-.9" fill="none" stroke="#a8e6cf" stroke-opacity=".45" stroke-width="1.6" stroke-linecap="round"/>
-  <path d="M59.8 25.8c.8 5.3-11.6 11.8-27 15.5-13.6 3.3-21.1 1.6-24.3-2.1" fill="none" stroke="url(#zp-gold)" stroke-width="3" stroke-linecap="round"/>
-  <path d="M52 6l1.6 4.9L58.5 12.5l-4.9 1.6L52 19l-1.6-4.9L45.5 12.5l4.9-1.6z" fill="url(#zp-gold)"/>
+
+  <!-- Dış yeşil hale (şeffaf zeminde ışıma) -->
+  <circle cx="64" cy="64" r="40" fill="#3fd39c" opacity="0.18" filter="url(#zp-soft)"/>
+
+  <g transform="rotate(-20 64 64)">
+    <!-- Halkanın arka yarısı (gezegenin arkasında) -->
+    <path d="M6 64 A58 17 0 0 1 122 64" fill="none" stroke="url(#zp-gold-edge)" stroke-width="8.5" stroke-linecap="round"/>
+    <path d="M6 64 A58 17 0 0 1 122 64" fill="none" stroke="url(#zp-gold)" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+  </g>
+
+  <!-- Gezegen -->
+  <g filter="url(#zp-drop)">
+    <circle cx="64" cy="64" r="36" fill="url(#zp-body)"/>
+    <!-- Mücevher yüzeyleri (fasetler) -->
+    <g clip-path="url(#zp-clip)" stroke="#d9fff0" stroke-width="0.7" stroke-linejoin="round">
+      <path d="M64 28 L46 44 L64 50 Z" fill="#ffffff" fill-opacity="0.16" stroke-opacity="0.55"/>
+      <path d="M64 28 L82 42 L64 50 Z" fill="#ffffff" fill-opacity="0.08" stroke-opacity="0.45"/>
+      <path d="M46 44 L32 60 L50 66 L64 50 Z" fill="#ffffff" fill-opacity="0.12" stroke-opacity="0.45"/>
+      <path d="M64 50 L82 42 L94 58 L76 66 Z" fill="#000000" fill-opacity="0.06" stroke-opacity="0.35"/>
+      <path d="M50 66 L64 50 L76 66 L62 80 Z" fill="#ffffff" fill-opacity="0.06" stroke-opacity="0.35"/>
+      <path d="M32 60 L30 78 L48 88 L50 66 Z" fill="#000000" fill-opacity="0.05" stroke-opacity="0.3"/>
+      <path d="M50 66 L62 80 L48 88 Z" fill="#000000" fill-opacity="0.08" stroke-opacity="0.3"/>
+      <path d="M76 66 L94 58 L100 74 L82 86 Z" fill="#000000" fill-opacity="0.12" stroke-opacity="0.25"/>
+      <path d="M62 80 L76 66 L82 86 L66 100 L48 88 Z" fill="#000000" fill-opacity="0.1" stroke-opacity="0.25"/>
+    </g>
+    <circle cx="64" cy="64" r="36" fill="url(#zp-shade)"/>
+    <circle cx="64" cy="64" r="39" fill="url(#zp-atmo)"/>
+    <!-- Yansıma -->
+    <ellipse cx="50" cy="45" rx="11" ry="7" transform="rotate(-35 50 45)" fill="url(#zp-spec)"/>
+    <circle cx="46.5" cy="41.5" r="1.4" fill="#ffffff" opacity="0.75"/>
+  </g>
+
+  <g transform="rotate(-20 64 64)">
+    <!-- Halkanın gezegen üzerine düşen gölgesi -->
+    <path d="M28 66 A58 17 0 0 0 100 69" fill="none" stroke="#011a12" stroke-width="5" stroke-opacity="0.35" filter="url(#zp-soft)" clip-path="url(#zp-clip)"/>
+    <!-- Halkanın ön yarısı (gezegenin önünde) -->
+    <path d="M6 64 A58 17 0 0 0 122 64" fill="none" stroke="url(#zp-gold-edge)" stroke-width="9" stroke-linecap="round"/>
+    <path d="M6 64 A58 17 0 0 0 122 64" fill="none" stroke="url(#zp-gold)" stroke-width="6.5" stroke-linecap="round"/>
+    <!-- Halkanın üst kenarındaki metal parlaması (ortada en güçlü) -->
+    <path d="M6 64 A58 17 0 0 0 122 64" transform="translate(0 -1.9)" fill="none" stroke="#fff6d2" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="70 400" stroke-dashoffset="-34" opacity="0.8"/>
+  </g>
+
+  <!-- Parıltı yıldızı -->
+  <g filter="url(#zp-glow)">
+    <path d="M104 12 L106.6 22.4 L117 25 L106.6 27.6 L104 38 L101.4 27.6 L91 25 L101.4 22.4 Z" fill="url(#zp-star)"/>
+    <circle cx="104" cy="25" r="1.8" fill="#ffffff"/>
+  </g>
 </svg>
