@@ -1,9 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Award, Sparkles, Globe, Zap } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { SEOManager } from '@/components/SEOManager';
+import { Footer } from '@/components/Footer';
 
-const ValueCard = ({ icon: Icon, title, desc, delay }: any) => (
+interface ValueCardProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  delay: number;
+}
+
+const ValueCard = ({ icon: Icon, title, desc, delay }: ValueCardProps) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
     whileInView={{ opacity: 1, scale: 1 }}
@@ -20,6 +29,8 @@ const ValueCard = ({ icon: Icon, title, desc, delay }: any) => (
 );
 
 export default function About() {
+  const [, setLocation] = useLocation();
+
   return (
     <div className="min-h-screen relative w-full pt-48 pb-32 px-6 overflow-hidden">
       <SEOManager title="Zühre Planet - Hakkımızda & Vizyonumuz" />
@@ -58,16 +69,16 @@ export default function About() {
            >
               <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">MİSYONUMUZ</h2>
               <p className="text-sm font-black italic uppercase tracking-[0.2em] text-white/40 leading-loose">
-                 Klasik reklam platformlarını geride bırakarak; 3D görselleştirme, yapay zeka moderasyonu ve kusursuz güvenlik altyapısıyla eskort ve müşteri arasındaki güven bağını yeniden tanımlıyoruz. Her dokunuşun, her etkileşimin arkasında "Kusursuzluk" yatar.
+                 Klasik ilan dizinlerini geride bırakarak; modern vitrin tasarımı, içerik moderasyonu ve şeffaf doğrulama ilkeleriyle bağımsız ilan sahipleri ve ziyaretçiler için düzenli bir keşif alanı sunuyoruz. Zühre Planet yalnızca ilan ve doğrudan iletişim alanı sağlar; randevu veya ödeme aracılığı yapmaz.
               </p>
               <div className="flex gap-8">
                  <div>
-                    <div className="text-4xl font-black text-primary italic tracking-tighter">50K+</div>
-                    <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">AKTİF YILDIZ</div>
+                    <div className="text-4xl font-black text-primary italic tracking-tighter">81 İL</div>
+                    <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">ŞEHİR & İLÇE DİZİNİ</div>
                  </div>
                  <div>
-                    <div className="text-4xl font-black text-secondary italic tracking-tighter">1M+</div>
-                    <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">MUTLU ÜYE</div>
+                    <div className="text-4xl font-black text-secondary italic tracking-tighter">18+</div>
+                    <div className="text-[10px] font-black text-white/20 uppercase tracking-widest">MODERASYONLU VİTRİN</div>
                  </div>
               </div>
            </motion.div>
@@ -84,20 +95,20 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-48">
            <ValueCard 
              icon={Shield} 
-             title="KUSURSUZ GÜVEN" 
-             desc="AI destekli 3D yüz doğrulama ve kriptolu mesajlaşma ile gizliliğiniz galaktik koruma altında." 
+             title="GİZLİLİK & SINIRLAR" 
+             desc="Kişisel verilerin korunması, açık rıza kuralları ve moderasyon denetimi ile güvenli bir ilan ortamı." 
              delay={0.1}
            />
            <ValueCard 
              icon={Zap} 
-             title="HIZLI REZERVASYON" 
-             desc="Anlık müsaitlik takibi ve akıllı bildirimler ile vakit kaybetmeden en iyisine ulaşın." 
+             title="DOĞRUDAN ERİŞİM" 
+             desc="Aracı olmadan, ilan sahibinin paylaştığı iletişim kanalları üzerinden doğrudan bağlantı imkânı." 
              delay={0.2}
            />
            <ValueCard 
              icon={Award} 
-             title="ELİT STANDARTLAR" 
-             desc="Sadece onaylanmış, yüksek puanlı ve profesyonel profillerin yer aldığı seçkin topluluk." 
+             title="ŞEFFAF DOĞRULAMA" 
+             desc="Doğrulama rozetleri satın alınamaz; yalnızca moderasyon incelemesini geçen profillere verilir." 
              delay={0.3}
            />
         </div>
@@ -112,11 +123,15 @@ export default function About() {
               Zühre Planet sadece bir isim değil, bir yaşam tarzı ve lüksün yeni tanımıdır. <br />
               Sınırların ötesindeki galaksimize davetlisiniz.
            </p>
-           <button className="h-20 px-16 bg-primary text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:scale-105 transition-all shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)]">
+           <button
+             onClick={() => setLocation('/catalog')}
+             className="h-20 px-16 bg-primary text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:scale-105 transition-all shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)]"
+           >
               ŞİMDİ KEŞFET
            </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

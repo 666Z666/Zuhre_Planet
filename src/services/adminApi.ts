@@ -422,7 +422,7 @@ export async function setUserVisibility(
  */
 export async function deleteUser(
   id: string,
-  reason?: string
+  _reason?: string
 ): Promise<ApiResponse<{ success: boolean; message: string }>> {
   return del(`/admin/users/${id}`);
 }

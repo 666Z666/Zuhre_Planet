@@ -48,10 +48,11 @@ const mockEscortBookings = [
 export default function EscortPrivateDashboard() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
-  const [activeQuickTab, setActiveQuickTab] = useState('bookings');
+  const [_activeQuickTab, _setActiveQuickTab] = useState('bookings');
 
   // If user is not escort, handle or guard (Real app uses AuthGuard)
-  const profile = (user as any)?.profile || {
+  const userWithProfile = user as { profile?: { id: string; displayName: string; membershipTier: string } } | null;
+  const profile = userWithProfile?.profile || {
     id: '1',
     displayName: user?.name || "Yıldız Partner",
     membershipTier: 'platinum'

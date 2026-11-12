@@ -8,16 +8,18 @@
  * @module pages/EscortList
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Filter, Sparkles, Search, MapPin, 
   ChevronDown, Plus
 } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 // Domain Types & Service
 import { ListingProfile } from '@/types/domain';
 import { listingService } from '@/services/listingService';
+import { sameLocation } from '@/data/locations';
 
 // UI Components
 import { StandardCard } from '@/components/StandardCard';
@@ -25,10 +27,16 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { SEO } from '@/pages/SEO';
 import { ProfileQuickViewOverlay } from '@/components/ProfileQuickViewOverlay';
+import { Footer } from '@/components/Footer';
+
+const CITIES = ['Tümü', 'İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa'];
 
 export default function EscortList() {
   const [listings, setListings] = useState<ListingProfile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCity, setSelectedCity] = useState('Tümü');
+  const [, setLocation] = useLocation();
 
   // Quick View State
   const [selectedProfile, setSelectedProfile] = useState<ListingProfile | null>(null);
@@ -49,6 +57,30 @@ export default function EscortList() {
 
     fetchListings();
   }, []);
+
+  const filteredListings = useMemo(() => {
+    return listings.filter((item) => {
+      if (selectedCity !== 'Tümü' && !sameLocation(item.city, selectedCity)) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchName = (item.displayName || '').toLowerCase().includes(q);
+        const matchCity = (item.city || '').toLowerCase().includes(q);
+        const matchDistrict = (item.district || '').toLowerCase().includes(q);
+        const matchService = (item.services || []).some((s) => s.toLowerCase().includes(q));
+        if (!matchName && !matchCity && !matchDistrict && !matchService) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [listings, selectedCity, searchQuery]);
+
+  const cycleCity = () => {
+    const idx = CITIES.indexOf(selectedCity);
+    setSelectedCity(CITIES[(idx + 1) % CITIES.length]);
+  };
 
   return (
     <div className="min-h-screen bg-transparent text-foreground">
@@ -87,22 +119,31 @@ export default function EscortList() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/50" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="İsim, şehir veya özellik ara..."
                 className="w-full bg-white/5 border border-white/10 rounded-xl py-3.5 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all placeholder:text-white/20 font-black uppercase tracking-widest text-[10px] italic"
               />
             </div>
 
-            <button className="flex items-center justify-between md:justify-start gap-3 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10 text-white/60 font-black uppercase tracking-widest text-[10px] italic">
+            <button
+              type="button"
+              onClick={cycleCity}
+              className="flex items-center justify-between md:justify-start gap-3 px-5 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 transition-all border border-white/10 text-white/60 font-black uppercase tracking-widest text-[10px] italic"
+            >
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-primary" />
-                <span>İstanbul</span>
+                <span>{selectedCity}</span>
               </div>
               <ChevronDown className="w-4 h-4 opacity-50" />
             </button>
 
-            <Button className="bg-primary hover:bg-primary/80 text-white font-black py-7 px-8 rounded-xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-[10px] italic">
+            <Button
+              onClick={() => setLocation('/catalog')}
+              className="bg-primary hover:bg-primary/80 text-white font-black py-7 px-8 rounded-xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-[10px] italic"
+            >
               <Filter className="w-4 h-4 mr-2" />
-              FİLTRELE
+              DETAYLI KATALOG
             </Button>
           </motion.div>
         </div>
@@ -126,7 +167,7 @@ export default function EscortList() {
           >
             {/* We simulate a Grid of 16 slots */}
             {Array.from({ length: 16 }).map((_, slotIndex) => {
-               const profile = listings[slotIndex];
+               const profile = filteredListings[slotIndex];
                
                if (profile) {
                  return (
@@ -167,7 +208,14 @@ export default function EscortList() {
                     <h4 className="text-xs font-black text-gray-800 uppercase italic mt-1 group-hover:text-white">#{slotIndex + 1} NOLU SLOT</h4>
                     
                     <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity">
-                       <Button size="sm" variant="outline" className="h-8 rounded-lg border-primary/20 text-primary text-[8px] font-black uppercase italic hover:bg-primary hover:text-white">REZERVE ET</Button>
+                       <Button
+                         size="sm"
+                         variant="outline"
+                         onClick={() => setLocation('/register/escort')}
+                         className="h-8 rounded-lg border-primary/20 text-primary text-[8px] font-black uppercase italic hover:bg-primary hover:text-white"
+                       >
+                         BAŞVURU YAP
+                       </Button>
                     </div>
                   </motion.div>
                );
@@ -181,6 +229,8 @@ export default function EscortList() {
         profile={selectedProfile}
         onClose={() => setSelectedProfile(null)}
       />
+
+      <Footer />
     </div>
   );
 }

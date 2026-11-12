@@ -52,7 +52,7 @@ interface ReferralManagementPanelProps {
 }
 
 export function ReferralManagementPanel({
-  userMemberId,
+  userMemberId: _userMemberId,
   username,
   userTier,
   stats,
@@ -105,7 +105,7 @@ export function ReferralManagementPanel({
   };
 
   const activeCodes = useMemo(() => referralCodes.filter((c) => c.isActive), [referralCodes]);
-  const totalUsage = useMemo(() => referralCodes.reduce((sum, c) => sum + c.usageCount, 0), [referralCodes]);
+  const _totalUsage = useMemo(() => referralCodes.reduce((sum, c) => sum + c.usageCount, 0), [referralCodes]);
 
   // Tier'e göre bonus
   const tierBonusMap = {

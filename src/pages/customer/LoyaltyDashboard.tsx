@@ -21,8 +21,8 @@ import { StarryBackground } from '@/components/StarryBackground';
 import { TrustScoreIndicator } from '@/components/ui/TrustScoreIndicator';
 
 export default function LoyaltyDashboard() {
-  const { data: loyaltyData, isLoading, error } = useLoyaltyStatus();
-  const generateCode = useGenerateReferralCode();
+  const { data: loyaltyData, isLoading, error: _error } = useLoyaltyStatus();
+  const _generateCode = useGenerateReferralCode();
 
   const referralCode = loyaltyData?.referralCode ?? 'GALAXY-VIP-777';
   const points = loyaltyData?.points ?? 4850;
@@ -30,7 +30,7 @@ export default function LoyaltyDashboard() {
   const progressPercent = 88;
   const nextRank = 'QUASAR LEGEND';
   const pointsToNextRank = 1500;
-  const rankColor = '#f59e0b'; // Gold for Pulsar
+  const _rankColor = '#f59e0b'; // Gold for Pulsar
 
   const handleCopyReferral = () => {
     navigator.clipboard.writeText(`https://zuhreplanet.com/register?ref=${referralCode}`);
@@ -198,7 +198,15 @@ export default function LoyaltyDashboard() {
   );
 }
 
-function LoyaltyStatCard({ label, value, icon: Icon, color, bg }: any) {
+interface LoyaltyStatCardProps {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  bg: string;
+}
+
+function LoyaltyStatCard({ label, value, icon: Icon, color, bg }: LoyaltyStatCardProps) {
   return (
     <div className="p-10 rounded-[3rem] bg-[#0a0a0f] border border-white/10 group hover:border-white/20 transition-all">
        <div className={`w-14 h-14 rounded-2xl ${bg} ${color} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>

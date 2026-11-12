@@ -10,11 +10,21 @@ import {
   Zap,
   Award
 } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { SEOManager } from '@/components/SEOManager';
+import { Footer } from '@/components/Footer';
 
-const StepCard = ({ number, icon: Icon, title, desc, delay }: any) => (
+interface StepCardProps {
+  number: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  delay: number;
+}
+
+const StepCard = ({ number, icon: Icon, title, desc, delay }: StepCardProps) => (
   <motion.div
-    initial={{ opacity: 0, x: number % 2 === 0 ? 50 : -50 }}
+    initial={{ opacity: 0, x: Number(number) % 2 === 0 ? 50 : -50 }}
     whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true }}
     transition={{ delay, duration: 1, ease: "circOut" }}
@@ -37,6 +47,8 @@ const StepCard = ({ number, icon: Icon, title, desc, delay }: any) => (
 );
 
 export default function HowItWorks() {
+  const [, setLocation] = useLocation();
+
   return (
     <div className="min-h-screen relative w-full pt-48 pb-32 px-6">
       <SEOManager title="Zühre Planet - Nasıl Çalışır? | Kullanım Kılavuzu" />
@@ -72,29 +84,29 @@ export default function HowItWorks() {
            <StepCard 
              number="01" 
              icon={UserPlus} 
-             title="PROFİLİNİZİ OLUŞTURUN" 
-             desc="Dakikalar içinde ücretsiz kayıt olun. Kimlik doğrulama sürecini tamamlayarak 'Güvenli Üye' statüsünü kazanın ve galaksideki ilk adımınızı atın." 
+             title="HESABINIZI OLUŞTURUN" 
+             desc="Dakikalar içinde ücretsiz kayıt olun. İlan sahipleri için görsel doğrulama sürecini tamamlayarak 'Onaylı' rozetini kazanın." 
              delay={0.1}
            />
            <StepCard 
              number="02" 
              icon={Search} 
-             title="ELİT KATALOĞU KEŞFEDİN" 
-             desc="Gelişmiş 3D filtreleme sistemimiz ile konum, yaş, özellik ve puan bazlı arama yapın. Sizin için en uygun 'Yıldız'ı saniyeler içinde bulun." 
+             title="KATALOĞU KEŞFEDİN" 
+             desc="Gelişmiş filtreleme sistemimiz ile şehir, ilçe, yaş, doğrulama durumu ve aktiflik bazlı arama yapın." 
              delay={0.2}
            />
            <StepCard 
              number="03" 
              icon={MessageCircle} 
              title="DOĞRUDAN İLETİŞİM" 
-             desc="Uçtan uca şifreli mesajlaşma sistemimiz ile güvenle bağlantı kurun. Randevu detaylarını gizlilik içinde görüşün." 
+             desc="İlan sayfasındaki Telefon veya WhatsApp bağlantılarıyla aracı olmadan doğrudan ilan sahibiyle iletişime geçin." 
              delay={0.3}
            />
            <StepCard 
              number="04" 
              icon={Award} 
-             title="DENEYİMİ DEĞERLENDİRİN" 
-             desc="Gerçekleşen randevu sonrası puanlama yaparak topluluğa katkıda bulunun. Kazandığınız sadakat puanları ile VIP ayrıcalıkların keyfini çıkarın." 
+             title="GERİ BİLDİRİM & FAVORİLER" 
+             desc="Beğendiğiniz ilanları favorilerinize kaydedin ve moderasyon onaylı yorumlarla topluluk deneyimine katkıda bulunun." 
              delay={0.4}
            />
         </div>
@@ -106,10 +118,16 @@ export default function HowItWorks() {
               ŞİMDİ <span className="text-primary">HAZIRSINIZ</span>
            </h2>
            <div className="flex flex-wrap justify-center gap-6">
-              <button className="h-20 px-20 bg-primary text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:scale-105 transition-all shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)]">
+              <button
+                onClick={() => setLocation('/register/client')}
+                className="h-20 px-20 bg-primary text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:scale-105 transition-all shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)]"
+              >
                  ÜYE OL
               </button>
-              <button className="h-20 px-20 bg-white/5 border border-white/10 text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:bg-white hover:text-black transition-all">
+              <button
+                onClick={() => setLocation('/catalog')}
+                className="h-20 px-20 bg-white/5 border border-white/10 text-white font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:bg-white hover:text-black transition-all"
+              >
                  KATALOG
               </button>
            </div>
@@ -118,8 +136,8 @@ export default function HowItWorks() {
         {/* Benefits Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
            {[
-             { title: '%100 DOĞRULAMA', icon: ShieldCheck },
-             { title: '7/24 ELİT DESTEK', icon: Sparkles },
+             { title: 'MANUEL DOĞRULAMA', icon: ShieldCheck },
+             { title: 'MODERASYON DESTEĞİ', icon: Sparkles },
              { title: 'SADAKAT PUANLARI', icon: TrendingUp }
            ].map((b, i) => (
              <div key={i} className="p-10 rounded-[3rem] bg-white/5 border border-white/5 backdrop-blur-xl text-center group hover:bg-white/10 transition-colors">
@@ -129,6 +147,7 @@ export default function HowItWorks() {
            ))}
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

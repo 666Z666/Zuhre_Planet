@@ -149,7 +149,7 @@ interface InteractiveRatingProps {
 export function InteractiveRating({
   value,
   onChange,
-  size = 'lg',
+  size: _size = 'lg',
   label,
   required = false,
   error,

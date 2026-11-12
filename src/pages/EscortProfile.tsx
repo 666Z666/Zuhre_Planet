@@ -12,6 +12,7 @@ import {
   Star, 
   MapPin, 
   Phone, 
+  MessageCircle,
   Sparkles, 
   Play, 
   X,
@@ -280,7 +281,7 @@ export default function EscortProfile() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {[
                   { url: profile.coverImage || '', id: 'cover' },
-                  ...(Array.isArray(profile.gallery) ? profile.gallery : []).map((img: any) => 
+                  ...(Array.isArray(profile.gallery) ? profile.gallery : []).map((img: string | { url: string; id: string }) => 
                     typeof img === 'string' ? { url: img, id: img } : img
                   )
                 ].map((item: { url: string; id: string }, idx: number) => (
@@ -459,6 +460,13 @@ export default function EscortProfile() {
                       className="w-full h-14 md:h-16 bg-gradient-to-t from-primary/90 to-primary text-white rounded-2xl sm:rounded-[2rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] italic shadow-[0_8px_20px_rgba(18,122,89,0.3)] hover:shadow-[0_15px_30px_rgba(18,122,89,0.5)] hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group">
                       <Phone className="w-4 h-4 sm:w-5 sm:h-5 group-hover:animate-ping" /> ŞİMDİ ARA
                     </Button>
+
+                    <Button 
+                      onClick={handleWhatsApp}
+                      variant="outline"
+                      className="w-full h-14 md:h-16 bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 hover:text-white rounded-2xl sm:rounded-[2rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] italic hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+                      <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" /> WHATSAPP İLE YAZ
+                    </Button>
                   </div>
                 </div>
 
@@ -494,6 +502,36 @@ export default function EscortProfile() {
             <div className="w-full max-w-4xl aspect-video glass-panel border-none rounded-[3rem] overflow-hidden shadow-2xl">
               <video src={profile.thumbnailVideo} controls autoPlay className="w-full h-full object-cover" />
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Gallery Image Lightbox Modal */}
+      <AnimatePresence>
+        {selectedImageUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImageUrl(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl cursor-zoom-out"
+          >
+            <button
+              onClick={() => setSelectedImageUrl(null)}
+              className="absolute top-8 right-8 text-white/70 hover:text-white p-2 rounded-full bg-white/10"
+              aria-label="Görseli Kapat"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <motion.img
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              src={selectedImageUrl}
+              alt={profile.displayName}
+              onClick={(e) => e.stopPropagation()}
+              className="max-h-[85vh] max-w-[90vw] object-contain rounded-3xl border border-white/15 shadow-2xl cursor-default"
+            />
           </motion.div>
         )}
       </AnimatePresence>

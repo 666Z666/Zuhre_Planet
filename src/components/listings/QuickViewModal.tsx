@@ -1,10 +1,12 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import { 
   X, MapPin, Star, Phone, MessageCircle, Ruler, 
   Weight, User, ShieldCheck, ArrowRight
 } from 'lucide-react';
 import { ListingProfile } from '@/types/domain';
+import { listingService } from '@/services/listingService';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLocation } from 'wouter';
@@ -18,6 +20,16 @@ export function QuickViewModal({ profile, onClose }: QuickViewModalProps) {
   const [, setLocation] = useLocation();
 
   if (!profile) return null;
+
+  const openContact = async (channel: 'phone' | 'whatsapp') => {
+    const res = await listingService.revealContact(profile.id, channel);
+    if ('error' in res) {
+      toast.error(res.error);
+      return;
+    }
+    if (channel === 'phone') window.location.href = res.url;
+    else window.open(res.url, '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <AnimatePresence>
@@ -143,13 +155,21 @@ export function QuickViewModal({ profile, onClose }: QuickViewModalProps) {
               {/* Actions - Premium 3D Responsive Buttons */}
               <div className="space-y-3 sm:space-y-4 pt-6 sm:pt-8 border-t border-white/5">
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                  <Button className="flex-1 h-14 md:h-16 bg-gradient-to-t from-primary/90 to-primary text-white font-black uppercase tracking-widest rounded-3xl sm:rounded-[2rem] group hover:-translate-y-1 active:translate-y-1 transition-all shadow-[0_8px_20px_rgba(18,122,89,0.3),inset_0_-4px_0_rgba(0,0,0,0.3)] hover:shadow-[0_15px_30px_rgba(18,122,89,0.5),inset_0_-2px_0_rgba(0,0,0,0.2)] relative overflow-hidden">
+                  <Button
+                    onClick={() => void openContact('whatsapp')}
+                    className="flex-1 h-14 md:h-16 bg-gradient-to-t from-primary/90 to-primary text-white font-black uppercase tracking-widest rounded-3xl sm:rounded-[2rem] group hover:-translate-y-1 active:translate-y-1 transition-all shadow-[0_8px_20px_rgba(18,122,89,0.3),inset_0_-4px_0_rgba(0,0,0,0.3)] hover:shadow-[0_15px_30px_rgba(18,122,89,0.5),inset_0_-2px_0_rgba(0,0,0,0.2)] relative overflow-hidden"
+                  >
                     <span className="relative z-10 flex items-center justify-center">
                       WHATSAPP <MessageCircle className="w-5 h-5 ml-3 group-hover:scale-125 group-hover:rotate-12 transition-transform" />
                     </span>
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
                   </Button>
-                  <Button variant="outline" className="h-14 sm:h-auto sm:w-20 md:w-24 bg-white/5 hover:bg-white/10 border-white/10 rounded-3xl sm:rounded-[2rem] shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_-4px_0_rgba(0,0,0,0.2)] hover:-translate-y-1 active:translate-y-1 transition-all group overflow-hidden relative">
+                  <Button
+                    onClick={() => void openContact('phone')}
+                    aria-label="Telefon ile Ara"
+                    variant="outline"
+                    className="h-14 sm:h-auto sm:w-20 md:w-24 bg-white/5 hover:bg-white/10 border-white/10 rounded-3xl sm:rounded-[2rem] shadow-[0_8px_20px_rgba(0,0,0,0.3),inset_0_-4px_0_rgba(0,0,0,0.2)] hover:-translate-y-1 active:translate-y-1 transition-all group overflow-hidden relative"
+                  >
                     <span className="relative z-10 flex items-center justify-center">
                       <Phone className="w-5 h-5 md:w-6 md:h-6 group-hover:animate-pulse" />
                     </span>

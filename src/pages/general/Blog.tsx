@@ -11,7 +11,17 @@ import {
 } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
-const MagazineCard = ({ post, delay }: any) => {
+interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  category: string;
+  date: string;
+  author: string;
+  image: string;
+}
+
+const MagazineCard = ({ post, delay }: { post: BlogPost; delay: number }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (

@@ -32,7 +32,7 @@ export default function AdminMediaApprovals() {
       setRejectionReason('');
       await refetch();
       toast.success('Medya onaylandı');
-    } catch (error) {
+    } catch {
       toast.error('Fotoğraf onaylanırken hata oluştu');
     }
   };
@@ -49,7 +49,7 @@ export default function AdminMediaApprovals() {
       setRejectionReason('');
       await refetch();
       toast.success('Medya reddedildi');
-    } catch (error) {
+    } catch {
       toast.error('Fotoğraf reddedilirken hata oluştu');
     }
   };

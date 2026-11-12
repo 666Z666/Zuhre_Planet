@@ -155,7 +155,7 @@ export default function ProfileEditor() {
     toast.success('Değişiklikleriniz moderasyon kuyruğuna alındı.');
   };
 
-  const handleUnpublish = async () => {
+  const _handleUnpublish = async () => {
      // İlanı anında gizler
      setFormData(prev => ({ ...prev, status: 'rejected' })); // Simulation
      toast.warning('İlanınız yayından kaldırıldı.');

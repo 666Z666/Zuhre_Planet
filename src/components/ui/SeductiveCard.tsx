@@ -123,7 +123,7 @@ const SeductiveCardComponent = ({ profile, onQuickView, size = 'sm' }: Seductive
             background: 'radial-gradient(circle at var(--x) var(--y), rgba(255,255,255,0.4) 0%, transparent 60%)',
             '--x': glareX,
             '--y': glareY
-          } as any}
+          } as unknown as React.CSSProperties}
         />
 
         <div 
@@ -180,7 +180,7 @@ const SeductiveCardComponent = ({ profile, onQuickView, size = 'sm' }: Seductive
                </h3>
                <div className="flex items-center gap-2">
                   <Star className="w-3 h-3 text-secondary fill-current" />
-                  <span className="text-[10px] font-black text-gray-100 italic">{profile.rating || 5.0}</span>
+                  <span className="text-[10px] font-black text-gray-100 italic">{profile.rating ? profile.rating.toFixed(1) : 'Yeni'}</span>
                </div>
              </div>
              <div className="flex items-center justify-between text-gray-300 text-[9px] font-bold uppercase tracking-[0.3em] italic">
@@ -191,8 +191,8 @@ const SeductiveCardComponent = ({ profile, onQuickView, size = 'sm' }: Seductive
            
            <div className="flex items-center justify-between pt-3 border-t border-white/20">
               <div className="flex items-center gap-4 text-[9px] text-gray-100 font-black tracking-widest">
-                 <span>{profile.age || 21} YAŞ</span>
-                 <span>{profile.height || '---'} CM</span>
+                 <span>{profile.age ? `${profile.age} YAŞ` : '—'}</span>
+                 <span>{profile.height ? `${profile.height} CM` : '---'}</span>
               </div>
               <button className="text-[9px] font-black uppercase tracking-[0.4em] italic text-primary hover:text-white transition-all">
                  DETAY

@@ -15,7 +15,7 @@ expect.extend(matchers);
 
 // Declare TypeScript types for custom matchers
 declare module 'vitest' {
-  interface Assertion<T = any> extends jest.Matchers<void, T>, TestingLibraryMatchers<T, void> {}
+  interface Assertion<T = unknown> extends jest.Matchers<void, T>, TestingLibraryMatchers<T, void> {}
 }
 
 // Cleanup after each test case
@@ -47,7 +47,7 @@ global.IntersectionObserver = class IntersectionObserver {
     return [];
   }
   unobserve() {}
-} as any;
+} as unknown as typeof IntersectionObserver;
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -55,7 +55,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-} as any;
+} as unknown as typeof ResizeObserver;
 
 // Suppress console errors in tests (optional)
 // const originalError = console.error;

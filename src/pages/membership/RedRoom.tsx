@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Eye, Zap, KeyRound, Lock, Crown, ChevronRight } from 'lucide-react';
+import { Eye, Zap, KeyRound, Lock, Crown, ChevronRight, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'wouter';
 import { Footer } from '@/components/Footer';
@@ -12,7 +12,7 @@ const VIP_ITEMS = Array.from({ length: 8 }, (_, i) => ({
   title: `Özel Çekim #${i + 1}`,
   model: ['Elara Moon', 'Luna', 'Milena', 'Sofia', 'Valentina', 'Anastasia', 'Isabella', 'Zara'][i],
   tier: i < 2 ? 'Diamond' : i < 5 ? 'Platinum' : 'VIP',
-  img: `/brand/placeholders/portrait-1.svg'1517841905240-472988babdf9','1534528741775-53994a69daeb','1529626455594-4ff0802cfb7e','1524504388940-b1c1722653e1','1516575334481-f85287c2c81d','1544005313-94ddf0286df2','1531746020798-e6953c6e8e04','1488426862026-3ee34a7d66b3'][i]}?w=600&auto=format&fit=crop&q=80`,
+  img: `/brand/placeholders/portrait-${(i % 6) + 1}.svg`,
 }));
 
 const tierConfig: Record<string, string> = {
@@ -192,6 +192,46 @@ export default function RedRoom() {
           )}
         </AnimatePresence>
       </div>
+
+      {/* Preview Lightbox Modal */}
+      <AnimatePresence>
+        {previewIdx !== null && VIP_ITEMS[previewIdx] && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPreviewIdx(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/95 backdrop-blur-2xl"
+          >
+            <button
+              onClick={() => setPreviewIdx(null)}
+              className="absolute top-8 right-8 text-white/70 hover:text-white p-2 rounded-full bg-white/10"
+              aria-label="Önizlemeyi Kapat"
+            >
+              <X className="w-8 h-8" />
+            </button>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-lg w-full bg-black/80 border border-red-800/40 rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <img
+                src={VIP_ITEMS[previewIdx].img}
+                alt={VIP_ITEMS[previewIdx].model}
+                className="w-full aspect-[3/4] object-cover"
+              />
+              <div className="p-6 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-white">{VIP_ITEMS[previewIdx].model}</h3>
+                  <p className="text-white/50 text-xs">{VIP_ITEMS[previewIdx].title}</p>
+                </div>
+                <span className={`px-3 py-1 rounded-full border text-xs font-bold ${tierConfig[VIP_ITEMS[previewIdx].tier]}`}>
+                  {VIP_ITEMS[previewIdx].tier}
+                </span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>

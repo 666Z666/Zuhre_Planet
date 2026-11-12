@@ -18,7 +18,14 @@ import { SEOManager } from '@/components/SEOManager';
 import { toast } from 'sonner';
 import { trpc } from '@/lib/trpc';
 
-const ContactMethod = ({ icon: Icon, title, desc, delay }: any) => (
+interface ContactMethodProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  delay: number;
+}
+
+const ContactMethod = ({ icon: Icon, title, desc, delay }: ContactMethodProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}

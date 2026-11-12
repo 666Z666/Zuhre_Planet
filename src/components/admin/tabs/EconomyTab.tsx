@@ -141,7 +141,14 @@ export const EconomyTab = () => {
   );
 };
 
-const RewardItem = ({ label, description, value, setValue }: any) => (
+interface RewardItemProps {
+  label: string;
+  description: string;
+  value: number;
+  setValue: (v: number) => void;
+}
+
+const RewardItem = ({ label, description, value, setValue }: RewardItemProps) => (
   <div className="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5 group transition-all hover:bg-white/10">
      <div>
         <p className="text-xs font-black text-white italic uppercase tracking-tighter">{label}</p>
@@ -159,7 +166,13 @@ const RewardItem = ({ label, description, value, setValue }: any) => (
   </div>
 );
 
-const StatSmall = ({ label, value, icon: Icon }: any) => (
+interface StatSmallProps {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const StatSmall = ({ label, value, icon: Icon }: StatSmallProps) => (
   <Card className="bg-white/5 border-white/5 p-8 rounded-[2.5rem] relative overflow-hidden group">
      <div className="relative z-10">
         <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1 italic">{label}</p>

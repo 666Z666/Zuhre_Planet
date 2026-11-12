@@ -3,7 +3,14 @@ import { motion } from 'framer-motion';
 import { Cookie, Shield, Settings, Info, CheckCircle } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
-const CookieSection = ({ icon: Icon, title, content, delay }: any) => (
+interface CookieSectionProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  content: string[];
+  delay: number;
+}
+
+const CookieSection = ({ icon: Icon, title, content, delay }: CookieSectionProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}

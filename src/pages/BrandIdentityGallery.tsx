@@ -23,7 +23,7 @@ export default function BrandIdentityGallery() {
     }
   };
 
-  const item = {
+  const _item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } }
   };
@@ -209,7 +209,14 @@ export default function BrandIdentityGallery() {
   );
 }
 
-function IconShowcase({ title, meta, desc, Icon }: any) {
+interface IconShowcaseProps {
+  title: string;
+  meta: string;
+  desc: string;
+  Icon: React.ComponentType<{ size?: number; className?: string }>;
+}
+
+function IconShowcase({ title, meta, desc, Icon }: IconShowcaseProps) {
   return (
     <motion.div 
       variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}
@@ -229,7 +236,13 @@ function IconShowcase({ title, meta, desc, Icon }: any) {
   );
 }
 
-function ColorBlock({ hex, name, meaning }: any) {
+interface ColorBlockProps {
+  hex: string;
+  name: string;
+  meaning: string;
+}
+
+function ColorBlock({ hex, name, meaning }: ColorBlockProps) {
   return (
     <div className="group cursor-pointer">
       <div 
@@ -244,7 +257,13 @@ function ColorBlock({ hex, name, meaning }: any) {
   );
 }
 
-function ArchetypeCard({ title, quote, desc }: any) {
+interface ArchetypeCardProps {
+  title: string;
+  quote: string;
+  desc: string;
+}
+
+function ArchetypeCard({ title, quote, desc }: ArchetypeCardProps) {
   return (
     <div className="space-y-6">
       <h3 className="text-3xl font-black font-orbitron text-white border-b border-primary/20 pb-4 italic underline decoration-primary/30 underline-offset-8">

@@ -173,14 +173,14 @@ test.describe('Authentication - Escort Registration', () => {
 });
 
 test.describe('Authentication - Session Management', () => {
-  test('should redirect authenticated users from login page', async ({ page, context }) => {
+  test('should redirect authenticated users from login page', async ({ page, context: _context }) => {
     // This test would require setting up authentication state
     // For now, just verify the login page is accessible
     await page.goto('/login');
     await expect(page).toHaveURL(/login/i);
   });
 
-  test('should maintain session across page reloads', async ({ page, context }) => {
+  test('should maintain session across page reloads', async ({ page, context: _context }) => {
     // This test would require actual login implementation
     await page.goto('/');
     await expect(page).toHaveURL('/');

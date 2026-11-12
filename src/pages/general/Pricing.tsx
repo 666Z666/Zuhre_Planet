@@ -6,11 +6,31 @@ import {
   TrendingUp, Users, Eye, Clock,
   Gem, Check
 } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { SEOManager } from '@/components/SEOManager';
+import { Footer } from '@/components/Footer';
 
-const PricingCard = ({ plan, delay, activeTab }: any) => {
-  const [isHovered, setIsHovered] = useState(false);
+interface PricingPlan {
+  id: string;
+  name: string;
+  duration: string;
+  price: number;
+  features: string[];
+  color: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge: string;
+  popular?: boolean;
+}
+
+interface PricingCardProps {
+  plan: PricingPlan;
+  delay: number;
+  activeTab: 'weekly' | 'monthly';
+  onSelect: (planId: string) => void;
+}
+
+const PricingCard = ({ plan, delay, activeTab, onSelect }: PricingCardProps) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseXSpring = useSpring(x);
@@ -29,7 +49,6 @@ const PricingCard = ({ plan, delay, activeTab }: any) => {
   const handleMouseLeave = () => {
     x.set(0);
     y.set(0);
-    setIsHovered(false);
   };
 
   const Icon = plan.icon;
@@ -41,7 +60,6 @@ const PricingCard = ({ plan, delay, activeTab }: any) => {
       transition={{ delay, duration: 0.8 }}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       className={`group relative p-8 rounded-[3rem] bg-[#0a0a0f]/40 border border-white/5 backdrop-blur-3xl transition-all duration-500 perspective-1000 ${
         plan.popular ? 'ring-2 ring-primary shadow-[0_0_50px_rgba(var(--primary-rgb),0.15)]' : ''
@@ -83,6 +101,7 @@ const PricingCard = ({ plan, delay, activeTab }: any) => {
         </div>
 
         <Button 
+          onClick={() => onSelect(plan.id)}
           className={`w-full h-16 rounded-2xl font-black italic uppercase tracking-[0.2em] text-[10px] transition-all duration-500 shadow-xl ${
             plan.popular 
             ? 'bg-primary text-white shadow-primary/20 hover:scale-105' 
@@ -99,8 +118,9 @@ const PricingCard = ({ plan, delay, activeTab }: any) => {
 
 export default function Pricing() {
   const [activeTab, setActiveTab] = useState<'weekly' | 'monthly'>('weekly');
+  const [, setLocation] = useLocation();
   
-  const weeklyPlans = [
+  const weeklyPlans: PricingPlan[] = [
     {
       id: 'w_basic',
       name: 'Starter',
@@ -127,12 +147,52 @@ export default function Pricing() {
       name: 'Elite',
       duration: '7 Gün',
       price: 399,
-      features: ['Ultra Listeleme', 'Sınırsız Galeri', 'Haftalık 3 Boost', 'Anında Onay'],
+      features: ['Ultra Listeleme', 'Sınırsız Galeri', 'Haftalık 3 Boost', 'Öncelikli İnceleme'],
       color: 'from-amber-400 to-orange-600',
       icon: Gem,
       badge: 'PREMIUM'
     }
   ];
+
+  const monthlyPlans: PricingPlan[] = [
+    {
+      id: 'm_basic',
+      name: 'Starter',
+      duration: '30 Gün',
+      price: 499,
+      features: ['Vitrinde Öncelik', 'Özel Rozet', 'Sınırsız Mesaj', 'X5 Fotoğraf', '%16 Tasarruf'],
+      color: 'from-blue-500 to-emerald-500',
+      icon: Clock,
+      badge: 'GİRİŞ'
+    },
+    {
+      id: 'm_pro',
+      name: 'Professional',
+      duration: '30 Gün',
+      price: 799,
+      features: ['Öncelikli Listeleme', '15 Fotoğraf / 3 Video', 'Aylık 5 Boost', 'VIP Desteği', '%20 Tasarruf'],
+      color: 'from-primary to-secondary',
+      icon: Crown,
+      badge: 'EN POPÜLER',
+      popular: true
+    },
+    {
+      id: 'm_elite',
+      name: 'Elite',
+      duration: '30 Gün',
+      price: 1299,
+      features: ['Ultra Listeleme', 'Sınırsız Galeri', 'Aylık 15 Boost', 'Öncelikli İnceleme', '%18 Tasarruf'],
+      color: 'from-amber-400 to-orange-600',
+      icon: Gem,
+      badge: 'PREMIUM'
+    }
+  ];
+
+  const currentPlans = activeTab === 'weekly' ? weeklyPlans : monthlyPlans;
+
+  const handleSelectPlan = () => {
+    setLocation('/register/escort');
+  };
 
   return (
     <div className="min-h-screen relative w-full pt-48 pb-32 px-6">
@@ -175,8 +235,8 @@ export default function Pricing() {
 
         {/* Pricing Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
-           {weeklyPlans.map((plan, i) => (
-             <PricingCard key={plan.id} plan={plan} delay={i * 0.1} activeTab={activeTab} />
+           {currentPlans.map((plan, i) => (
+             <PricingCard key={plan.id} plan={plan} delay={i * 0.1} activeTab={activeTab} onSelect={handleSelectPlan} />
            ))}
         </div>
 
@@ -212,12 +272,16 @@ export default function Pricing() {
                  </h2>
                  <p className="text-white/60 text-sm font-black uppercase tracking-widest italic">İlk 100 kullanıcıya özel %50 indirim fırsatı.</p>
               </div>
-              <Button className="h-20 px-16 bg-white text-black hover:bg-black hover:text-white font-black italic uppercase text-xs tracking-[0.3em] rounded-[2rem] transition-all shadow-2xl">
+              <Button
+                onClick={handleSelectPlan}
+                className="h-20 px-16 bg-white text-black hover:bg-black hover:text-white font-black italic uppercase text-xs tracking-[0.3em] rounded-[2rem] transition-all shadow-2xl"
+              >
                  ŞİMDİ KATIL
               </Button>
            </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

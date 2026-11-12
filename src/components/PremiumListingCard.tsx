@@ -24,7 +24,7 @@ interface PremiumListingCardProps {
  * Glassmorphism efekti, hover animasyonları ve modern tasarım
  */
 export const PremiumListingCard: React.FC<PremiumListingCardProps> = ({
-  id,
+  id: _id,
   image,
   stageName,
   city,

@@ -134,7 +134,13 @@ export const StoreTab = () => {
   );
 };
 
-const SmallStat = ({ label, value, icon: Icon }: any) => (
+interface SmallStatProps {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const SmallStat = ({ label, value, icon: Icon }: SmallStatProps) => (
   <div className="p-6 rounded-3xl bg-white/5 border border-white/5 flex items-center gap-4 transition-all hover:bg-white/10 shrink-0">
      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
         <Icon className="w-5 h-5 text-emerald-400" />

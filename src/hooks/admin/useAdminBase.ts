@@ -72,7 +72,7 @@ export function useFetchData<T>(
       fetchData();
       hasMountedRef.current = true;
     }
-  }, [fetchData, ...deps]);
+  }, [fetchData, deps]);
 
   // Auto refetch on interval
   useEffect(() => {

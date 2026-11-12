@@ -55,7 +55,7 @@ const REPORT_TYPES = [
   { value: 'performance', label: 'Performans Raporu', icon: FileOutput, description: 'Dönüşüm ve yanıt süreleri' },
 ] as const;
 
-export function ReportsPanel({ className = '', userRole }: ReportsPanelProps) {
+export function ReportsPanel({ className = '', userRole: _userRole }: ReportsPanelProps) {
   const { generateReport, exportReport } = useAnalytics({ autoRefresh: false });
   const [reports, setReports] = useState<Report[]>([]);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);

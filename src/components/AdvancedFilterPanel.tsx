@@ -38,6 +38,7 @@ interface FilterSection {
 interface AdvancedFilterPanelProps {
   onFilterChange?: (filters: Record<string, FilterValue>) => void;
   onReset?: () => void;
+  onClose?: () => void;
   className?: string;
 }
 
@@ -154,6 +155,7 @@ const filterSections: FilterSection[] = [
 export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
   onFilterChange,
   onReset,
+  onClose,
   className = ''
 }) => {
   const [activeFilters, setActiveFilters] = useState<Record<string, FilterValue>>({});
@@ -358,7 +360,11 @@ export const AdvancedFilterPanel: React.FC<AdvancedFilterPanelProps> = ({
         ))}
       </div>
 
-      <button className="w-full py-6 bg-primary hover:bg-primary/90 text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] italic shadow-2xl shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-3 group">
+      <button
+        type="button"
+        onClick={() => onClose?.()}
+        className="w-full py-6 bg-primary hover:bg-primary/90 text-white rounded-[2rem] font-black text-[11px] uppercase tracking-[0.3em] italic shadow-2xl shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-3 group"
+      >
         KADERİ FİLTRELE <Zap className="w-4 h-4 group-hover:scale-125 transition-transform" />
       </button>
     </div>

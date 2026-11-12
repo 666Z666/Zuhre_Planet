@@ -3,7 +3,15 @@ import { motion } from 'framer-motion';
 import { Lock, Eye, CheckCircle, Fingerprint, Scale } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
-const DocSection = ({ icon: Icon, title, content, delay }: any) => (
+interface DocSectionProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc?: string;
+  content: string[];
+  delay: number;
+}
+
+const DocSection = ({ icon: Icon, title, content, delay }: DocSectionProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}

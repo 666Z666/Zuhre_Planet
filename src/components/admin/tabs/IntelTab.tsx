@@ -188,7 +188,14 @@ export const IntelTab = () => {
   );
 };
 
-const StatCard = ({ label, value, icon: Icon, color }: any) => (
+interface StatCardProps {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+}
+
+const StatCard = ({ label, value, icon: Icon, color }: StatCardProps) => (
   <Card className="bg-white/5 border-white/5 p-6 rounded-[2rem]">
      <div className="flex items-center gap-4">
         <div className={`w-12 h-12 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center ${color}`}>

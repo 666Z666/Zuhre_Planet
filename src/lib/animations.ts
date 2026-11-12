@@ -637,7 +637,7 @@ export const prefersReducedMotion = () => {
   
   try {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  } catch (e) {
+  } catch {
     // Fallback for browsers that don't support matchMedia
     return false;
   }

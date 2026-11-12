@@ -95,7 +95,7 @@ const Confetti = () => {
 };
 
 export default function PaymentResult() {
-  const [location] = useLocation();
+  const [_location] = useLocation();
   const [showConfetti, setShowConfetti] = useState(false);
 
   // Parse query parameters

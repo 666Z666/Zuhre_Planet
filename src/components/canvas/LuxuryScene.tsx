@@ -17,7 +17,13 @@ import * as THREE from 'three';
 
 // --- GEOMETRY COMPONENTS ---
 
-const TransmissionMesh = ({ geometry: Geometry, materialProps, ...props }: any) => {
+interface TransmissionMeshProps {
+  geometry: React.ComponentType;
+  materialProps: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+const TransmissionMesh = ({ geometry: Geometry, materialProps, ...props }: TransmissionMeshProps) => {
   const mesh = useRef<THREE.Mesh>(null!);
   useFrame((state) => {
     const t = state.clock.getElapsedTime();

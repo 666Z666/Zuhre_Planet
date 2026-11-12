@@ -384,7 +384,7 @@ test.describe('Navigation - Geri Buton', () => {
 });
 
 test.describe('Navigation - Dış Linkler', () => {
-  test('dış linkler yeni sekmede açılmalı', async ({ page, context }) => {
+  test('dış linkler yeni sekmede açılmalı', async ({ page, context: _context }) => {
     await page.goto('/');
     
     // Footer'daki dış linkleri kontrol et

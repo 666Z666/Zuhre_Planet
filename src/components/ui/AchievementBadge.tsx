@@ -10,7 +10,7 @@ interface AchievementBadgeProps {
   count?: number;
 }
 
-const achievementConfigs: Record<AchievementType, { icon: any, color: string, glow: string, border: string }> = {
+const achievementConfigs: Record<AchievementType, { icon: React.ComponentType<{ className?: string }>, color: string, glow: string, border: string }> = {
   pioneer: { 
     icon: Zap, 
     color: 'from-[#ffcc33] via-[#ffb900] to-[#917500]', 

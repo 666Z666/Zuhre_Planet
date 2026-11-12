@@ -84,6 +84,16 @@ export default function Catalog() {
       if (city && !sameLocation(escort.city, resolveCityName(city))) return false;
       const district = searchParams.get('district');
       if (district && !sameLocation(escort.district, resolveDistrictName(city, district))) return false;
+      const minHeight = Number(searchParams.get('height') || 0);
+      if (minHeight > 0) {
+        const h = escort.physicalTraits?.height ?? escort.height ?? 0;
+        if (h > 0 && h < minHeight) return false;
+      }
+      const maxWeight = Number(searchParams.get('weight') || 0);
+      if (maxWeight > 0) {
+        const w = escort.physicalTraits?.weight ?? escort.weight ?? 0;
+        if (w > 0 && w > maxWeight) return false;
+      }
       return true;
     });
   }, [listings, searchParams, debouncedQuery]);
@@ -97,11 +107,11 @@ export default function Catalog() {
       rank(b) - rank(a) || (tierOrder[a.membershipTier] ?? 99) - (tierOrder[b.membershipTier] ?? 99));
   }, [filteredEscorts]);
 
-  const handleFilterChange = (newFilters: Record<string, any>) => {
+  const handleFilterChange = (newFilters: Record<string, unknown>) => {
     const params = new URLSearchParams();
     Object.entries(newFilters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
-        params.set(key, String(value));
+        params.set(key, Array.isArray(value) ? value.join(',') : String(value));
       }
     });
     setSearchParams(params);
@@ -287,6 +297,7 @@ export default function Catalog() {
                   handleFilterChange({ ...activeFilters, ...filters });
                 }}
                 onReset={() => setSearchParams(new URLSearchParams())}
+                onClose={() => setIsFilterOpen(false)}
               />
             </motion.aside>
           </motion.div>

@@ -61,7 +61,7 @@ const loyaltyTasks = [
 ];
 
 export default function EscortLoyalty() {
-  const [points, setPoints] = useState(1250);
+  const [points] = useState(1250);
   const currentTier = escortTiers.find(t => points >= t.minPoints && points <= t.maxPoints) || escortTiers[0];
   const nextTier = escortTiers[escortTiers.indexOf(currentTier) + 1];
   const progressPercent = nextTier ? ((points - currentTier.minPoints) / (nextTier.minPoints - currentTier.minPoints)) * 100 : 100;

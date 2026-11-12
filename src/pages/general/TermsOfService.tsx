@@ -3,7 +3,14 @@ import { motion } from 'framer-motion';
 import { Gavel, ShieldCheck, AlertCircle, Scale, Info, CheckCircle } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
-const TermSection = ({ icon: Icon, title, content, delay }: any) => (
+interface TermSectionProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  content: string[];
+  delay: number;
+}
+
+const TermSection = ({ icon: Icon, title, content, delay }: TermSectionProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}

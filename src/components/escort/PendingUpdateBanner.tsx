@@ -39,7 +39,7 @@ export default function PendingUpdateBanner({
 
     if (!hasPendingUpdate || !pendingData) return null;
 
-    let parsed: Record<string, any> = {};
+    let parsed: Record<string, unknown> = {};
     try {
         parsed = JSON.parse(pendingData);
     } catch {

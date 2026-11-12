@@ -3,7 +3,14 @@ import { motion } from 'framer-motion';
 import { Eye, Lock, UserCheck, Database, Globe } from 'lucide-react';
 import { SEOManager } from '@/components/SEOManager';
 
-const PrivacySection = ({ icon: Icon, title, content, delay }: any) => (
+interface PrivacySectionProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  content: string[];
+  delay: number;
+}
+
+const PrivacySection = ({ icon: Icon, title, content, delay }: PrivacySectionProps) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}

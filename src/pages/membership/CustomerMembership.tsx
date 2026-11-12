@@ -45,11 +45,11 @@ const membershipTiers = [
     description: 'En popüler seçim, tam deneyim.',
     features: [
       'Bronze Tüm Özellikleri',
-      'Gizli (Underground) Profillere Erişim',
-      '%0 Hizmet Bedeli (Rezervasyonlarda)',
+      'Özel Vitrin (Red Room) Erişimi',
+      'Gelişmiş Filtre & Favori Listeleri',
       'Profilde Altın Çerçeve & Rozet',
-      'Öncelikli WhatsApp Destek',
-      'Günde 3 Ücretsiz "Hızlandır" (Mesajlaşma)'
+      'Öncelikli Destek Hattı',
+      'Sadakat Puanı Çarpanı'
     ],
     color: 'from-yellow-400 via-amber-500 to-yellow-600',
     icon: Crown,
@@ -64,11 +64,11 @@ const membershipTiers = [
     description: 'Sınırları zorlayanlar için.',
     features: [
       'Gold Tüm Özellikleri',
-      'Özel Concierge Hizmeti',
+      'Öncelikli Moderasyon & Destek',
       'Tam Gizli Mod (Görünmez Gezinme)',
-      'Sınırsız Mesajlaşma & Görüntülü Arama',
-      'Özel Davetli Etkinliklere Erişim',
-      'Kişisel İlişki Danışmanı'
+      'Sınırsız Favori & Koleksiyon',
+      'Özel Vitrin Koleksiyonlarına Erişim',
+      'VIP Rozet Ayrıcalığı'
     ],
     color: 'from-emerald-300 via-blue-500 to-emerald-600',
     icon: Sparkles,
@@ -78,20 +78,20 @@ const membershipTiers = [
 
 const perksOverview = [
   {
-    title: 'Gizli Profiller',
-    desc: 'Sadece Elite üyelere özel açılan, halka açık olmayan prestijli profiller.',
+    title: 'Özel Vitrinler',
+    desc: 'Sadece Elite üyelere özel açılan seçkin vitrin ve koleksiyonlar.',
     icon: EyeOff,
     color: 'text-amber-500'
   },
   {
-    title: 'Sıfır Komisyon',
-    desc: 'Rezervasyon ve ödemelerde platform komisyonu ödemezsiniz.',
+    title: 'Sadakat Avantajı',
+    desc: 'Biriken sadakat puanlarınızı üyelik paketlerinde indirim olarak kullanın.',
     icon: Percent,
     color: 'text-green-500'
   },
   {
-    title: 'Tam Güvenlik',
-    desc: 'Uçtan uca şifreli iletişim ve anonim gezinme garantisi.',
+    title: 'Gizlilik Odaklı',
+    desc: 'Kişisel tercihlerinizi ve favori listelerinizi gizlilikle yönetin.',
     icon: Shield,
     color: 'text-blue-500'
   }

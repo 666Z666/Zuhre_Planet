@@ -1,9 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Shield, Lock, CheckCircle, AlertTriangle, Fingerprint } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { SEOManager } from '@/components/SEOManager';
+import { Footer } from '@/components/Footer';
 
-const SafetyModule = ({ icon: Icon, title, desc, points, delay }: any) => (
+interface SafetyModuleProps {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  points: string[];
+  delay: number;
+}
+
+const SafetyModule = ({ icon: Icon, title, desc, points, delay }: SafetyModuleProps) => (
   <motion.div
     initial={{ opacity: 0, scale: 0.95 }}
     whileInView={{ opacity: 1, scale: 1 }}
@@ -29,6 +39,8 @@ const SafetyModule = ({ icon: Icon, title, desc, points, delay }: any) => (
 );
 
 export default function Safety() {
+  const [, setLocation] = useLocation();
+
   return (
     <div className="min-h-screen relative w-full pt-48 pb-32 px-6">
       <SEOManager title="Zühre Planet - Güvenlik Protokolleri & Gizlilik" />
@@ -60,16 +72,16 @@ export default function Safety() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-48">
            <SafetyModule 
              icon={Fingerprint} 
-             title="YAPAY ZEKA DOĞRULAMA" 
-             desc="Gelişmiş AI algoritmalarımız her profil fotoğrafını ve biyografiyi saniyeler içinde tarar." 
-             points={['3D Yüz Karşılaştırma', 'Görsel Meta Veri Analizi', 'Sahte Profil Eliminasyonu']}
+             title="GÖRSEL & PROFİL DENETİMİ" 
+             desc="Yüklenen her profil fotoğrafı ve açıklama moderasyon ekibimiz tarafından incelenir." 
+             points={['Manuel Moderasyon Onayı', 'Görsel Bütünlük ve Rıza Kontrolü', 'Sahte ve Kopya İlan Engelleme']}
              delay={0.1}
            />
            <SafetyModule 
              icon={Lock} 
-             title="KRİPTOLU İLETİŞİM" 
-             desc="Mesajlaşmalarınız uçtan uca şifrelenir ve asla üçüncü taraflarla paylaşılmaz." 
-             points={['256-bit AES Şifreleme', 'Kendi Kendini Silen Mesajlar', 'Ekran Görüntüsü Koruması']}
+             title="VERİ & İLETİŞİM GÜVENLİĞİ" 
+             desc="İletişim numaraları ham sayfada açık tutulmaz; yalnızca kullanıcı aksiyonuyla güvenli biçimde açılır." 
+             points={['HTTPS / TLS Bağlantı Güvenliği', 'Kötüye Kullanım ve Hız Sınırı (Rate Limit)', 'Üçüncü Taraflarla Paylaşılmayan Kayıtlar']}
              delay={0.2}
            />
         </div>
@@ -82,8 +94,8 @@ export default function Safety() {
            <div>
               <h4 className="text-2xl font-black text-amber-500 italic uppercase tracking-tighter mb-2">DİKKAT EDİLMESİ GEREKENLER</h4>
               <p className="text-sm font-black italic text-amber-500/40 uppercase tracking-widest leading-relaxed">
-                 Platform dışı ödemelerden kaçının. Sadece uygulama içindeki güvenli kanalları kullanın. <br />
-                 Herhangi bir şüpheli durumda "Anında Raporlama" sistemimizi aktif edin.
+                 Görüşme öncesi kapora veya ön ödeme talep eden kişilere itibar etmeyiniz. Zühre Planet randevu ücreti tahsil etmez. <br />
+                 Şüpheli bir durumla karşılaştığınızda Destek ve İletişim merkezimiz üzerinden bildirimde bulunun.
               </p>
            </div>
         </div>
@@ -91,12 +103,16 @@ export default function Safety() {
         {/* Support CTA */}
         <div className="text-center">
            <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-10">GÜVENDE HİSSEDİN</h2>
-           <button className="h-20 px-16 bg-white text-black font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:bg-primary hover:text-white transition-all shadow-2xl">
+           <button
+             onClick={() => setLocation('/support')}
+             className="h-20 px-16 bg-white text-black font-black italic uppercase text-xs tracking-[0.4em] rounded-[2rem] hover:bg-primary hover:text-white transition-all shadow-2xl"
+           >
               DESTEK MERKEZİNE BAĞLAN
            </button>
-           <p className="mt-8 text-[9px] font-black italic uppercase tracking-widest text-white/20">© 2026 ZÜHRE PLANET — GÜVENLİK DEPARMANI</p>
+           <p className="mt-8 text-[9px] font-black italic uppercase tracking-widest text-white/20">© 2026 ZÜHRE PLANET — GÜVENLİK DEPARTMANI</p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
