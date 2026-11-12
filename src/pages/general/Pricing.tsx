@@ -195,37 +195,37 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen relative w-full pt-48 pb-32 px-6">
+    <div className="min-h-screen relative w-full pt-28 md:pt-48 pb-20 md:pb-32 px-4 sm:px-6">
       <SEOManager title="Zühre Planet - Üyelik Paketleri & VIP Ayrıcalıkları" />
       
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-24">
+        <div className="text-center mb-16 md:mb-24">
            <motion.div 
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
-             className="inline-flex items-center gap-2 mb-8 px-6 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl"
+             className="inline-flex items-center gap-2 mb-6 md:mb-8 px-5 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl"
            >
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50 italic">Üyelik & Ayrıcalıklar</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white/50 italic">Üyelik & Ayrıcalıklar</span>
            </motion.div>
 
-           <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none h-premium mb-8">
+           <h1 className="text-3xl sm:text-5xl md:text-8xl font-black italic uppercase tracking-tighter leading-none h-premium mb-6 md:mb-8 break-words">
               GÖRÜNÜRLÜĞÜNÜZÜ <br /> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary animate-gradient-x">ARTIRIN</span>
            </h1>
 
-           <div className="flex justify-center mt-12">
+           <div className="flex justify-center mt-8 md:mt-12">
               <div className="inline-flex items-center p-1.5 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2rem]">
                  <button 
                    onClick={() => setActiveTab('weekly')}
-                   className={`px-10 h-14 rounded-[1.5rem] text-[10px] font-black italic uppercase tracking-[0.25em] transition-all ${activeTab === 'weekly' ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-white/40 hover:text-white'}`}
+                   className={`px-6 sm:px-10 h-12 sm:h-14 rounded-[1.5rem] text-[10px] font-black italic uppercase tracking-[0.2em] sm:tracking-[0.25em] transition-all ${activeTab === 'weekly' ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-white/40 hover:text-white'}`}
                  >
                    HAFTALIK
                  </button>
                  <button 
                    onClick={() => setActiveTab('monthly')}
-                   className={`px-10 h-14 rounded-[1.5rem] text-[10px] font-black italic uppercase tracking-[0.25em] transition-all ${activeTab === 'monthly' ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-white/40 hover:text-white'}`}
+                   className={`px-6 sm:px-10 h-12 sm:h-14 rounded-[1.5rem] text-[10px] font-black italic uppercase tracking-[0.2em] sm:tracking-[0.25em] transition-all ${activeTab === 'monthly' ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-white/40 hover:text-white'}`}
                  >
                    AYLIK
                  </button>
@@ -263,18 +263,18 @@ export default function Pricing() {
         </div>
 
         {/* CTA Footer */}
-        <div className="p-12 md:p-20 rounded-[4rem] bg-gradient-to-r from-primary to-secondary relative overflow-hidden group">
+        <div className="p-6 sm:p-12 md:p-20 rounded-[2rem] sm:rounded-[4rem] bg-gradient-to-r from-primary to-secondary relative overflow-hidden group">
            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
               <div className="text-center md:text-left">
-                 <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white leading-none mb-4">
+                 <h2 className="text-2xl sm:text-4xl md:text-6xl font-black italic uppercase tracking-tighter text-white leading-none mb-4">
                     PROFESYONEL <br /> ADIM ATIN
                  </h2>
-                 <p className="text-white/60 text-sm font-black uppercase tracking-widest italic">İlk 100 kullanıcıya özel %50 indirim fırsatı.</p>
+                 <p className="text-white/70 text-xs sm:text-sm font-black uppercase tracking-widest italic">İlanınızı hemen oluşturun ve vitrinde yerinizi alın.</p>
               </div>
               <Button
                 onClick={handleSelectPlan}
-                className="h-20 px-16 bg-white text-black hover:bg-black hover:text-white font-black italic uppercase text-xs tracking-[0.3em] rounded-[2rem] transition-all shadow-2xl"
+                className="w-full sm:w-auto h-14 sm:h-20 px-8 sm:px-16 bg-white text-black hover:bg-black hover:text-white font-black italic uppercase text-xs tracking-[0.25em] sm:tracking-[0.3em] rounded-2xl sm:rounded-[2rem] transition-all shadow-2xl"
               >
                  ŞİMDİ KATIL
               </Button>

@@ -198,32 +198,32 @@ export default function Home() {
         </Suspense>
       )}
 
-      <section ref={heroRef} className="relative pt-48 pb-20 px-6 max-w-7xl mx-auto text-center z-20 perspective-1000">
+      <section ref={heroRef} className="relative pt-28 md:pt-44 pb-16 md:pb-20 px-4 sm:px-6 max-w-7xl mx-auto text-center z-20 perspective-1000">
           <div className="preserve-3d">
-          <div className="inline-flex items-center gap-2 mb-8 px-6 py-2.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl shadow-[0_0_20px_rgba(212,175,55,0.1)]">
+          <div className="inline-flex items-center gap-2 mb-6 md:mb-8 px-5 py-2.5 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl shadow-[0_0_20px_rgba(212,175,55,0.1)]">
             <Sparkles className="w-3.5 h-3.5 text-primary motion-safe:animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/80">18+ İlan Platformu</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white/80">18+ İlan Platformu</span>
           </div>
 
-          <div className="min-h-[28vh] md:min-h-[36vh] flex items-center justify-center relative">
-            <h1 className="max-w-5xl text-4xl sm:text-5xl md:text-7xl font-black font-orbitron text-white uppercase tracking-tight leading-tight drop-shadow-[0_0_30px_rgba(63,174,134,0.35)]">
+          <div className="min-h-[20vh] md:min-h-[34vh] flex items-center justify-center relative py-4">
+            <h1 className="max-w-5xl text-3xl sm:text-5xl md:text-7xl font-black font-orbitron text-white uppercase tracking-tight leading-tight drop-shadow-[0_0_30px_rgba(63,174,134,0.35)]">
               Gecenin Parlak Yıldızları
             </h1>
           </div>
 
-          <p className="max-w-3xl mx-auto text-gray-200 text-base md:text-lg mb-12 leading-relaxed">
+          <p className="max-w-3xl mx-auto text-gray-200 text-sm sm:text-base md:text-lg mb-8 md:mb-12 leading-relaxed">
             Yalnızca 18 yaş ve üzerindeki yetişkinlere yönelik ilanları inceleyin. Profiller ve medya yayın öncesi incelenir; platform randevu veya ödeme aracılığı yapmaz.
           </p>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
             <Link href={ROUTES.CATALOG}>
-              <Button size="lg" className="h-20 px-14 bg-white text-black hover:bg-primary hover:text-white font-black uppercase text-xs tracking-[0.3em] italic rounded-[2rem] group transition-all duration-700 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+              <Button size="lg" className="w-full sm:w-auto h-14 sm:h-20 px-8 sm:px-14 bg-white text-black hover:bg-primary hover:text-white font-black uppercase text-xs tracking-[0.2em] sm:tracking-[0.3em] italic rounded-2xl sm:rounded-[2rem] group transition-all duration-700 shadow-[0_0_40px_rgba(255,255,255,0.1)]">
                 İLANLARI GÖRÜNTÜLE
                 <ArrowRight className="w-5 h-5 ml-3 transition-transform group-hover:translate-x-2" />
               </Button>
             </Link>
             <Link href={ROUTES.REGISTER_ESCORT}>
-              <Button size="lg" variant="ghost" className="h-20 px-10 text-white/40 hover:text-white font-black uppercase text-xs tracking-[0.3em] italic rounded-[2rem] transition-colors border border-white/5 hover:border-white/20">
+              <Button size="lg" variant="ghost" className="w-full sm:w-auto h-14 sm:h-20 px-6 sm:px-10 text-white/60 hover:text-white font-black uppercase text-xs tracking-[0.2em] sm:tracking-[0.3em] italic rounded-2xl sm:rounded-[2rem] transition-colors border border-white/10 hover:border-white/25">
                 İLAN SAHİBİ OLARAK KATIL
               </Button>
             </Link>
@@ -267,44 +267,44 @@ export default function Home() {
 
       <section ref={escortRef} className="relative py-12 md:py-32 px-4 md:px-6 max-w-7xl mx-auto z-20">
         <SectionHeading label="İlan sahibi" title="Profilini açıkça yönet" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {escortFeatures.map((feature, i) => (
-            <div key={i} className="escort-feature-card group p-8 rounded-3xl border border-rose-500/10 bg-gradient-to-br from-rose-500/5 to-gold-500/5 hover:from-rose-500/10 hover:to-gold-500/10 transition-all relative overflow-hidden">
-              <div className={`p-4 rounded-full bg-white/5 w-fit mb-6 group-hover:scale-110 transition-transform`}>
+            <div key={i} className="escort-feature-card group p-6 sm:p-8 rounded-3xl border border-rose-500/10 bg-gradient-to-br from-rose-500/5 to-gold-500/5 hover:from-rose-500/10 hover:to-gold-500/10 transition-all relative overflow-hidden">
+              <div className={`p-4 rounded-full bg-white/5 w-fit mb-5 group-hover:scale-110 transition-transform`}>
                 <feature.icon className={`w-6 h-6 ${feature.color}`} />
               </div>
-              <h3 className="text-xl font-bold mb-3 font-orbitron text-white">{feature.title}</h3>
+              <h3 className="text-lg sm:text-xl font-bold mb-2.5 font-orbitron text-white">{feature.title}</h3>
               <p className="text-gray-300 text-sm leading-relaxed">{feature.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section ref={ctaRef} className="relative py-20 px-6 z-20">
-        <div className="max-w-5xl mx-auto p-12 md:p-20 rounded-[3rem] bg-gradient-to-r from-gold-700 via-rose-700 to-gold-700 overflow-hidden relative group">
+      <section ref={ctaRef} className="relative py-12 md:py-20 px-4 sm:px-6 z-20">
+        <div className="max-w-5xl mx-auto p-6 sm:p-12 md:p-20 rounded-[2rem] sm:rounded-[3rem] bg-gradient-to-r from-gold-700 via-rose-700 to-gold-700 overflow-hidden relative group">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.18)_1px,transparent_0)] bg-[length:18px_18px] opacity-20 mix-blend-overlay" />
           <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/20 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
           <div className="absolute bottom-[-20%] left-[-10%] w-48 h-48 bg-rose-300/20 rounded-full blur-[80px] group-hover:scale-125 transition-transform duration-1000" />
 
           <div className="relative z-10 text-center md:text-left md:flex items-center justify-between gap-12">
             <div className="mb-8 md:mb-0 max-w-xl">
-              <h2 className="text-4xl md:text-5xl font-black font-orbitron mb-6 text-white uppercase tracking-tighter leading-none">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-orbitron mb-4 sm:mb-6 text-white uppercase tracking-tighter leading-none">
                 İLANINI <br /> GÜNCEL TUT
               </h2>
-              <p className="text-white/80 text-lg font-light leading-relaxed">
+              <p className="text-white/80 text-sm sm:text-lg font-light leading-relaxed">
                 İlan sahibi olarak başvurunuzu oluşturun. Profil bilgileri ve medya herkese açılmadan önce incelenir; platform randevu veya ödeme işlemez.
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
               <Link href={ROUTES.REGISTER_ESCORT}>
-                <Button size="lg" className="h-16 px-12 bg-white text-black hover:bg-gray-100 font-black uppercase text-sm tracking-widest rounded-2xl">
+                <Button size="lg" className="w-full sm:w-auto h-14 sm:h-16 px-6 sm:px-12 bg-white text-black hover:bg-gray-100 font-black uppercase text-xs sm:text-sm tracking-wider sm:tracking-widest rounded-2xl">
                   İlan Sahibi Olarak Kaydol
                 </Button>
               </Link>
               <div className="flex items-center justify-center gap-2 text-white/60">
-                <ShieldCheck className="w-4 h-4 text-white" />
-                <span className="text-xs font-bold uppercase tracking-widest">18+ · Yayın öncesi inceleme</span>
+                <ShieldCheck className="w-4 h-4 text-white shrink-0" />
+                <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest">18+ · Yayın öncesi inceleme</span>
               </div>
             </div>
           </div>

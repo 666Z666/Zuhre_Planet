@@ -143,7 +143,7 @@ export default function Catalog() {
         subtitle="Zühre Planet'in en gizemli ve şehvetli yıldızlarını keşfetme zamanı."
       />
 
-      <div className="relative z-20 -mt-24 mb-16 px-4">
+      <div className="relative z-20 mt-6 md:-mt-16 mb-10 md:mb-16 px-4">
         <StoryRingGallery 
           storyGroups={[
             { userId: '1', userName: 'Elara', avatar: '/brand/placeholders/portrait-3.svg', tier: 'vip', isVip: true, items: [{ id: 's1', type: 'image', url: '/brand/placeholders/portrait-2.svg', duration: 3 }] },

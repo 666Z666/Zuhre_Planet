@@ -9,6 +9,7 @@
 import React from 'react';
 import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { ShieldCheck } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { LipsIcon, MaskIcon, HeelsIcon } from './ui/SensualIcons';
 
 interface PremiumHeroBannerProps {
@@ -20,6 +21,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
   title,
   subtitle,
 }) => {
+  const [, setLocation] = useLocation();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const mouseX = useSpring(x, { stiffness: 40, damping: 25 });
@@ -34,10 +36,14 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
     y.set(e.clientY / innerHeight - 0.5);
   };
 
+  const handleExploreClick = () => {
+    window.scrollTo({ top: window.innerHeight * 0.65, behavior: 'smooth' });
+  };
+
   return (
     <div 
       onMouseMove={handleMouseMove}
-      className={`relative min-h-[95vh] flex items-center justify-center overflow-hidden anamorphic-container bg-black`}
+      className="relative min-h-[55vh] md:min-h-[85vh] pt-24 pb-12 md:py-28 flex items-center justify-center overflow-hidden anamorphic-container bg-black"
     >
       {/* BACKGROUND LAYER: Cinematic Moving Image (NSFW/Seductive) */}
       <motion.div 
@@ -74,16 +80,16 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
       <div className="absolute inset-0 z-[1] opacity-[0.08] pointer-events-none bg-[url('/textures/noise.svg')] mix-blend-overlay contrast-200" />
 
       {/* CONTENT LAYER */}
-      <div className="relative z-10 max-w-[1800px] mx-auto px-12 text-center space-y-16">
-        <div className="space-y-8">
+      <div className="relative z-10 max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 text-center space-y-8 md:space-y-14">
+        <div className="space-y-5 md:space-y-8">
           <motion.div
             initial={{ opacity: 0, scale: 0.8, filter: 'blur(30px)' }}
             whileInView={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
             transition={{ duration: 2, ease: "easeOut" }}
-            className="inline-flex items-center gap-4 px-10 py-3 rounded-full bg-black/60 border border-primary/40 backdrop-blur-3xl mb-4 shadow-[0_0_50px_rgba(212,175,55,0.2)]"
+            className="inline-flex items-center gap-2.5 sm:gap-4 px-4 sm:px-8 py-2 sm:py-3 rounded-full bg-black/60 border border-primary/40 backdrop-blur-3xl mb-2 shadow-[0_0_50px_rgba(212,175,55,0.2)] max-w-full"
           >
-            <ShieldCheck className="w-5 h-5 text-primary" />
-            <span className="text-[11px] font-black uppercase tracking-[0.4em] text-white italic">SHADOW PROTOCOL: SECURE & LUXURY EROTICA</span>
+            <ShieldCheck className="w-4 h-4 sm:w-5 sm:h-5 text-primary shrink-0" />
+            <span className="text-[9px] sm:text-[11px] font-black uppercase tracking-[0.15em] sm:tracking-[0.35em] text-white italic">18+ DOĞRULANMIŞ VİTRİN & KEŞİF DİZİNİ</span>
           </motion.div>
 
           <div className="relative">
@@ -91,7 +97,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
               initial={{ opacity: 0, y: 100, filter: 'blur(40px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 1.5, delay: 0.3, ease: "circOut" }}
-              className="text-[8vw] md:text-[10vw] font-black italic uppercase tracking-[-0.08em] leading-[0.8] text-white drop-shadow-[0_0_60px_rgba(var(--primary-rgb),0.6)] font-orbitron"
+              className="text-4xl sm:text-6xl md:text-[8vw] font-black italic uppercase tracking-[-0.05em] md:tracking-[-0.08em] leading-[0.9] md:leading-[0.8] text-white drop-shadow-[0_0_60px_rgba(var(--primary-rgb),0.6)] font-orbitron"
             >
               {title.split(' ')[0]} <br />
               <span className="inline-block pr-[0.18em] -mr-[0.18em] text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-primary animate-gradient-slow drop-shadow-none">
@@ -111,7 +117,7 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1.5, delay: 1 }}
-            className="text-base md:text-3xl font-black uppercase tracking-[0.15em] md:tracking-[0.6em] text-white/40 italic max-w-6xl mx-auto leading-relaxed"
+            className="text-xs sm:text-base md:text-2xl font-black uppercase tracking-[0.15em] md:tracking-[0.4em] text-white/60 italic max-w-4xl mx-auto leading-relaxed px-2"
           >
              {subtitle}
           </motion.p>
@@ -122,23 +128,31 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.5, delay: 1.2 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-20 border-t border-white/5"
+          className="grid grid-cols-3 gap-2.5 sm:gap-6 md:gap-12 pt-6 md:pt-14 border-t border-white/10"
         >
-          <StatComponent icon={<LipsIcon size={28} />} number="12,500+" label="ARZULU ÜYE" />
-          <StatComponent icon={<HeelsIcon size={28} />} number="4.9/5.0" label="SEKSİ DENEYİM" color="text-secondary" />
-          <StatComponent icon={<MaskIcon size={28} />} number="850+" label="GİZEMLİ PARTNER" />
+          <StatComponent icon={<LipsIcon size={24} />} number="81 İL" label="ŞEHİR DİZİNİ" />
+          <StatComponent icon={<HeelsIcon size={24} />} number="18+" label="MODERASYONLU ALAN" color="text-secondary" />
+          <StatComponent icon={<MaskIcon size={24} />} number="7/24" label="DOĞRUDAN ERİŞİM" />
         </motion.div>
 
         <motion.div
            initial={{ opacity: 0 }}
            animate={{ opacity: 1 }}
            transition={{ duration: 1, delay: 1.8 }}
-           className="flex flex-col md:flex-row items-center justify-center gap-8 mt-24"
+           className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-2"
         >
-           <button className="h-24 px-20 bg-primary text-white rounded-full font-black uppercase tracking-[0.4em] italic text-sm hover:scale-110 transition-all shadow-[0_0_60px_rgba(212,175,55,0.5)] border border-primary/50">
+           <button
+             type="button"
+             onClick={handleExploreClick}
+             className="w-full sm:w-auto h-14 md:h-20 px-8 md:px-16 bg-primary text-white rounded-full font-black uppercase tracking-[0.25em] md:tracking-[0.4em] italic text-xs md:text-sm hover:scale-105 transition-all shadow-[0_0_40px_rgba(212,175,55,0.4)] border border-primary/50"
+           >
               HEMEN KEŞFET
            </button>
-           <button className="h-24 px-20 bg-black/60 border border-white/10 backdrop-blur-3xl text-white rounded-full font-black uppercase tracking-[0.4em] italic text-sm hover:border-primary hover:bg-primary/5 transition-all">
+           <button
+             type="button"
+             onClick={() => setLocation('/membership')}
+             className="w-full sm:w-auto h-14 md:h-20 px-8 md:px-16 bg-black/60 border border-white/15 backdrop-blur-3xl text-white rounded-full font-black uppercase tracking-[0.25em] md:tracking-[0.4em] italic text-xs md:text-sm hover:border-primary hover:bg-primary/5 transition-all"
+           >
               VİP ELİTE GİRİŞ
            </button>
         </motion.div>
@@ -154,11 +168,11 @@ export const PremiumHeroBanner: React.FC<PremiumHeroBannerProps> = ({
 };
 
 const StatComponent = ({ icon, number, label, color = "text-primary" }: { icon: React.ReactNode, number: string, label: string, color?: string }) => (
-  <div className="glass-panel p-12 group hover:border-primary/60 transition-all border-white/5 bg-black/40 hover:scale-105 duration-700">
-     <div className={`mb-6 ${color} group-hover:scale-150 transition-transform duration-1000 flex justify-center drop-shadow-[0_0_15px_rgba(var(--primary-rgb),1)]`}>
+  <div className="glass-panel p-3.5 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl group hover:border-primary/60 transition-all border-white/10 bg-black/40 hover:scale-105 duration-700">
+     <div className={`mb-2 sm:mb-4 ${color} group-hover:scale-125 transition-transform duration-1000 flex justify-center drop-shadow-[0_0_15px_rgba(var(--primary-rgb),1)]`}>
         {icon}
      </div>
-     <div className="text-4xl font-black font-orbitron uppercase text-white mb-2 drop-shadow-2xl">{number}</div>
-     <div className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 italic group-hover:text-white transition-colors">{label}</div>
+     <div className="text-base sm:text-2xl md:text-4xl font-black font-orbitron uppercase text-white mb-1 drop-shadow-2xl">{number}</div>
+     <div className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.1em] sm:tracking-[0.3em] text-white/50 italic group-hover:text-white transition-colors">{label}</div>
   </div>
 );

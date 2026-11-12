@@ -6,6 +6,7 @@
 
 import { Link, useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useState } from 'react';
 import { ROUTES, getDashboardRouteByRole } from '@/constants/routes';
@@ -21,14 +22,14 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center pointer-events-none anamorphic-container">
+    <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center pointer-events-none">
       <motion.header 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className="w-full pointer-events-auto backdrop-blur-[32px] border-b border-border/60 bg-background/70 shadow-[0_4px_30px_rgba(4,20,15,0.25)]"
+        className="w-full pointer-events-auto backdrop-blur-[32px] border-b border-border/60 bg-background/85 shadow-[0_4px_30px_rgba(4,20,15,0.25)]"
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-8 h-20 md:h-24">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 md:px-8 h-16 sm:h-20 md:h-24">
 
           {/* Logo — src/config/brand.ts + src/components/brand/Logo.tsx */}
           <Link href={ROUTES.HOME} aria-label="Zühre Planet ana sayfa">
@@ -36,7 +37,7 @@ export function Header() {
               whileHover={{ scale: 1.03 }}
               className="cursor-pointer flex items-center group"
             >
-              <Logo size={60} showTagline className="max-sm:[&_.text-brand-wordmark]:text-[1.1rem] max-sm:[&_img]:size-12" />
+              <Logo size={56} showTagline className="max-sm:[&_.text-brand-wordmark]:text-[0.95rem] max-sm:[&_img]:size-9" />
             </motion.div>
           </Link>
 
@@ -77,7 +78,7 @@ export function Header() {
             </Link>
           </nav>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 sm:gap-4 md:gap-6">
             <LanguageSwitcher />
             <div className="hidden lg:flex items-center gap-6 border-l border-border pl-6">
               {isAuthenticated ? (
@@ -109,10 +110,11 @@ export function Header() {
             {/* Mobile Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-              className="lg:hidden p-3 bg-foreground/5 rounded-2xl border border-border text-primary"
+              className="lg:hidden p-2.5 sm:p-3 bg-foreground/5 rounded-2xl border border-border text-primary hover:bg-foreground/10 transition-colors"
               aria-label={mobileMenuOpen ? "Menüyü Kapat" : "Menüyü Aç"}
+              aria-expanded={mobileMenuOpen}
             >
-              <ThemeIcon type={mobileMenuOpen ? 'zap' : 'home'} size={24} />
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -121,21 +123,26 @@ export function Header() {
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              className="absolute top-24 left-4 right-4 glass-panel border-primary/20 p-10 flex flex-col gap-8 lg:hidden shadow-[0_0_50px_rgba(4,20,15,0.6)] bg-background/95 backdrop-blur-[40px] rounded-[3rem]"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              className="fixed top-16 sm:top-20 left-3 right-3 max-h-[calc(100vh-5rem)] overflow-y-auto border border-primary/30 p-6 sm:p-8 flex flex-col gap-6 lg:hidden shadow-[0_25px_70px_rgba(0,0,0,0.95)] bg-[#050c09]/95 backdrop-blur-3xl rounded-3xl z-[110]"
             >
-              <nav className="flex flex-col gap-4">
+              <nav className="flex flex-col gap-2">
                 {[
-                  { name: 'Keşfet', path: ROUTES.CATALOG, icon: 'star' as const },
-                  { name: 'VIP Elite', path: ROUTES.VIP, color: 'text-secondary', icon: 'zap' as const },
+                  { name: 'Ana Sayfa', path: ROUTES.HOME, icon: 'home' as const },
+                  { name: 'Katalog & Keşfet', path: ROUTES.CATALOG, icon: 'star' as const },
+                  { name: 'Yıldızlar Vitrini', path: '/escorts', icon: 'star' as const },
+                  { name: 'VIP Elite Club', path: ROUTES.VIP, color: 'text-secondary', icon: 'zap' as const },
+                  { name: 'İlan Paketleri', path: ROUTES.PRICING, icon: 'shield' as const },
+                  { name: 'SSS', path: ROUTES.FAQ, icon: 'shield' as const },
+                  { name: 'Destek & İletişim', path: ROUTES.SUPPORT, icon: 'user' as const },
                 ].map((item) => (
-                  <Link key={item.name} href={item.path}>
+                  <Link key={item.path} href={item.path}>
                     <span 
                       onClick={() => setMobileMenuOpen(false)} 
-                      className={`text-lg flex items-center gap-4 font-bold uppercase tracking-widest transition-colors py-2
-                        ${location === item.path ? 'text-primary' : (item.color || 'text-foreground/70')}`}
+                      className={`text-sm sm:text-base flex items-center gap-3.5 font-bold uppercase tracking-widest transition-colors py-2.5 px-3 rounded-xl hover:bg-white/5 cursor-pointer
+                        ${location === item.path ? 'text-primary bg-primary/10' : (item.color || 'text-foreground/80')}`}
                     >
                       <ThemeIcon type={item.icon} size={18} /> {item.name}
                     </span>
@@ -145,7 +152,7 @@ export function Header() {
                 <Link href={ROUTES.RED_ROOM}>
                   <span
                     onClick={() => setMobileMenuOpen(false)}
-                    className="text-lg flex items-center gap-4 font-bold uppercase tracking-widest text-red-400 py-2"
+                    className="text-sm sm:text-base flex items-center gap-3.5 font-bold uppercase tracking-widest text-red-400 py-2.5 px-3 rounded-xl hover:bg-red-950/30 cursor-pointer"
                   >
                     <ThemeIcon type="eye" size={18} /> Red Room
                     <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
@@ -156,18 +163,28 @@ export function Header() {
               <div className="h-px bg-foreground/10 w-full" />
               
               {!isAuthenticated ? (
-                <Link href={ROUTES.LOGIN}>
-                  <button 
-                    onClick={() => setMobileMenuOpen(false)} 
-                    className="w-full bg-primary text-primary-foreground py-5 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] italic shadow-2xl shadow-primary/20"
-                  >
-                    GALAKSİYE GİR
-                  </button>
-                </Link>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Link href={ROUTES.LOGIN}>
+                    <button 
+                      onClick={() => setMobileMenuOpen(false)} 
+                      className="w-full bg-primary text-primary-foreground py-4 rounded-2xl font-black text-xs uppercase tracking-[0.25em] italic shadow-xl shadow-primary/20"
+                    >
+                      GİRİŞ YAP
+                    </button>
+                  </Link>
+                  <Link href={ROUTES.REGISTER_CLIENT}>
+                    <button 
+                      onClick={() => setMobileMenuOpen(false)} 
+                      className="w-full bg-white/5 border border-white/15 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.25em] italic hover:bg-white/10 transition-colors"
+                    >
+                      KAYIT OL
+                    </button>
+                  </Link>
+                </div>
               ) : (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <Link href={getDashboardRouteByRole(user?.role)}>
-                    <button onClick={() => setMobileMenuOpen(false)} className="w-full bg-foreground/5 border border-border text-foreground py-5 rounded-[2rem] font-black text-xs uppercase tracking-widest italic">
+                    <button onClick={() => setMobileMenuOpen(false)} className="w-full bg-foreground/5 border border-border text-foreground py-4 rounded-2xl font-black text-xs uppercase tracking-widest italic">
                        PANELİM
                     </button>
                   </Link>

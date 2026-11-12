@@ -180,6 +180,7 @@ function AppRouter() {
           <Route path={ROUTES.ESCORT_PROFILE} component={EscortProfile} />
           <Route path="/escort/:id" component={EscortProfile} />
           <Route path="/konum/:city/:district?" component={LocationListings} />
+          <Route path="/escorts/:city/:district?" component={LocationListings} />
 
           {/* ── Auth ── */}
           <Route path={ROUTES.LOGIN} component={CustomerLogin} />
@@ -187,6 +188,7 @@ function AppRouter() {
           <Route path={ROUTES.ADMIN_LOGIN} component={AdminLogin} />
           <Route path={ROUTES.REGISTER} component={ClientRegister} />
           <Route path={ROUTES.REGISTER_CLIENT} component={ClientRegister} />
+          <Route path="/register/client" component={ClientRegister} />
           <Route path={ROUTES.REGISTER_ESCORT} component={EscortRegister} />
           <Route path="/register/escort" component={EscortRegister} />
 
@@ -208,7 +210,9 @@ function AppRouter() {
 
           {/* ── Customer Features ── */}
           <Route path={ROUTES.MESSAGES} component={CustomerMessages} />
+          <Route path="/customer/messages" component={CustomerMessages} />
           <Route path={ROUTES.FAVORITES} component={CustomerFavorites} />
+          <Route path="/customer/favorites" component={CustomerFavorites} />
           <Route path={ROUTES.APPOINTMENTS}><Redirect to={ROUTES.CUSTOMER_DASHBOARD} /></Route>
           <Route path="/customer/appointments"><Redirect to={ROUTES.CUSTOMER_DASHBOARD} /></Route>
           <Route path={ROUTES.REVIEWS} component={CustomerReviews} />

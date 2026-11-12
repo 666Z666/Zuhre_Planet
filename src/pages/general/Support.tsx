@@ -255,17 +255,17 @@ export default function Support() {
               <h3 className="text-lg font-black uppercase italic text-white mb-4">
                 Hızlı Bağlantılar
               </h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" onClick={() => setLocation('/faq')} className="h-auto py-4 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Button variant="outline" onClick={() => setLocation('/faq')} className="h-auto py-3.5 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
                   SSS
                 </Button>
-                <Button variant="outline" onClick={() => setLocation('/how-it-works')} className="h-auto py-4 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
+                <Button variant="outline" onClick={() => setLocation('/how-it-works')} className="h-auto py-3.5 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
                   Nasıl Çalışır
                 </Button>
-                <Button variant="outline" onClick={() => setLocation('/terms')} className="h-auto py-4 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
+                <Button variant="outline" onClick={() => setLocation('/terms')} className="h-auto py-3.5 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
                   Kullanım Koşulları
                 </Button>
-                <Button variant="outline" onClick={() => setLocation('/privacy')} className="h-auto py-4 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
+                <Button variant="outline" onClick={() => setLocation('/privacy')} className="h-auto py-3.5 border-white/10 bg-white/5 hover:bg-white/10 text-white text-xs font-bold">
                   Gizlilik Politikası
                 </Button>
               </div>

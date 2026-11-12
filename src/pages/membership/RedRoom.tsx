@@ -45,26 +45,26 @@ export default function RedRoom() {
       </div>
 
       {/* Hero Header */}
-      <div className="relative pt-32 pb-16 px-6 text-center z-10">
+      <div className="relative pt-24 md:pt-32 pb-10 md:pb-16 px-4 sm:px-6 text-center z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           className="max-w-3xl mx-auto"
         >
-          <div className="w-20 h-20 mx-auto mb-8 rounded-full border border-red-800/50 bg-red-950/50 flex items-center justify-center shadow-[0_0_60px_rgba(220,38,38,0.2)]">
-            <Eye className="w-10 h-10 text-red-400 animate-pulse" />
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-6 sm:mb-8 rounded-full border border-red-800/50 bg-red-950/50 flex items-center justify-center shadow-[0_0_60px_rgba(220,38,38,0.2)]">
+            <Eye className="w-8 h-8 sm:w-10 sm:h-10 text-red-400 animate-pulse" />
           </div>
-          <h1 className="text-6xl md:text-8xl font-black uppercase tracking-wider mb-6 text-transparent bg-clip-text bg-gradient-to-b from-red-300 via-red-500 to-red-900">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-wider mb-4 sm:mb-6 text-transparent bg-clip-text bg-gradient-to-b from-red-300 via-red-500 to-red-900">
             The Red Room
           </h1>
-          <p className="text-red-300/60 text-lg uppercase tracking-[0.3em] font-light italic">
+          <p className="text-red-300/60 text-xs sm:text-lg uppercase tracking-[0.2em] sm:tracking-[0.3em] font-light italic">
             "Kapının Ardında Saklı Kalan Arzular"
           </p>
         </motion.div>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pb-24">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pb-24">
         <AnimatePresence mode="wait">
           {!hasAccess ? (
             /* ACCESS DENIED STATE */
@@ -75,7 +75,7 @@ export default function RedRoom() {
               className="max-w-xl mx-auto"
             >
               {/* Locked card */}
-              <div className="bg-black/60 border border-red-900/40 rounded-3xl p-10 md:p-12 text-center backdrop-blur-xl shadow-[0_0_80px_rgba(220,38,38,0.08)]">
+              <div className="bg-black/60 border border-red-900/40 rounded-3xl p-6 sm:p-10 md:p-12 text-center backdrop-blur-xl shadow-[0_0_80px_rgba(220,38,38,0.08)]">
                 <Lock className="w-16 h-16 text-red-800 mx-auto mb-6" />
                 <h2 className="text-2xl font-black uppercase tracking-wide text-white mb-3">
                   Yetki Gerekli
@@ -87,7 +87,7 @@ export default function RedRoom() {
                 </p>
 
                 {/* Membership tiers preview */}
-                <div className="grid grid-cols-2 gap-3 mb-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                   {[
                     { name: 'Platinum', color: 'border-gold-500/40 bg-gold-900/20', textColor: 'text-gold-300', perks: ['Red Room Erişim', 'Gizli Profiller', 'VIP Destek'] },
                     { name: 'VIP', color: 'border-rose-500/40 bg-rose-900/20', textColor: 'text-rose-300', perks: ['Full Red Room', 'Diamond Profiller', '7/24 Özel Asistan'] },

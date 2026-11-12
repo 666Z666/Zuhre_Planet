@@ -116,24 +116,24 @@ export default function CustomerMembership() {
     <div className="min-h-screen bg-transparent relative w-full overflow-hidden">
       <StarryBackground />
 
-      <div className="relative z-10 py-32 container mx-auto px-6">
+      <div className="relative z-10 pt-24 pb-20 md:py-32 container mx-auto px-4 sm:px-6">
         
         {/* POINT REDEMPTION BANNER */}
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col md:flex-row items-center justify-between p-8 rounded-[3rem] bg-amber-500/10 border border-amber-500/20 mb-20 overflow-hidden relative group"
+          className="flex flex-col md:flex-row items-center justify-between gap-5 p-6 sm:p-8 rounded-[2rem] sm:rounded-[3rem] bg-amber-500/10 border border-amber-500/20 mb-14 md:mb-20 overflow-hidden relative group text-center md:text-left"
         >
            <div className="absolute top-0 right-0 p-8 opacity-5 rotate-12">
               <Sparkles className="w-48 h-48" />
            </div>
-           <div className="flex items-center gap-8 relative z-10">
-              <div className="w-16 h-16 rounded-3xl bg-amber-500 flex items-center justify-center shadow-2xl shadow-amber-900/40">
-                 <Zap className="w-8 h-8 text-black" />
+           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 relative z-10">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-3xl bg-amber-500 flex items-center justify-center shadow-2xl shadow-amber-900/40 shrink-0">
+                 <Zap className="w-7 h-7 sm:w-8 sm:h-8 text-black" />
               </div>
               <div>
-                 <h3 className="text-lg font-black text-amber-500 uppercase tracking-widest italic">SADAKAT PUANLARINIZI KULLANIN</h3>
-                 <p className="text-sm text-gray-400 mt-1">
+                 <h3 className="text-base sm:text-lg font-black text-amber-500 uppercase tracking-widest italic">SADAKAT PUANLARINIZI KULLANIN</h3>
+                 <p className="text-xs sm:text-sm text-gray-400 mt-1">
                    Mevcut Elite Puanınız: <strong className="text-white">{userPoints.toLocaleString()}</strong> • 
                    Değeri: <strong className="text-green-400">₺{pointsValue}</strong>
                  </p>
@@ -142,7 +142,7 @@ export default function CustomerMembership() {
            <Button 
              variant="outline" 
              onClick={() => setUsePoints(!usePoints)}
-             className={`rounded-2xl px-10 py-4 text-xs font-black uppercase tracking-widest transition-all ${
+             className={`w-full md:w-auto rounded-2xl px-8 py-4 text-xs font-black uppercase tracking-widest transition-all ${
                usePoints ? 'bg-amber-500 text-black border-transparent' : 'bg-white/5 text-amber-500 border-amber-500/30 hover:bg-amber-500/20'
              }`}
            >
@@ -151,21 +151,21 @@ export default function CustomerMembership() {
         </motion.div>
         
         {/* HERO */}
-        <div className="text-center max-w-4xl mx-auto mb-20">
+        <div className="text-center max-w-4xl mx-auto mb-16 md:mb-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-6 py-2 mb-8"
+            className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-5 py-2 mb-6 md:mb-8"
           >
             <Crown className="w-5 h-5 text-amber-500" />
-            <span className="text-[10px] font-black tracking-[0.3em] uppercase text-amber-500 italic">ELITE CLUB MEMBERSHIP</span>
+            <span className="text-[10px] font-black tracking-[0.25em] sm:tracking-[0.3em] uppercase text-amber-500 italic">ELITE CLUB MEMBERSHIP</span>
           </motion.div>
           
-          <h1 className="text-5xl md:text-8xl font-black tracking-tightest leading-none mb-8 text-white">
+          <h1 className="text-2xl sm:text-5xl md:text-8xl font-black tracking-tightest leading-none mb-6 md:mb-8 text-white">
             SIRADANIN <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-200 animate-shimmer">ÖTESİNE</span> GEÇİN
           </h1>
           
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-400 max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed">
             Galaxy Elite Club, sadece en seçkin üyelerimize özel ayrıcalıklar sunar. 
             Gizli profillerden sıfır komisyona kadar her şey sizin için tasarlandı.
           </p>
@@ -234,7 +234,7 @@ export default function CustomerMembership() {
                      )}
                   </CardHeader>
 
-                  <CardContent className="px-12 pb-20 space-y-8">
+                  <CardContent className="px-6 sm:px-12 pb-12 sm:pb-20 space-y-8">
                      <div className="space-y-4">
                        {tier.features.map((feature, i) => (
                          <div key={i} className="flex items-center gap-4 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">

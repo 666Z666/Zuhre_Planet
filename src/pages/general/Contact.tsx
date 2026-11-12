@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { SEOManager } from '@/components/SEOManager';
+import { Footer } from '@/components/Footer';
 import { toast } from 'sonner';
 import { trpc } from '@/lib/trpc';
 
@@ -63,39 +64,39 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen relative w-full pt-48 pb-32 px-6">
+    <div className="min-h-screen relative w-full pt-28 md:pt-48 pb-20 md:pb-32 px-4 sm:px-6 overflow-hidden">
       <SEOManager title="Zühre Planet - İletişime Geç & Destek Merkezi" />
 
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-32">
+        <div className="text-center mb-16 md:mb-32">
            <motion.div 
              initial={{ opacity: 0, y: 20 }}
              animate={{ opacity: 1, y: 0 }}
-             className="inline-flex items-center gap-2 mb-8 px-6 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl"
+             className="inline-flex items-center gap-2 mb-6 md:mb-8 px-5 py-2 rounded-full border border-white/5 bg-white/5 backdrop-blur-3xl"
            >
               <Sparkles className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/50 italic">7/24 Elit Destek Ağı</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-white/50 italic">7/24 Elit Destek Ağı</span>
            </motion.div>
 
-           <h1 className="text-6xl md:text-[9rem] font-black italic uppercase tracking-tighter leading-none h-premium mb-8">
+           <h1 className="text-4xl sm:text-6xl md:text-[9rem] font-black italic uppercase tracking-tighter leading-none h-premium mb-6 md:mb-8">
               BİZE <br /> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary animate-gradient-x">ULAŞIN</span>
            </h1>
 
-           <p className="max-w-2xl mx-auto text-sm font-black italic uppercase tracking-[0.3em] text-white/30 leading-relaxed">
-              Sorularınız, iş ortaklıkları veya elit üyelik başvuruları için <br /> 
+           <p className="max-w-2xl mx-auto text-xs sm:text-sm font-black italic uppercase tracking-[0.2em] sm:tracking-[0.3em] text-white/40 leading-relaxed">
+              Sorularınız, iş ortaklıkları veya elit üyelik başvuruları için <br className="hidden sm:inline" /> 
               danışmanlarımız her an yanınızda.
            </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
            {/* Form Section */}
            <motion.div 
              initial={{ opacity: 0, x: -30 }}
              whileInView={{ opacity: 1, x: 0 }}
              viewport={{ once: true }}
-             className="p-12 rounded-[3.5rem] bg-white/5 border border-white/5 backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+             className="p-6 sm:p-10 md:p-12 rounded-[2.5rem] sm:rounded-[3.5rem] bg-white/5 border border-white/5 backdrop-blur-3xl shadow-[0_0_100px_rgba(0,0,0,0.5)]"
            >
               <form onSubmit={handleSubmit} className="space-y-8">
                  {/* Bot tuzağı — ekranda görünmez */}
@@ -208,6 +209,7 @@ export default function Contact() {
            </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

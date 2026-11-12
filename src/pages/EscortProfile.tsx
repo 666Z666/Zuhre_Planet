@@ -234,12 +234,12 @@ export default function EscortProfile() {
             </motion.div>
 
             {/* Profile Brief Info */}
-            <div className="flex-1 space-y-6">
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
-                <h1 className="text-6xl md:text-9xl font-black tracking-tighter uppercase italic text-3d-premium leading-none text-shadow-premium">
+            <div className="flex-1 space-y-5">
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-4">
+                <h1 className="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase italic text-3d-premium leading-none text-shadow-premium break-words">
                   {profile.displayName}
                 </h1>
-                <Badge className="bg-primary text-white border-none px-6 py-3 rounded-full text-xs font-black uppercase tracking-[0.2em] italic shadow-lg shadow-primary/20">
+                <Badge className="bg-primary text-white border-none px-4 py-2 sm:px-6 sm:py-3 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] italic shadow-lg shadow-primary/20">
                   {profile.age} YAŞ
                 </Badge>
               </div>
@@ -274,9 +274,9 @@ export default function EscortProfile() {
           <div className="lg:col-span-8 space-y-16">
 
             {/* Gallery Section */}
-            <section className="glass-panel border-none rounded-[3rem] p-8 md:p-12 shadow-2xl">
-              <h2 className={`text-2xl font-black mb-10 flex items-center gap-4 uppercase tracking-tighter italic text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>
-                <Sparkles className="w-7 h-7 text-primary" /> GALAKSİ ARŞİVİ
+            <section className="glass-panel border-none rounded-[2rem] sm:rounded-[3rem] p-5 sm:p-8 md:p-12 shadow-2xl">
+              <h2 className={`text-xl sm:text-2xl font-black mb-6 sm:mb-10 flex items-center gap-3 sm:gap-4 uppercase tracking-tighter italic text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>
+                <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 text-primary shrink-0" /> GALAKSİ ARŞİVİ
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {[
@@ -324,14 +324,14 @@ export default function EscortProfile() {
                 <TabsTrigger value="reviews" className="flex-1 rounded-2xl py-4 text-[10px] font-black uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all italic">YORUMLAR</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="about" className="mt-10">
+              <TabsContent value="about" className="mt-6 sm:mt-10">
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-                  className="glass-panel border-none rounded-[3rem] p-10 md:p-16 shadow-2xl relative overflow-hidden"
+                  className="glass-panel border-none rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 md:p-16 shadow-2xl relative overflow-hidden"
                 >
                   <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-                  <h3 className={`text-3xl font-black mb-8 uppercase italic tracking-tighter text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>BİYOGRAFİ</h3>
-                  <p className={`leading-relaxed text-xl md:text-2xl font-medium text-shadow-premium ${isDark ? 'text-white/80' : 'text-orange-900/80'}`}>
+                  <h3 className={`text-2xl sm:text-3xl font-black mb-4 sm:mb-8 uppercase italic tracking-tighter text-shadow-premium ${isDark ? 'text-white' : 'text-orange-950'}`}>BİYOGRAFİ</h3>
+                  <p className={`leading-relaxed text-base sm:text-xl md:text-2xl font-medium text-shadow-premium ${isDark ? 'text-white/80' : 'text-orange-900/80'}`}>
                     {profile.biography || "Bu yıldız henüz hikayesini paylaşmadı. Galaksinin derinliklerinde keşfedilmeyi bekliyor."}
                   </p>
                 </motion.div>
@@ -438,7 +438,7 @@ export default function EscortProfile() {
           {/* Right Column: Contact Sticky Panel */}
           <div className="lg:col-span-4">
             <div className="sticky top-28 space-y-8">
-              <div className="glass-panel border-none rounded-[3rem] p-10 shadow-2xl relative overflow-hidden">
+              <div className="glass-panel border-none rounded-[2rem] sm:rounded-[3rem] p-6 sm:p-10 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-3xl rounded-full -mr-16 -mt-16" />
                 <h3 className="text-2xl font-black mb-8 uppercase italic tracking-tighter text-white text-shadow-premium">
                   İLETİŞİM VE ÜCRET

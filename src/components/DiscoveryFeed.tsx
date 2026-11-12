@@ -78,21 +78,21 @@ export function DiscoveryFeed() {
             </div>
 
             {/* User Info */}
-            <div className="absolute bottom-6 inset-x-6 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full border-2 border-primary overflow-hidden">
+            <div className="absolute bottom-3 inset-x-3 sm:bottom-6 sm:inset-x-6 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-primary overflow-hidden shrink-0">
                   <img src={story.avatar} alt={story.userName} className="w-full h-full object-cover" />
                 </div>
-                <div>
-                   <span className="text-xs font-black text-white uppercase tracking-widest truncate max-w-[80px] block">{story.userName}</span>
-                   <span className="text-[7px] text-primary font-black uppercase tracking-widest">NOVA RANK</span>
+                <div className="min-w-0">
+                   <span className="text-[11px] sm:text-xs font-black text-white uppercase tracking-wider truncate block">{story.userName}</span>
+                   <span className="text-[8px] text-primary font-black uppercase tracking-widest block">NOVA RANK</span>
                 </div>
               </div>
               <motion.button 
                 whileTap={{ scale: 0.8 }}
-                className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-primary transition-all group/btn"
+                className="w-7 h-7 sm:w-8 sm:h-8 shrink-0 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-primary transition-all group/btn"
               >
-                <Heart size={14} className="text-white group-hover/btn:fill-white" />
+                <Heart size={13} className="text-white group-hover/btn:fill-white" />
               </motion.button>
             </div>
 
